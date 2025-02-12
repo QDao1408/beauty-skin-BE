@@ -1,6 +1,7 @@
 package online.beautyskin.beauty.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import online.beautyskin.beauty.enums.RoleEnums;
 
@@ -27,13 +28,14 @@ public class User {
     private String address;
 
     @Column(name = "Username", unique = true)
+    @NotNull(message = "Username cannot be null.")
     private String username;
 
     @Column(name = "Password")
     //@Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$#*!%&]).{10,}$")
     private String password;
 
-    @Column(name = "Mail")
+    @Column(name = "Mail", unique = true)
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")
     private String mail;
 

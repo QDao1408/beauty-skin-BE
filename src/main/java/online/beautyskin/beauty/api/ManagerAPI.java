@@ -5,6 +5,7 @@ import online.beautyskin.beauty.entity.Manager;
 import online.beautyskin.beauty.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/manager")
+@Validated
 public class ManagerAPI {
 
     @Autowired
@@ -27,8 +29,8 @@ public class ManagerAPI {
 
     @PostMapping("/create")
     public ResponseEntity createManager(@RequestBody@Valid Manager manager){
-        managers.add(managerService.createManager(manager));
-        return ResponseEntity.ok(manager);
+        Manager newManager = managerService.createManager(manager);
+        return ResponseEntity.ok(newManager);
     }
 
     @PutMapping("/update")

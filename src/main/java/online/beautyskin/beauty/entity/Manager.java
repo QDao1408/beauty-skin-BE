@@ -14,7 +14,7 @@ public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "fullName is not blank!")
+    @NotBlank(message = "Name is not blank!")
     private String name;
     @NotBlank(message = "address is not blank!")
     private String address;
@@ -24,7 +24,6 @@ public class Manager {
     private String mail;
     @NotBlank(message = "userName is not blank!")
     private String userName;
-    @NotBlank(message = "userName is not blank!")
     private String password;
     private boolean isDelete = false;
 
@@ -36,19 +35,11 @@ public class Manager {
         this.address = address;
     }
 
-    public String getFullName() {
-        return name;
-    }
-
-    public void setFullName(String fullName) {
-        this.name = fullName;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -66,6 +57,14 @@ public class Manager {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -95,11 +94,12 @@ public class Manager {
     public Manager() {
     }
 
-    public Manager(String address, String name, long id, String mail, String password, String phone, String userName) {
+    public Manager(String address, Long id, boolean isDelete, String mail, String name, String password, String phone, String userName) {
         this.address = address;
-        this.name = name;
         this.id = id;
+        this.isDelete = isDelete;
         this.mail = mail;
+        this.name = name;
         this.password = password;
         this.phone = phone;
         this.userName = userName;

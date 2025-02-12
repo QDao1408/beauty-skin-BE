@@ -8,13 +8,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+
 public class ManagerService {
     @Autowired
     private ManagerRepository managerRepository;
 
     //CREATE
     public Manager createManager(Manager manager){
-        return managerRepository.save(manager);
+        Manager newManager = managerRepository.save(manager);
+        return newManager;
     }
     //REMOVE
     public Manager deleteManager(long id){

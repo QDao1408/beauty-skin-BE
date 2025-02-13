@@ -38,7 +38,7 @@ public class BlogAPI {
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity delete(@RequestBody long id){
+    public ResponseEntity delete(@PathVariable long id){
         Blog blog = blogService.delete(id);
         return ResponseEntity.ok(blog);
     }

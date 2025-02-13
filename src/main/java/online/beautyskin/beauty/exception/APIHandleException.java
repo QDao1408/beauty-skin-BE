@@ -2,6 +2,7 @@ package online.beautyskin.beauty.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,6 +30,16 @@ public class APIHandleException {
     public ResponseEntity handleDuplicate(SQLIntegrityConstraintViolationException exception) {
         //exception.getMessage().con
         return new ResponseEntity("Trùng tên đăng nhập / email", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity handleNullPointerException(NullPointerException exception) {
+        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity handleUsernameNotFoundException(UsernameNotFoundException exception) {
+        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 }

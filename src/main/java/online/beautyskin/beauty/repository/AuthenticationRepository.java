@@ -13,4 +13,5 @@ public interface AuthenticationRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
     List<User> findAllUser();
 
+    Optional<User> findByMail(String email);
 }

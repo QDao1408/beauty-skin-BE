@@ -46,12 +46,12 @@ public class AuthenticationService implements UserDetailsService {
 
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest){
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            authenticationRequest.getUsername(),
-                            authenticationRequest.getPassword()
-                    )
-            );
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                authenticationRequest.getUsername(),
+                                authenticationRequest.getPassword()
+                        )
+                );
         }catch (Exception e){
             throw new NullPointerException("tài khoản hoặc mật khẩu không đúng");
         }
@@ -73,5 +73,6 @@ public class AuthenticationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return authenticationRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("not found"));
+
     }
 }

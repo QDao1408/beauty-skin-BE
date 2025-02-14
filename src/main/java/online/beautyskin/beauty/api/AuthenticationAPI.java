@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 @CrossOrigin("*")
 public class AuthenticationAPI {
     @Autowired
@@ -29,4 +31,12 @@ public class AuthenticationAPI {
         AuthenticationResponse authenticationResponse = authenticationService.login(authenticationRequest);
         return ResponseEntity.ok(authenticationResponse);
     }
+
+    @GetMapping("/get")
+    public ResponseEntity get() {
+        List<User> users = authenticationService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+
 }

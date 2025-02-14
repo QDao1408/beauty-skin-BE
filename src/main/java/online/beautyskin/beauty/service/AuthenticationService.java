@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AuthenticationService implements UserDetailsService {
 
@@ -39,6 +41,7 @@ public class AuthenticationService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setUsername(userRequest.getUsername());
         user.setMail(userRequest.getEmail());
+        user.setFullName(userRequest.getFullName());
         // save
         User u = authenticationRepository.save(user);
         return u;
@@ -81,4 +84,9 @@ public class AuthenticationService implements UserDetailsService {
                 .orElseGet(() -> authenticationRepository.findByMail(usernameOrEmail)
                         .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail)));
     }
+
+    public List<User> getAllUsers() {
+        return authenticationRepository.findAll();
+    }
+
 }

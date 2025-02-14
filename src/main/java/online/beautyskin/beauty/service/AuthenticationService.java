@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AuthenticationService implements UserDetailsService {
 
@@ -74,6 +76,10 @@ public class AuthenticationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return authenticationRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("not found"));
-
     }
+
+    public List<User> getAllUsers() {
+        return authenticationRepository.findAll();
+    }
+
 }

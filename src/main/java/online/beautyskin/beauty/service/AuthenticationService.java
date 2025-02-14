@@ -45,18 +45,19 @@ public class AuthenticationService implements UserDetailsService {
     }
 
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest){
+        User user = findByUsernameOrEmail(authenticationRequest.getUsername());
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            authenticationRequest.getUsername(),
+                            user.getUsername(), // Always use username for authentication
                             authenticationRequest.getPassword()
                     )
             );
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new NullPointerException("tài khoản hoặc mật khẩu không đúng");
         }
-        User user = authenticationRepository.findByUsername(authenticationRequest.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException(authenticationRequest.getUsername()));
+
         String token = tokenService.generateToken(user);
         AuthenticationResponse authenticationResponse = new AuthenticationResponse();
 
@@ -71,7 +72,13 @@ public class AuthenticationService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return authenticationRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("not found"));
+    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        return findByUsernameOrEmail(usernameOrEmail);
+    }
+
+    private User findByUsernameOrEmail(String usernameOrEmail) {
+        return authenticationRepository.findByUsername(usernameOrEmail)
+                .orElseGet(() -> authenticationRepository.findByMail(usernameOrEmail)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail)));
     }
 }

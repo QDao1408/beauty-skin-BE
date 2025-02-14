@@ -4,6 +4,7 @@ public class UserRequest {
     private String username;
     private String password;
     private String email;
+    private String fullName;
 
     public String getUsername() {
         return username;
@@ -27,5 +28,13 @@ public class UserRequest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

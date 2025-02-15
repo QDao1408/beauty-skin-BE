@@ -18,8 +18,7 @@ public class Category {
     public Category() {
         this.isDeleted = false;
     }
-    public Category(long id, String name, long parentId) {
-        this.id = id;
+    public Category(String name, long parentId) {
         this.name = name;
         this.parentId = parentId;
         this.isDeleted = false;

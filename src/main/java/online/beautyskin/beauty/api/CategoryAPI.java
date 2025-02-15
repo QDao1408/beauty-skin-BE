@@ -38,8 +38,7 @@ public class CategoryAPI {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable long id) {
-        Category category = categoryService.findById(id);
-        category.setDeleted(true);
+        Category category = categoryService.delete(id);
         return ResponseEntity.ok(category);
     }
 }

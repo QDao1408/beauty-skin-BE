@@ -2,12 +2,15 @@ package online.beautyskin.beauty.repository;
 
 import online.beautyskin.beauty.entity.Promotion;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface PromotionRepository extends JpaRepository<Promotion, Long> {
-    Promotion createPromotion(LocalDate startDate, LocalDate endDate);
-    Promotion findPromotionByDate(LocalDate date);
-    Promotion findPromotionBetween(LocalDate startDate, LocalDate endDate);
-    
+
+    @Query("SELECT p FROM Promotion p WHERE p.startDate <= CURRENT_DATE AND p.endDate >= CURRENT_DATE")
+    List<Promotion> findValidPromotions();
+
+    List<Promotion> findAllByIsDeletedFalse();
 }

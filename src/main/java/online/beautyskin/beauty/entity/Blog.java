@@ -1,9 +1,6 @@
 package online.beautyskin.beauty.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
@@ -13,12 +10,18 @@ import java.util.Date;
 public class Blog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Id")
     private long id;
+    @Column(name = "Title")
     private String title;
+    @Column(name = "Content")
     private String content;
+    @Column(name = "PostDate")
     private LocalDate postDate;
-    private String picture;
-    private boolean isDelete = false;
+    @Column(name = "Image")
+    private String image;
+
+    private boolean isDeleted = false;
 
     public String getContent() {
         return content;
@@ -36,21 +39,15 @@ public class Blog {
         this.id = id;
     }
 
-    public boolean isDelete() {
-        return isDelete;
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    public void setDelete(boolean delete) {
-        isDelete = delete;
+    public void setDeleted(boolean delete) {
+        isDeleted = delete;
     }
 
-    public String getPicture() {
-        return picture;
-    }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
 
     public LocalDate getPostDate() {
         return postDate;
@@ -71,12 +68,20 @@ public class Blog {
     public Blog() {
     }
 
-    public Blog(String content, long id, boolean isDelete, String picture, LocalDate postDate, String title) {
+    public Blog(String content, long id, boolean isDeleted, String image, LocalDate postDate, String title) {
         this.content = content;
         this.id = id;
-        this.isDelete = isDelete;
-        this.picture = picture;
+        this.isDeleted = isDeleted;
+        this.image = image;
         this.postDate = postDate;
         this.title = title;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

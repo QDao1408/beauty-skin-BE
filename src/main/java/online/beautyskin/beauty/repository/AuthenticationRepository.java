@@ -16,4 +16,5 @@ public interface AuthenticationRepository extends JpaRepository<User, Long> {
     List<User> findByIsDeletedFalse();
 
     Optional<User> findByMail(String email);
+
 }

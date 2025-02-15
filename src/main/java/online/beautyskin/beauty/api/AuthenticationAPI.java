@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 @CrossOrigin("*")
 public class AuthenticationAPI {
     @Autowired
@@ -37,6 +37,8 @@ public class AuthenticationAPI {
         List<User> users = authenticationService.getAllUsers();
         return ResponseEntity.ok(users);
     }
+
+
 
 
 }

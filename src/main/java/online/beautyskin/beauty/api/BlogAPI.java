@@ -33,7 +33,7 @@ public class BlogAPI {
 
     @GetMapping("getByDeleteIsFalse")
     public ResponseEntity getByDeleteIsFalse(){
-        blogs = blogService.findByDeleteIsFalse();
+        blogs = blogService.findByDeletedIsFalse();
         return ResponseEntity.ok(blogs);
     }
 

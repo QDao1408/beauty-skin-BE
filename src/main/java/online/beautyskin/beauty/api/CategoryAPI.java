@@ -30,14 +30,14 @@ public class CategoryAPI {
         return ResponseEntity.ok(categories);
     }
 
-    @PutMapping("/updatee/{id}")
-    public ResponseEntity update(@Valid @RequestBody Category category, @PathVariable int id) {
+    @PutMapping("/update/{id}")
+    public ResponseEntity update(@Valid @RequestBody Category category, @PathVariable long id) {
         categoryService.create(category);
         return ResponseEntity.ok(category);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable int id) {
+    public ResponseEntity delete(@PathVariable long id) {
         Category category = categoryService.findById(id);
         category.setDeleted(true);
         return ResponseEntity.ok(category);

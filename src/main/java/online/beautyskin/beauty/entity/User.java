@@ -52,6 +52,9 @@ public class User implements UserDetails {
     @Column(name = "IsDeleted")
     private boolean isDeleted = false;
 
+    @Column(name = "IsUpdate")
+    private boolean isActive = true;
+
     @Enumerated(value = EnumType.STRING)
     public RoleEnums roleEnums;
 
@@ -166,5 +169,13 @@ public class User implements UserDetails {
 
     public void setMail(@Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$") String mail) {
         this.mail = mail;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

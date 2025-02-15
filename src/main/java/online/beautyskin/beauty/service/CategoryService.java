@@ -16,7 +16,7 @@ public class CategoryService {
         return categoryRepository.findByIsDeletedFalse();
     }
 
-    public Category findById(int id) {
+    public Category findById(long id) {
         return categoryRepository.findById(id);
     }
 

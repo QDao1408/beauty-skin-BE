@@ -26,6 +26,7 @@ public class Promotion {
     private PromotionEnums apply;
     @Column(name = "PromotionAmount")
     private double promoAmount;
+    private boolean isDeleted = false;
 
     @AssertTrue(message = "Promotion's end date must be after the start date.")
     public boolean isEndDateAfterStartDate() {
@@ -45,6 +46,7 @@ public class Promotion {
         this.type = type;
         this.apply = apply;
         this.promoAmount = promoAmount;
+        this.isDeleted = false;
     }
 
 
@@ -106,5 +108,17 @@ public class Promotion {
 
     public void setPromoAmount(double promoAmount) {
         this.promoAmount = promoAmount;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

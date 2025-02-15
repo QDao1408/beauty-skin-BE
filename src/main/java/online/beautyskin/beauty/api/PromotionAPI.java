@@ -34,13 +34,13 @@ public class PromotionAPI {
         return ResponseEntity.ok(promo1);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@RequestBody Promotion promotion, @PathVariable long id) {
         Promotion del = promotionService.deletePromotion(promotion);
         return ResponseEntity.ok(del);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     public ResponseEntity update(@RequestBody Promotion promotion, @PathVariable long id) {
         Promotion upd = promotionService.updatePromotion(promotion);
         return ResponseEntity.ok(upd);

@@ -8,15 +8,20 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column(name= "Category_Name")
+    @Column(name= "CategoryName")
     @NotBlank(message = "Category name can not be blank")
     private String name;
-    @Column(name = "Parent_Id")
+    @Column(name = "ParentId")
     private long parentId;
 
     private boolean isDeleted = false;
     public Category() {
-
+        this.isDeleted = false;
+    }
+    public Category(String name, long parentId) {
+        this.name = name;
+        this.parentId = parentId;
+        this.isDeleted = false;
     }
 
     public boolean isDeleted() {

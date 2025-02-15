@@ -49,6 +49,7 @@ public class User implements UserDetails {
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")
     private String mail;
 
+    @Column(name = "IsDeleted")
     private boolean isDeleted = false;
 
     @Enumerated(value = EnumType.STRING)

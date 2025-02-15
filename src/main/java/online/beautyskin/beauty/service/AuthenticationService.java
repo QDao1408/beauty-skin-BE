@@ -86,7 +86,7 @@ public class AuthenticationService implements UserDetailsService {
     }
 
     public List<User> getAllUsers() {
-        return authenticationRepository.findAll();
+        return authenticationRepository.findByIsDeletedFalse();
     }
 
 }

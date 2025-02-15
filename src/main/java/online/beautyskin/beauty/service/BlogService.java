@@ -32,7 +32,7 @@ public class BlogService {
     //delete
     public Blog delete(long id){
         Blog blog = blogRepository.findBlogById(id);
-        blog.setDelete(true);
+        blog.setDeleted(true);
         return blogRepository.save(blog);
     }
     //edit

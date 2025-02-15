@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/user")
+@CrossOrigin("*")
 public class UserAPI {
     @Autowired
     private UserService userService;
@@ -25,6 +26,8 @@ public class UserAPI {
         userService.delete(u);
         return ResponseEntity.ok(u);
     }
+
+
 
     @PutMapping("/inActive/{id}")
     public ResponseEntity inActive(@PathVariable long id) {

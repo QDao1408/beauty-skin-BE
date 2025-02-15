@@ -35,9 +35,6 @@ public class Blog {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public boolean isDeleted() {
         return isDeleted;
@@ -68,10 +65,9 @@ public class Blog {
     public Blog() {
     }
 
-    public Blog(String content, long id, boolean isDeleted, String image, LocalDate postDate, String title) {
+    public Blog(String content,String image, LocalDate postDate, String title) {
         this.content = content;
-        this.id = id;
-        this.isDeleted = isDeleted;
+        this.isDeleted = false;
         this.image = image;
         this.postDate = postDate;
         this.title = title;

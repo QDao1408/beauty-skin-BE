@@ -5,7 +5,11 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jdk.jfr.Category;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.service.annotation.GetExchange;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 public class Product {
@@ -16,43 +20,46 @@ public class Product {
     @Column(name = "Product_Name")
     private String name;
 
-    @Column(name = "Form")
-    private String form; // liquid, solid, powder, wasp
-
-    @Column(name = "Description")
-    private String description;
-
-    @Column(name = "Origin")
-    private String origin;
-
-    @Column(name = "Image")
-    private String image;
-
-    @Column(name = "Price")
-    @Min(value = 0, message = "Price must greater than 0")
-    private int price;
-
-    @Column(name = "Quantity")
-    @Min(value = 0, message = "Quantity must greater than 0")
-    private int quantity;
+    @Column(name = "Brand")
+    private String brand; // liquid, solid, powder, wasp
 
     @Column(name = "Category")
     private String category;
 
-    @Column(name = "Capacity")
-    private int capacity;
+    @Column(name = "Description")
+    private String description;
 
-    boolean isDeleted = false;
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
 
-    public Product() {}
+    @Column(name = "status")
+    private Boolean status;
 
-    public boolean isDeleted() {
-        return isDeleted;
-    }
+    @Column(name = "image")
+    private String image;
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
+    @Column(name = "rating")
+    @Min(0)
+    @Max(5)
+    private BigDecimal rating;
+
+    @Column(name = "tag")
+    private String tag;
+
+    @Column(name = "capacity")
+    private String capacity;
+
+    @Column(name = "stock")
+    private BigDecimal stock;
+
+    @Column(name = "publish")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime publish;
+
+    @Column(name = "origin")
+    private String origin;
+
+    private boolean isDeleted;
 
     public long getId() {
         return id;
@@ -70,52 +77,12 @@ public class Product {
         this.name = name;
     }
 
-    public String getForm() {
-        return form;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setForm(String form) {
-        this.form = form;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public String getCategory() {
@@ -126,11 +93,112 @@ public class Product {
         this.category = category;
     }
 
-    public int getCapacity() {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public BigDecimal getRating() {
+        return rating;
+    }
+
+    public void setRating(BigDecimal rating) {
+        this.rating = rating;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(String capacity) {
         this.capacity = capacity;
+    }
+
+    public BigDecimal getStock() {
+        return stock;
+    }
+
+    public void setStock(BigDecimal stock) {
+        this.stock = stock;
+    }
+
+    public LocalDateTime getPublish() {
+        return publish;
+    }
+
+    public void setPublish(LocalDateTime publish) {
+        this.publish = publish;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public Product() {
+    }
+
+    public Product(long id, String name, String brand, String category, String description, BigDecimal price, Boolean status, String image, BigDecimal rating, String tag, String capacity, BigDecimal stock, LocalDateTime publish, String origin, boolean isDeleted) {
+        this.id = id;
+        this.name = name;
+        this.brand = brand;
+        this.category = category;
+        this.description = description;
+        this.price = price;
+        this.status = status;
+        this.image = image;
+        this.rating = rating;
+        this.tag = tag;
+        this.capacity = capacity;
+        this.stock = stock;
+        this.publish = publish;
+        this.origin = origin;
+        this.isDeleted = isDeleted;
     }
 }

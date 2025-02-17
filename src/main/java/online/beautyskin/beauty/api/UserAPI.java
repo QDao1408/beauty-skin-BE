@@ -2,6 +2,7 @@ package online.beautyskin.beauty.api;
 
 import jakarta.validation.Valid;
 import online.beautyskin.beauty.entity.User;
+import online.beautyskin.beauty.entity.request.UserUpdateRequest;
 import online.beautyskin.beauty.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,8 @@ public class UserAPI {
     private UserService userService;
 
     @PutMapping("/update/{id}")
-    public ResponseEntity update(@PathVariable long id, @Valid @RequestBody User user) {
-        User user1 = userService.update(user);
+    public ResponseEntity update(@PathVariable long id, @RequestBody UserUpdateRequest user) {
+        User user1 = userService.update(user,id);
         return ResponseEntity.ok(user1);
     }
 

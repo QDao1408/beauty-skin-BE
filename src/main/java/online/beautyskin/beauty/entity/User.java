@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import online.beautyskin.beauty.enums.GenderEnums;
 import online.beautyskin.beauty.enums.RoleEnums;
 import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -48,6 +50,12 @@ public class User implements UserDetails {
     @Column(name = "Mail", unique = true)
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")
     private String mail;
+
+    @Column(name = "Gender")
+    private GenderEnums gender;
+
+    @Column(name = "Birthday")
+    private LocalDateTime birthday;
 
     @Column(name = "IsDeleted")
     private boolean isDeleted = false;
@@ -118,6 +126,22 @@ public class User implements UserDetails {
 
     public void setRoleEnums(RoleEnums roleEnums) {
         this.roleEnums = roleEnums;
+    }
+
+    public GenderEnums getGender() {
+        return gender;
+    }
+
+    public void setGender(GenderEnums gender) {
+        this.gender = gender;
+    }
+
+    public LocalDateTime getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDateTime birthday) {
+        this.birthday = birthday;
     }
 
     @Override

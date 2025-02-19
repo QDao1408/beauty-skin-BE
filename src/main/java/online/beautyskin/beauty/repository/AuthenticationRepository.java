@@ -17,4 +17,10 @@ public interface AuthenticationRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByMail(String email);
 
+    boolean existsByIdAndIsDeletedFalse(Long id);
+
+    Optional<User> findByUsernameAndIsDeletedFalse(String username);
+
+
+
 }

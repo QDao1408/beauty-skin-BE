@@ -49,29 +49,35 @@ public class AuthenticationService implements UserDetailsService {
 
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest){
         User user = findByUsernameOrEmail(authenticationRequest.getUsername());
+        if(authenticationRepository.existsByIdAndIsDeletedFalse(user.getId())) {
 
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            user.getUsername(), // Always use username for authentication
-                            authenticationRequest.getPassword()
-                    )
-            );
-        } catch (Exception e) {
-            throw new NullPointerException("tài khoản hoặc mật khẩu không đúng");
+            try {
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                user.getUsername(), // Always use username for authentication
+                                authenticationRequest.getPassword()
+                        )
+                );
+            } catch (Exception e) {
+                throw new NullPointerException("tài khoản hoặc mật khẩu không đúng");
+            }
+
+
+            String token = tokenService.generateToken(user);
+            AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+
+            authenticationResponse.setToken(token);
+            authenticationResponse.setId(user.getId());
+            authenticationResponse.setMail(user.getMail());
+            authenticationResponse.setUsername(user.getUsername());
+            authenticationResponse.setPassword(user.getPassword());
+            authenticationResponse.setRoleEnum(user.getRoleEnums());
+            return authenticationResponse;
+        } else {
+            throw new NullPointerException("tài khoản không tồn tại");
         }
 
-        String token = tokenService.generateToken(user);
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse();
 
-        authenticationResponse.setToken(token);
-        authenticationResponse.setId(user.getId());
-        authenticationResponse.setMail(user.getMail());
-        authenticationResponse.setUsername(user.getUsername());
-        authenticationResponse.setPassword(user.getPassword());
-        authenticationResponse.setRoleEnum(user.getRoleEnums());
-
-        return authenticationResponse;
     }
 
     @Override

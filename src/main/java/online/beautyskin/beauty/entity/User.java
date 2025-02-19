@@ -58,10 +58,10 @@ public class User implements UserDetails {
     private LocalDateTime birthday;
 
     @Column(name = "IsDeleted")
-    private boolean isDeleted = false;
+    private boolean isDeleted;
 
     @Column(name = "IsActive")
-    private boolean isActive = true;
+    private boolean isActive;
 
     @Enumerated(value = EnumType.STRING)
     public RoleEnums roleEnums;

@@ -72,6 +72,8 @@ public class AuthenticationService implements UserDetailsService {
             authenticationResponse.setUsername(user.getUsername());
             authenticationResponse.setPassword(user.getPassword());
             authenticationResponse.setRoleEnum(user.getRoleEnums());
+            authenticationResponse.setDeleted(false);
+            authenticationResponse.setActive(true);
             return authenticationResponse;
         } else {
             throw new NullPointerException("tài khoản không tồn tại");

@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.entity.respone;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import online.beautyskin.beauty.enums.RoleEnums;
@@ -12,17 +13,22 @@ public class AuthenticationResponse {
     @Enumerated(EnumType.STRING)
     private RoleEnums roleEnum;
     private String token;
+    private boolean isDeleted;
+
+    private boolean isActive;
 
     public AuthenticationResponse() {
     }
 
-    public AuthenticationResponse(long id, String mail, String username, String password, RoleEnums roleEnum, String token) {
+    public AuthenticationResponse(long id, String mail, String username, String password, RoleEnums roleEnum, String token, boolean isDeleted, boolean isActive) {
         this.id = id;
         this.mail = mail;
         this.username = username;
         this.password = password;
         this.roleEnum = roleEnum;
         this.token = token;
+        this.isDeleted = isDeleted;
+        this.isActive = isActive;
     }
 
     public long getId() {
@@ -71,5 +77,21 @@ public class AuthenticationResponse {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

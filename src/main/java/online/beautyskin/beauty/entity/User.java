@@ -61,7 +61,10 @@ public class User implements UserDetails {
     private boolean isDeleted;
 
     @Column(name = "IsActive")
-    private boolean isActive;
+    private Boolean isActive = true;
+
+    @Column(name = "IsUpdate")
+    private boolean isUpdate = false;
 
     @Enumerated(value = EnumType.STRING)
     public RoleEnums roleEnums;
@@ -144,6 +147,14 @@ public class User implements UserDetails {
         this.birthday = birthday;
     }
 
+    public Boolean isActive() {
+        return isActive != null ? isActive : true;
+    }
+
+    public void setActive(Boolean active) {
+        this.isActive = active != null ? active : true;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return UserDetails.super.isAccountNonExpired();
@@ -195,11 +206,4 @@ public class User implements UserDetails {
         this.mail = mail;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
 }

@@ -60,7 +60,7 @@ public class User implements UserDetails {
     @Column(name = "IsDeleted")
     private boolean isDeleted = false;
 
-    @Column(name = "IsUpdate")
+    @Column(name = "IsActive")
     private boolean isActive = true;
 
     @Enumerated(value = EnumType.STRING)

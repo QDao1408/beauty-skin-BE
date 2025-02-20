@@ -16,12 +16,10 @@ public class Blog {
     private String title;
     @Column(name = "Content")
     private String content;
-    @Column(name = "PostDate")
-    private LocalDate postDate;
     @Column(name = "Image")
     private String image;
     @Column(name = "Publish")
-    private String publish;
+    private LocalDate publish;
     @Column(name = "Slug")
     private String Slug;
     @Column(name = "Author")
@@ -43,23 +41,12 @@ public class Blog {
         return id;
     }
 
-
     public boolean isDeleted() {
         return isDeleted;
     }
 
     public void setDeleted(boolean delete) {
         isDeleted = delete;
-    }
-
-
-
-    public LocalDate getPostDate() {
-        return postDate;
-    }
-
-    public void setPostDate(LocalDate postDate) {
-        this.postDate = postDate;
     }
 
     public String getTitle() {
@@ -73,11 +60,10 @@ public class Blog {
     public Blog() {
     }
 
-    public Blog(long id, String title, String content, LocalDate postDate, String image, String publish, String slug, String author, String tag, boolean isDeleted) {
+    public Blog(long id, String title, String content, String image, LocalDate publish, String slug, String author, String tag, boolean isDeleted) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.postDate = postDate;
         this.image = image;
         this.publish = publish;
         Slug = slug;
@@ -98,11 +84,11 @@ public class Blog {
         this.id = id;
     }
 
-    public String getPublish() {
+    public LocalDate getPublish() {
         return publish;
     }
 
-    public void setPublish(String publish) {
+    public void setPublish(LocalDate publish) {
         this.publish = publish;
     }
 

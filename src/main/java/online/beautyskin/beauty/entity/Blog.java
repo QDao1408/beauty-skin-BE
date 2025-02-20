@@ -20,6 +20,14 @@ public class Blog {
     private LocalDate postDate;
     @Column(name = "Image")
     private String image;
+    @Column(name = "Publish")
+    private String publish;
+    @Column(name = "Slug")
+    private String Slug;
+    @Column(name = "Author")
+    private String author;
+    @Column(name = "Tag")
+    private String tag;
 
     private boolean isDeleted = false;
 
@@ -65,12 +73,17 @@ public class Blog {
     public Blog() {
     }
 
-    public Blog(String content,String image, LocalDate postDate, String title) {
-        this.content = content;
-        this.isDeleted = false;
-        this.image = image;
-        this.postDate = postDate;
+    public Blog(long id, String title, String content, LocalDate postDate, String image, String publish, String slug, String author, String tag, boolean isDeleted) {
+        this.id = id;
         this.title = title;
+        this.content = content;
+        this.postDate = postDate;
+        this.image = image;
+        this.publish = publish;
+        Slug = slug;
+        this.author = author;
+        this.tag = tag;
+        this.isDeleted = isDeleted;
     }
 
     public String getImage() {
@@ -79,5 +92,41 @@ public class Blog {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getPublish() {
+        return publish;
+    }
+
+    public void setPublish(String publish) {
+        this.publish = publish;
+    }
+
+    public String getSlug() {
+        return Slug;
+    }
+
+    public void setSlug(String slug) {
+        Slug = slug;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

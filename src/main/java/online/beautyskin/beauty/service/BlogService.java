@@ -26,8 +26,8 @@ public class BlogService {
         return blogRepository.findAll();
     }
     //findByDeleteIsFalse
-    public List<Blog> findByDeleteIsFalse(){
-        return blogRepository.findByIsDeleteFalse();
+    public List<Blog> findByDeletedIsFalse(){
+        return blogRepository.findByIsDeletedFalse();
     }
     //delete
     public Blog delete(long id){

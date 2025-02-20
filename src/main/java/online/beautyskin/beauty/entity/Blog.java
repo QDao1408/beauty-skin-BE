@@ -14,9 +14,9 @@ public class Blog {
     private long id;
     @Column(name = "Title")
     private String title;
-    @Column(name = "Content")
+    @Column(name = "Content",columnDefinition = "LONGTEXT")
     private String content;
-    @Column(name = "Image")
+    @Column(name = "Image",columnDefinition = "LONGTEXT")
     private String image;
     @Column(name = "Publish")
     private LocalDate publish;

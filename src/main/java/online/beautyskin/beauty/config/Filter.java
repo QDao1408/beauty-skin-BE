@@ -97,4 +97,5 @@ public class Filter extends OncePerRequestFilter {
         if (authHeader == null) return null;
         return authHeader.substring(7);
     }
+
 }

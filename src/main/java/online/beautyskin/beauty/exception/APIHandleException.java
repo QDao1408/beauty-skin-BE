@@ -43,4 +43,9 @@ public class APIHandleException {
     public ResponseEntity handleUsernameNotFoundException(UsernameNotFoundException exception) {
         return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity handleAuthorizeException(AuthException exception) {
+        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

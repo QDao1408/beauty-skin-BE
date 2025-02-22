@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import online.beautyskin.beauty.entity.User;
+import online.beautyskin.beauty.entity.request.Request;
 import online.beautyskin.beauty.exception.AuthException;
 import online.beautyskin.beauty.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -32,20 +34,20 @@ public class Filter extends OncePerRequestFilter {
     @Qualifier("handlerExceptionResolver")
     HandlerExceptionResolver resolver;
 
-    private final List<String> AUTH_PERMISSION = List.of(
-            "/swagger-ui/**",
-            "/v3/api-docs/**",
-            "/swagger-resources/**",
-            "/api/login",
-            "/api/register"
-    );
+    private List<Request> publicAPI;
+
+    public Filter() {
+        publicAPI = new ArrayList<>();
+        Re
+    }
+
 
     public boolean checkIsPublic(String uri){
         // uri: /api/register
         // nếu gặp những api trong list ở trên => cho phép truy cập luôn => true
         AntPathMatcher patchMatch = new AntPathMatcher();
         // check token => false
-        return  AUTH_PERMISSION.stream().anyMatch(pattern -> patchMatch.match(pattern,uri));
+        return  publicAPI.stream().anyMatch(pattern -> patchMatch.match(pattern,uri));
     }
 
     @Override

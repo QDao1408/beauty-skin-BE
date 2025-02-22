@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.api;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.AuthenticationRequest;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin("*")
+@SecurityRequirement(name = "api")
 public class AuthenticationAPI {
     @Autowired
     private AuthenticationService authenticationService;

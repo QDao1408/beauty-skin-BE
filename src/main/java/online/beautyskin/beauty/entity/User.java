@@ -186,7 +186,7 @@ public class User implements UserDetails {
     })
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(this.roleEnums.toString()));
+        if (this.roleEnums != null) authorities.add(new SimpleGrantedAuthority(this.roleEnums.toString()));
         return authorities;
     }
 

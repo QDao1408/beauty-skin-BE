@@ -34,12 +34,14 @@ public class Filter extends OncePerRequestFilter {
     @Qualifier("handlerExceptionResolver")
     HandlerExceptionResolver resolver;
 
-    private List<Request> publicAPI;
-
-    public Filter() {
-        publicAPI = new ArrayList<>();
-        Re
-    }
+    private final List<String> AUTH_PERMISSION = List.of(
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/api/login",
+            "/api/register",
+            "/api/product/get"
+    );
 
 
     public boolean checkIsPublic(String uri){
@@ -47,7 +49,7 @@ public class Filter extends OncePerRequestFilter {
         // nếu gặp những api trong list ở trên => cho phép truy cập luôn => true
         AntPathMatcher patchMatch = new AntPathMatcher();
         // check token => false
-        return  publicAPI.stream().anyMatch(pattern -> patchMatch.match(pattern,uri));
+        return  AUTH_PERMISSION.stream().anyMatch(pattern -> patchMatch.match(pattern,uri));
     }
 
     @Override

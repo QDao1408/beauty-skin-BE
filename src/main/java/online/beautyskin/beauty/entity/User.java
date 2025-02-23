@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private String fullName;
 
     @Column(name = "Phone")
-    //@Pattern(regexp = "(0[3|5|7|8|9])+([0-9]{8})\\b")
+    @Pattern(regexp = "(0[3|5|7|8|9])+([0-9]{8})\\b")
     private String phone;
 
     @Column(name = "Skin_Type")

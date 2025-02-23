@@ -8,7 +8,7 @@ import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "`Order`")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

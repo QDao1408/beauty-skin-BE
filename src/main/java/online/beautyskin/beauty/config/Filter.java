@@ -7,7 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import online.beautyskin.beauty.entity.User;
-import online.beautyskin.beauty.entity.request.Request;
 import online.beautyskin.beauty.exception.AuthException;
 import online.beautyskin.beauty.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;

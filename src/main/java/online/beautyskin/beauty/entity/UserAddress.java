@@ -9,7 +9,13 @@ public class UserAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id")
-    private long id;
+    private long addressId;
+
+    @ManyToOne
+    @JoinColumn(name = "UserID",nullable = false)
+    private User user;
+
+
     @Column(name = "ReceiverName")
     private String receiverName;
     @Column(name = "ReceiverPhone")
@@ -39,8 +45,8 @@ public class UserAddress {
         this.ward = ward;
     }
 
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    public long getAddressId() { return addressId; }
+    public void setAddressId(long id) { this.addressId = id; }
     public String getReceiverName() { return receiverName; }
     public void setReceiverName(String receiverName) { this.receiverName = receiverName; }
     public String getReceiverPhone() { return receiverPhone; }

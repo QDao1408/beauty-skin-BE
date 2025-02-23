@@ -5,9 +5,9 @@ import jakarta.persistence.*;
 @Entity
 public class SkinConcern {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "Id")
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ConcernID", nullable = false)
+    private Long id;
     @Column(name = "Name")
     private String name;
     @Column(name = "Description")

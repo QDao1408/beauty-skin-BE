@@ -16,6 +16,18 @@ public class UserSkinProfile {
     private LocalDateTime lastUpdate;
     private boolean isDeleted = false;
 
+    @OneToOne
+    @JoinColumn(name = "UserID", nullable = false, unique = true)
+    private User user;
+
+    @OneToOne
+    @JoinColumn(name = "TypeID", nullable = false)
+    private SkinType skinType;
+
+    @OneToOne
+    @JoinColumn(name = "ConcernID", nullable = false)
+    private SkinConcern skinConcern;
+
     public UserSkinProfile() {}
     public UserSkinProfile(@NotNull final LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;

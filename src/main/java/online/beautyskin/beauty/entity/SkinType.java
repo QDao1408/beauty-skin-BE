@@ -2,16 +2,21 @@ package online.beautyskin.beauty.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class SkinType {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "Id")
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "TypeID")
+    private Long id;
     @Column(name = "Type")
     private String typeName;
     @Column(name = "Description")
     private String description;
+
+    @OneToMany(mappedBy = "skinType",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Routine> routines;
 
     public SkinType() {
     }

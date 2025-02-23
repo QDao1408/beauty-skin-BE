@@ -10,8 +10,13 @@ import java.time.LocalDateTime;
 public class CustomerCart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "Id")
+    @Column(name = "CartID")
     private long id;
+
+    @ManyToOne
+    @JoinColumn(name = "UserID", nullable = false)
+    private User user;
+
     @Column(name = "Quantity")
     @Min(1)
     private int quantity;

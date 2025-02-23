@@ -34,28 +34,40 @@ public class Filter extends OncePerRequestFilter {
     @Qualifier("handlerExceptionResolver")
     HandlerExceptionResolver resolver;
 
-    private List<Request> publicAPI;
+    List<String> PUBLIC_API = List.of(
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/api/login",
+            "/api/register"
+    );
 
-    public Filter() {
-        publicAPI = new ArrayList<>();
-        Re
+    boolean isPermitted(HttpServletRequest request) {
+        AntPathMatcher matcher = new AntPathMatcher();
+        String uri = request.getRequestURI();
+        String method = request.getMethod();
+        if(method.equals("GET") && matcher.match("/api/product/**", uri)) {
+            return true;
+        }
+        return PUBLIC_API.stream().anyMatch(m -> matcher.match(m, uri));
     }
 
 
-    public boolean checkIsPublic(String uri){
-        // uri: /api/register
-        // nếu gặp những api trong list ở trên => cho phép truy cập luôn => true
-        AntPathMatcher patchMatch = new AntPathMatcher();
-        // check token => false
-        return  publicAPI.stream().anyMatch(pattern -> patchMatch.match(pattern,uri));
-    }
+//    public boolean checkIsPublic(String uri){
+//        // uri: /api/register
+//        // nếu gặp những api trong list ở trên => cho phép truy cập luôn => true
+//        AntPathMatcher patchMatch = new AntPathMatcher();
+//        // check token => false
+//        return  publicAPI.stream().anyMatch(pattern -> patchMatch.match(pattern,uri));
+//    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         //check xem api nguoi dung yeu cau co phai la 1 public api?
-        boolean isPublicAPI = checkIsPublic(request.getRequestURI());
-        if (isPublicAPI){
+        //boolean isPublicAPI = checkIsPublic(request.getRequestURI());
+        String uri = request.getRequestURI();
+        if (isPermitted(request)) {
             filterChain.doFilter(request,response);
         }else{
             String token = getToken(request);

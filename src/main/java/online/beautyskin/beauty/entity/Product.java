@@ -20,34 +20,12 @@ public class Product {
     @Column(name = "Product_Name")
     private String name;
 
-    @Column(name = "Brand")
-    private String brand; // liquid, solid, powder, wasp
-
-    @Column(name = "Category")
-    private String category;
 
     @Column(name = "Description")
     private String description;
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
-
-    @Column(name = "status")
-    private Boolean status;
-
-    @Column(name = "image")
-    private String image;
-
-    @Column(name = "rating")
-    @Min(0)
-    @Max(5)
-    private BigDecimal rating;
-
-    @Column(name = "tag")
-    private String tag;
-
-    @Column(name = "capacity")
-    private String capacity;
 
     @Column(name = "stock")
     private BigDecimal stock;

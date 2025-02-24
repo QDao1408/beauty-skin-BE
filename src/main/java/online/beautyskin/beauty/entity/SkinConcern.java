@@ -2,6 +2,9 @@ package online.beautyskin.beauty.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class SkinConcern {
     @Id
@@ -12,6 +15,14 @@ public class SkinConcern {
     private String name;
     @Column(name = "Description")
     private String description;
+
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_product_skinConcern",
+            joinColumns = @JoinColumn(name = "concern_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products = new ArrayList<Product>();
 
     public SkinConcern() {
     }

@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
@@ -7,6 +8,8 @@ import online.beautyskin.beauty.enums.PaymentStatusEnums;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "`Order`")
 public class Order {
@@ -23,6 +26,37 @@ public class Order {
     @Column(name = "Amount")
     @Min(0)
     private double amount;
+
+    @ManyToMany(mappedBy = "orders")
+    private List<Promotion> promotions = new ArrayList<>();
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Transaction transaction;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<OrderDetail> orderDetails = new ArrayList<>();
+
+    public List<OrderDetail> getOrderDetails() { return orderDetails; }
+    public void setOrderDetails(List<OrderDetail> orderDetails) { this.orderDetails = orderDetails; }
+
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private UserAddress userAddress;
+
+    @OneToOne
+    @JoinColumn(name = "payment_id")
+    private PaymentMethod paymentMethod;
+
+    public void addOrderDetail(OrderDetail orderDetail) {
+        orderDetails.add(orderDetail);
+        orderDetail.setOrder(this);
+    }
+
+    public void removeOrderDetail(OrderDetail orderDetail) {
+        orderDetails.remove(orderDetail);
+        orderDetail.setOrder(null);
+    }
 
     public Order() {}
     public long getId() { return id; }

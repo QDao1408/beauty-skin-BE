@@ -36,6 +36,14 @@ public class Promotion {
     )
     private List<Product> products = new ArrayList<Product>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_order_promo",
+            joinColumns = @JoinColumn(name = "promo_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id")
+    )
+    private List<Order> orders = new ArrayList<>();
+
     @AssertTrue(message = "Promotion's end date must be after the start date.")
     public boolean isEndDateAfterStartDate() {
         if (startDate == null || endDate == null) {

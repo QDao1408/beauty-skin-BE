@@ -17,7 +17,8 @@ public class CartDetails {
     @JoinColumn(name = "cart_id")
     private CustomerCart customerCart;
 
-    @OneToOne(mappedBy = "cartDetails", cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "product_id")
     private Product product;
 
     private boolean isDeleted = false;

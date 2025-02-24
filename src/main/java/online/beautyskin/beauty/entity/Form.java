@@ -2,6 +2,9 @@ package online.beautyskin.beauty.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Form {
     @Id
@@ -13,6 +16,14 @@ public class Form {
     @Column(name = "Description")
     private String description;
     private boolean isDeleted = false;
+
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_product_form",
+            joinColumns = @JoinColumn(name = "form_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products = new ArrayList<>();
 
     public Form() {}
     public Form(String name, String description) { this.name = name; this.description = description; }

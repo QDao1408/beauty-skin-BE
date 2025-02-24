@@ -2,7 +2,7 @@ package online.beautyskin.beauty.entity;
 
 import jakarta.persistence.*;
 
-@Entity(name = "ProductSizeMapping")
+@Entity(name = "MappingProductSize")
 public class MappingProductSize {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

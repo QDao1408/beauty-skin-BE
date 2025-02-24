@@ -2,6 +2,8 @@ package online.beautyskin.beauty.service;
 
 import jakarta.persistence.Access;
 import online.beautyskin.beauty.entity.Product;
+import online.beautyskin.beauty.entity.request.ProductRequest;
+import online.beautyskin.beauty.repository.BrandRepository;
 import online.beautyskin.beauty.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -13,6 +15,9 @@ import java.util.List;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private BrandRepository brandRepository;
 
     public List<Product> getAllProducts() {
         return productRepository.findByIsDeletedFalse();
@@ -27,7 +32,19 @@ public class ProductService {
         return productRepository.findByName(name);
     }
 
-    public Product createProduct(Product product) {
+    public Product createProduct(ProductRequest productrequest) {
+        Product product = new Product();
+        product.setName(productrequest.getName());
+        product.setDescription(productrequest.getDescription());
+        product.setBrand(brandRepository.findById(productrequest.getBrandId()));
+        product.setStock(productrequest.getStock());
+        product.setCreateDateTime(productrequest.getCreateDateTime());
+        product.setLastUpdateDateTime(productrequest.getLastUpdateDateTime());
+        product.setExpiredDateTime(productrequest.getExpiredDateTime());
+        product.setStatus(productrequest.getStatus());
+        product.setInstruction(productrequest.getInstruction());
+        product.setDeleted(false);
+
         return productRepository.save(product);
     }
 

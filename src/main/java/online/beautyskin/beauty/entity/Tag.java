@@ -2,6 +2,9 @@ package online.beautyskin.beauty.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Tag {
     @Id
@@ -11,6 +14,14 @@ public class Tag {
     @Column(name = "TagName", unique = true, nullable = false)
     private String name;
     private boolean isDeleted = false;
+
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_product_tag",
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products = new ArrayList<>();
 
     public Tag() {
     }

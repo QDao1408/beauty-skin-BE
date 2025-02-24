@@ -72,6 +72,21 @@ public class Product {
     @JsonIgnore
     private List<MappingProductImage> mappingProductImages = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "products")
+    private List<Promotion> promotions = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "products")
+    private List<SkinType> skinTypes = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "products")
+    private List<SkinConcern> skinConcerns = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "products")
+    private List<Tag> tags = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "products")
+    private List<Form> forms = new ArrayList<>();
+
     public List<MappingProductImage> getMappingProductImages() { return mappingProductImages; }
     public void setMappingProductImages(List<MappingProductImage> mappingProductImages) { this.mappingProductImages = mappingProductImages; }
     public void addMappingProductSizes(MappingProductSize mappingProductSize) {

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jdk.jfr.Category;
+import online.beautyskin.beauty.entity.Category;
 import online.beautyskin.beauty.enums.ProductEnums;
 import online.beautyskin.beauty.enums.PromotionEnums;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,6 +64,14 @@ public class Product {
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    public void setCategory(Category category) { this.category = category; }
+    public Category getCategory() { return category; }
+
+
     public Brand getBrand() { return brand; }
     public void setBrand(Brand brand) { this.brand = brand; }
 
@@ -118,5 +126,6 @@ public class Product {
     public void setInstruction(String instruction) { this.instruction = instruction; }
     public boolean isDeleted() { return isDeleted; }
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
+
 
 }

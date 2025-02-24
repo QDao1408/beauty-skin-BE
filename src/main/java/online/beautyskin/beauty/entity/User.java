@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
@@ -31,21 +32,12 @@ public class User implements UserDetails {
     @Pattern(regexp = "(0[3|5|7|8|9])+([0-9]{8})\\b")
     private String phone;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private UserSkinProfile skinProfile;
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<UserAddress> addresses;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private CustomerCart customerCart;
-
     @Column(name = "Username", unique = true)
     @NotNull(message = "Username cannot be null.")
     private String username;
 
     @Column(name = "Password")
-    //@Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$#*!%&]).{10,}$")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$#*!%&]).{10,}$")
     private String password;
 
     @Column(name = "Mail", unique = true)
@@ -70,7 +62,33 @@ public class User implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     public RoleEnums roleEnums;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserSkinProfile skinProfile;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<UserAddress> addresses;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private CustomerCart customerCart;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonIgnore
+    private List<Feedback> feedbacks = new ArrayList<>();
+
     public User(){}
+
+    public void addFeedback(Feedback feedback){
+        feedbacks.add(feedback);
+        feedback.setUser(this);
+    }
+    public void removeFeedback(Feedback feedback){
+        feedbacks.remove(feedback);
+        feedback.setUser(null);
+    }
+
+    public List<Feedback> getFeedbacks() { return feedbacks; }
+    public void setFeedbacks(List<Feedback> feedbacks) { this.feedbacks = feedbacks; }
+
 
     public boolean isDeleted() {
         return isDeleted;

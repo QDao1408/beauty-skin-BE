@@ -2,6 +2,7 @@ package online.beautyskin.beauty.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,14 @@ public class SkinType {
 
     @OneToMany(mappedBy = "skinType",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Routine> routines;
+
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_product_skinType",
+            joinColumns = @JoinColumn(name = "type_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products = new ArrayList<Product>();
 
     public SkinType() {
     }

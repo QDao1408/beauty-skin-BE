@@ -5,6 +5,8 @@ import jakarta.validation.constraints.AssertTrue;
 import online.beautyskin.beauty.enums.PromotionEnums;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Promotion {
@@ -22,11 +24,17 @@ public class Promotion {
     private String description;
     @Column(name = "PromotionType")
     private PromotionEnums type;
-    @Column(name = "ApplyFor")
-    private PromotionEnums apply;
     @Column(name = "PromotionAmount")
     private double promoAmount;
     private boolean isDeleted = false;
+
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_product_promo",
+            joinColumns = @JoinColumn(name = "promo_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products = new ArrayList<Product>();
 
     @AssertTrue(message = "Promotion's end date must be after the start date.")
     public boolean isEndDateAfterStartDate() {
@@ -38,13 +46,12 @@ public class Promotion {
 
     public Promotion() {}
 
-    public Promotion(String name, LocalDate startDate, LocalDate endDate, String description, PromotionEnums type, PromotionEnums apply, double promoAmount) {
+    public Promotion(String name, LocalDate startDate, LocalDate endDate, String description, PromotionEnums type, double promoAmount) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
         this.type = type;
-        this.apply = apply;
         this.promoAmount = promoAmount;
         this.isDeleted = false;
     }
@@ -92,14 +99,6 @@ public class Promotion {
 
     public void setType(PromotionEnums type) {
         this.type = type;
-    }
-
-    public PromotionEnums getApply() {
-        return apply;
-    }
-
-    public void setApply(PromotionEnums apply) {
-        this.apply = apply;
     }
 
     public double getPromoAmount() {

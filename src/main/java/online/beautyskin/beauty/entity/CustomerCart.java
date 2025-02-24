@@ -29,14 +29,7 @@ public class CustomerCart {
     @JsonIgnore
     private List<CartDetails> cartDetails = new ArrayList<>();
 
-    public List<CartDetails> addToCartDetails(List<CartDetails> cartDetails) {
-        this.cartDetails.addAll(cartDetails);
-        return cartDetails;
-    }
-    public List<CartDetails> removeFromCartDetails(List<CartDetails> cartDetails) {
-        this.cartDetails.removeAll(cartDetails);
-        return cartDetails;
-    }
+
 
     public CustomerCart() {}
     public long getId() { return id; }

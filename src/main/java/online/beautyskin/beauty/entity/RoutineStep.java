@@ -3,6 +3,9 @@ package online.beautyskin.beauty.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class RoutineStep {
     @Id
@@ -18,6 +21,18 @@ public class RoutineStep {
     @Min(1)
     private int stepOrder;
     private boolean isDeleted = false;
+
+    @ManyToOne()
+    @JoinColumn(name = "routine_id", nullable = false)
+    private Routine routine;
+
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_product_routine_step",
+            joinColumns = @JoinColumn(name = "step_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products = new ArrayList<>();
 
     public RoutineStep() {}
     public RoutineStep(String description, String stepName, int stepOrder) {

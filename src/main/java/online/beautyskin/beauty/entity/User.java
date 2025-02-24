@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import online.beautyskin.beauty.enums.GenderEnums;
 import online.beautyskin.beauty.enums.RoleEnums;
-import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,13 +16,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
 @Entity
 
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "Id")
+    @Column(name = "UserID")
     private long id;
 
     @Column(name = "Full_Name")
@@ -33,12 +31,14 @@ public class User implements UserDetails {
     @Pattern(regexp = "(0[3|5|7|8|9])+([0-9]{8})\\b")
     private String phone;
 
-    @Column(name = "Skin_Type")
-    private String skinType;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserSkinProfile skinProfile;
 
-    @Column(name = "Address")
-    private String address;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<UserAddress> addresses;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CustomerCart> customerCart;
     @Column(name = "Username", unique = true)
     @NotNull(message = "Username cannot be null.")
     private String username;
@@ -103,20 +103,20 @@ public class User implements UserDetails {
         this.phone = phone;
     }
 
-    public String getSkinType() {
-        return skinType;
+    public UserSkinProfile getSkinProfile() {
+        return skinProfile;
     }
 
-    public void setSkinType(String skinType) {
-        this.skinType = skinType;
+    public void setSkinProfile(UserSkinProfile skinProfile) {
+        this.skinProfile = skinProfile;
     }
 
-    public String getAddress() {
-        return address;
+    public List<UserAddress> getAddresses() {
+        return addresses;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddresses(List<UserAddress> addresses) {
+        this.addresses = addresses;
     }
 
     public String getUsername() {

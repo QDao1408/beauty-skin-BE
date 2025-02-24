@@ -21,6 +21,10 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
+    public User create(User user) {
+        return userRepository.save(user);
+    }
+
     public User delete(User user) {
         user.setDeleted(true);
         return userRepository.save(user);

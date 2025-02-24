@@ -11,6 +11,9 @@ public class PaymentMethod {
     private String name;
     private boolean isDeleted;
 
+    @OneToOne(mappedBy = "paymentMethod", cascade = CascadeType.ALL)
+    private Order order;
+
     public PaymentMethod() {
 
     }

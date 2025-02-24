@@ -64,9 +64,11 @@ public class Product {
     @JsonIgnore
     private List<Feedback> feedbacks = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "product_id")
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private CartDetails cartDetails;
+
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    private OrderDetail orderDetail;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -86,6 +88,11 @@ public class Product {
 
     @ManyToMany(mappedBy = "products")
     private List<Form> forms = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "products")
+    private List<RoutineStep> routineSteps = new ArrayList<>();
+
+
 
     public List<MappingProductImage> getMappingProductImages() { return mappingProductImages; }
     public void setMappingProductImages(List<MappingProductImage> mappingProductImages) { this.mappingProductImages = mappingProductImages; }

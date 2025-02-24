@@ -35,6 +35,9 @@ public class UserAddress {
     private String ward;
     private boolean isDeleted = false;
 
+    @OneToOne(mappedBy = "userAddress", cascade = CascadeType.ALL)
+    private Order order;
+
     public UserAddress() {}
     public UserAddress(String receiverName, String receiverPhone, String receiverAddress, String city, String district, String ward) {
         this.receiverName = receiverName;

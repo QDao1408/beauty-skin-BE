@@ -3,6 +3,7 @@ package online.beautyskin.beauty.api;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import online.beautyskin.beauty.entity.Product;
+import online.beautyskin.beauty.entity.request.ProductRequest;
 import online.beautyskin.beauty.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,14 +30,14 @@ public class ProductAPI {
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity createProduct(@Valid @RequestBody Product product) {
+    public ResponseEntity createProduct(@Valid @RequestBody ProductRequest product) {
         products.add(productService.createProduct(product));
         return ResponseEntity.ok(product);
     }
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity updateProduct(@PathVariable long id, @Valid @RequestBody Product product) {
+    public ResponseEntity updateProduct(@PathVariable long id, @Valid @RequestBody ProductRequest product) {
         productService.createProduct(product);
         return ResponseEntity.ok(product);
     }

@@ -11,8 +11,14 @@ import java.time.LocalDateTime;
 public class Routine {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "Id")
+    @Column(name = "RountineID")
     private long id;
+
+    // fk skinTyoe id
+    @ManyToOne
+    @JoinColumn(name = "TypeID", nullable = false)
+    private SkinType skinType;
+
     @Column(name = "RoutineName")
     private String name;
     @Column(name = "Description")
@@ -21,7 +27,7 @@ public class Routine {
     @NotNull
     private LocalDateTime lastUpdate;
     private boolean isDeleted = false;
-    // fk skintype id
+
 
     public Routine() {}
     public Routine(String name, String description, LocalDateTime lastUpdate) { this.name = name; this.description = description; this.lastUpdate = lastUpdate; }

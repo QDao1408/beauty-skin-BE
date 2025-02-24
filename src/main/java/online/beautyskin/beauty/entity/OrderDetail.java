@@ -7,8 +7,8 @@ import jakarta.validation.constraints.Min;
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "Id")
-    private long id;
+    @Column(name = "OrderDetailId")
+    private long orderDetailId;
     @Column(name = "Quantity")
     @Min(1)
     private int quantity;
@@ -21,8 +21,8 @@ public class OrderDetail {
 
     public OrderDetail() {}
 
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    public long getOrderDetailId() { return orderDetailId; }
+    public void setOrderDetailId(long id) { this.orderDetailId = id; }
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
     public double getUnitPrice() { return unitPrice; }

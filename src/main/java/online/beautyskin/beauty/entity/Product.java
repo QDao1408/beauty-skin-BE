@@ -1,10 +1,12 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jdk.jfr.Category;
+import online.beautyskin.beauty.enums.ProductEnums;
 import online.beautyskin.beauty.enums.PromotionEnums;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,6 +14,7 @@ import org.springframework.web.service.annotation.GetExchange;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,27 +34,38 @@ public class Product {
     private BigDecimal stock;
 
     @Column(name = "CreateDate")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createDateTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") // Handles offset like +07:00
+
+    private OffsetDateTime createDateTime;
 
     @Column(name = "LastUpdate")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime lastUpdateDateTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") // Handles offset like +07:00
+
+    private OffsetDateTime lastUpdateDateTime;
 
     @Column(name = "ExpiredDate")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime expiredDateTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") // Handles offset like +07:00
+
+    private OffsetDateTime expiredDateTime;
 
     @Column(name = "Status")
-    private PromotionEnums status;
+    private ProductEnums status;
     @Column(name = "Instruction")
     private String instruction;
 
     private boolean isDeleted;
 
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<ProductSizeMapping> productSizeMappings = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
+
+    public Brand getBrand() { return brand; }
+    public void setBrand(Brand brand) { this.brand = brand; }
 
     public List<ProductSizeMapping> getProductSizeMappings() {
         return productSizeMappings;
@@ -73,7 +87,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String description, BigDecimal stock, LocalDateTime createDateTime, LocalDateTime lastUpdateDateTime, LocalDateTime expiredDateTime, PromotionEnums status, String instruction, boolean isDeleted) {
+    public Product(String name, String description, BigDecimal stock, OffsetDateTime createDateTime, OffsetDateTime lastUpdateDateTime, OffsetDateTime expiredDateTime, ProductEnums status, String instruction, boolean isDeleted) {
         this.name = name;
         this.description = description;
         this.stock = stock;
@@ -92,16 +106,17 @@ public class Product {
     public void setDescription(String description) { this.description = description; }
     public BigDecimal getStock() { return stock; }
     public void setStock(BigDecimal stock) { this.stock = stock; }
-    public LocalDateTime getCreateDateTime() { return createDateTime; }
-    public void setCreateDateTime(LocalDateTime createDateTime) { this.createDateTime = createDateTime; }
-    public LocalDateTime getLastUpdateDateTime() { return lastUpdateDateTime; }
-    public void setLastUpdateDateTime(LocalDateTime lastUpdateDateTime) { this.lastUpdateDateTime = lastUpdateDateTime; }
-    public LocalDateTime getExpiredDateTime() { return expiredDateTime; }
-    public void setExpiredDateTime(LocalDateTime expiredDateTime) { this.expiredDateTime = expiredDateTime; }
-    public PromotionEnums getStatus() { return status; }
-    public void setStatus(PromotionEnums status) { this.status = status; }
+    public OffsetDateTime getCreateDateTime() { return createDateTime; }
+    public void setCreateDateTime(OffsetDateTime createDateTime) { this.createDateTime = createDateTime; }
+    public OffsetDateTime getLastUpdateDateTime() { return lastUpdateDateTime; }
+    public void setLastUpdateDateTime(OffsetDateTime lastUpdateDateTime) { this.lastUpdateDateTime = lastUpdateDateTime; }
+    public OffsetDateTime getExpiredDateTime() { return expiredDateTime; }
+    public void setExpiredDateTime(OffsetDateTime expiredDateTime) { this.expiredDateTime = expiredDateTime; }
+    public ProductEnums getStatus() { return status; }
+    public void setStatus(ProductEnums status) { this.status = status; }
     public String getInstruction() { return instruction; }
     public void setInstruction(String instruction) { this.instruction = instruction; }
     public boolean isDeleted() { return isDeleted; }
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
+
 }

@@ -1,7 +1,11 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Category {
@@ -13,6 +17,25 @@ public class Category {
     private String name;
     @Column(name = "ParentId")
     private long parentId;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Product> products = new ArrayList<Product>();
+
+    public List<Product> getProducts() {
+        return products;
+    }
+    public void setProducts(List<Product> products) { this.products = products; }
+
+    public void addProduct(Product product) {
+        products.add(product);
+        product.setCategory(this);
+    }
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+        product.setCategory(null);
+    }
 
     private boolean isDeleted = false;
     public Category() {

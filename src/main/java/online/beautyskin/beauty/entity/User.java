@@ -37,8 +37,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<UserAddress> addresses;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CustomerCart> customerCart;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private CustomerCart customerCart;
+
     @Column(name = "Username", unique = true)
     @NotNull(message = "Username cannot be null.")
     private String username;

@@ -3,17 +3,9 @@ package online.beautyskin.beauty.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import online.beautyskin.beauty.entity.Category;
 import online.beautyskin.beauty.enums.ProductEnums;
-import online.beautyskin.beauty.enums.PromotionEnums;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.service.annotation.GetExchange;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,14 +50,14 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<ProductSizeMapping> productSizeMappings = new ArrayList<>();
+    private List<MappingProductSize> mappingProductSizes = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "brand_id")
+    @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -75,6 +67,21 @@ public class Product {
     @OneToOne
     @JoinColumn(name = "product_id")
     private CartDetails cartDetails;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<MappingProductImage> mappingProductImages = new ArrayList<>();
+
+    public List<MappingProductImage> getMappingProductImages() { return mappingProductImages; }
+    public void setMappingProductImages(List<MappingProductImage> mappingProductImages) { this.mappingProductImages = mappingProductImages; }
+    public void addMappingProductSizes(MappingProductSize mappingProductSize) {
+        this.mappingProductSizes.add(mappingProductSize);
+        mappingProductSize.setProduct(this);
+    }
+    public void removeMappingProductSizes(MappingProductSize mappingProductSize) {
+        this.mappingProductSizes.remove(mappingProductSize);
+        mappingProductSize.setProduct(null);
+    }
 
     public List<Feedback> getFeedbacks() { return feedbacks; }
     public void setFeedbacks(List<Feedback> feedbacks) { this.feedbacks = feedbacks; }
@@ -94,21 +101,21 @@ public class Product {
     public Brand getBrand() { return brand; }
     public void setBrand(Brand brand) { this.brand = brand; }
 
-    public List<ProductSizeMapping> getProductSizeMappings() {
-        return productSizeMappings;
+    public List<MappingProductSize> getProductSizeMappings() {
+        return mappingProductSizes;
     }
-    public void setProductSizeMappings(List<ProductSizeMapping> productSizeMappings) {
-        this.productSizeMappings = productSizeMappings;
-    }
-
-    public void addProductSizeMapping(ProductSizeMapping productSizeMapping) {
-        productSizeMappings.add(productSizeMapping);
-        productSizeMapping.setProduct(this);
+    public void setProductSizeMappings(List<MappingProductSize> mappingProductSizes) {
+        this.mappingProductSizes = mappingProductSizes;
     }
 
-    public void removeProductSizeMapping(ProductSizeMapping productSizeMapping) {
-        productSizeMappings.remove(productSizeMapping);
-        productSizeMapping.setProduct(null);
+    public void addProductSizeMapping(MappingProductSize mappingProductSize) {
+        mappingProductSizes.add(mappingProductSize);
+        mappingProductSize.setProduct(this);
+    }
+
+    public void removeProductSizeMapping(MappingProductSize mappingProductSize) {
+        mappingProductSizes.remove(mappingProductSize);
+        mappingProductSize.setProduct(null);
     }
 
     public Product() {

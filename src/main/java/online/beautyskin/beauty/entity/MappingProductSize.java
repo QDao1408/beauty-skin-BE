@@ -3,7 +3,7 @@ package online.beautyskin.beauty.entity;
 import jakarta.persistence.*;
 
 @Entity(name = "ProductSizeMapping")
-public class ProductSizeMapping {
+public class MappingProductSize {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "MappingId")
@@ -17,8 +17,11 @@ public class ProductSizeMapping {
     @JoinColumn(name = "SizeId", nullable = false)
     private Size size;
 
-    public ProductSizeMapping() {}
-    public ProductSizeMapping(double price) {
+
+
+
+    public MappingProductSize() {}
+    public MappingProductSize(double price) {
         this.price = price;
     }
     public long getId() { return id; }

@@ -1,9 +1,6 @@
 package online.beautyskin.beauty.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -25,6 +22,15 @@ public class Feedback {
     private String comment;
     private LocalDate feedBackDate;
     private boolean isDelete = false;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    public Product getProduct() {
+        return product;
+    }
+    public void setProduct(Product product) { this.product = product; }
 
     public String getComment() {
         return comment;

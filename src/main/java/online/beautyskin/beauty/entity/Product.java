@@ -68,6 +68,21 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Feedback> feedbacks = new ArrayList<>();
+
+    public List<Feedback> getFeedbacks() { return feedbacks; }
+    public void setFeedbacks(List<Feedback> feedbacks) { this.feedbacks = feedbacks; }
+    public void addFeedback(Feedback feedback) {
+        feedbacks.add(feedback);
+        feedback.setProduct(this);
+    }
+    public void removeFeedback(Feedback feedback) {
+        feedbacks.remove(feedback);
+        feedback.setProduct(null);
+    }
+
     public void setCategory(Category category) { this.category = category; }
     public Category getCategory() { return category; }
 

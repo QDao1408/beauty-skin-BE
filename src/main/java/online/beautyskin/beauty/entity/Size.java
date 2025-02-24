@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 
@@ -22,7 +23,8 @@ public class Size {
     private boolean isDeleted = false;
 
     @OneToMany(mappedBy = "size", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductSizeMapping> productSizeMappings = new ArrayList<>();
+    @JsonIgnore
+    private List<MappingProductSize> mappingProductSizes = new ArrayList<>();
 
     public Size() {}
     public Size(int volume, int weight) { this.volume = volume; this.weight = weight; }
@@ -33,17 +35,17 @@ public class Size {
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
     public int getWeight() { return weight; }
     public void setWeight(int weight) { this.weight = weight; }
-    public List<ProductSizeMapping> getProductSizeMappings() { return productSizeMappings; }
-    public void setProductSizeMappings(List<ProductSizeMapping> productSizeMappings) {
-        this.productSizeMappings = productSizeMappings;
+    public List<MappingProductSize> getProductSizeMappings() { return mappingProductSizes; }
+    public void setProductSizeMappings(List<MappingProductSize> mappingProductSizes) {
+        this.mappingProductSizes = mappingProductSizes;
     }
-    public void addProductSizeMapping(ProductSizeMapping productSizeMapping) {
-        productSizeMappings.add(productSizeMapping);
-        productSizeMapping.setSize(this);
+    public void addProductSizeMapping(MappingProductSize mappingProductSize) {
+        mappingProductSizes.add(mappingProductSize);
+        mappingProductSize.setSize(this);
     }
-    public void removeProductSizeMapping(ProductSizeMapping productSizeMapping) {
-        productSizeMappings.remove(productSizeMapping);
-        productSizeMapping.setSize(null);
+    public void removeProductSizeMapping(MappingProductSize mappingProductSize) {
+        mappingProductSizes.remove(mappingProductSize);
+        mappingProductSize.setSize(null);
     }
 
 }

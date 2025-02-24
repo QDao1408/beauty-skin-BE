@@ -16,8 +16,7 @@ public class SkinType {
     @Column(name = "Description")
     private String description;
 
-    @OneToMany(mappedBy = "skinType",cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Routine> routines;
+
 
     @ManyToMany
     @JoinTable(
@@ -26,6 +25,9 @@ public class SkinType {
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Product> products = new ArrayList<Product>();
+
+    @OneToOne(mappedBy = "skinType", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Routine routine;
 
     public SkinType() {
     }

@@ -1,7 +1,11 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class OrderDetail {
@@ -19,8 +23,25 @@ public class OrderDetail {
     @Min(0)
     private double totalPrice;
 
-    public OrderDetail() {}
+    @OneToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public OrderDetail() {}
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
     public long getOrderDetailId() { return orderDetailId; }
     public void setOrderDetailId(long id) { this.orderDetailId = id; }
     public int getQuantity() { return quantity; }

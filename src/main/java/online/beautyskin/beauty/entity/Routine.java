@@ -1,10 +1,14 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.util.RouteMatcher;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -14,10 +18,7 @@ public class Routine {
     @Column(name = "RountineID")
     private long id;
 
-    // fk skinTyoe id
-    @ManyToOne
-    @JoinColumn(name = "TypeID", nullable = false)
-    private SkinType skinType;
+
 
     @Column(name = "RoutineName")
     private String name;
@@ -28,6 +29,13 @@ public class Routine {
     private LocalDateTime lastUpdate;
     private boolean isDeleted = false;
 
+    @OneToOne
+    @JoinColumn(name = "type_id")
+    private SkinType skinType;
+
+    @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<RoutineStep> routineSteps = new ArrayList<>();
 
     public Routine() {}
     public Routine(String name, String description, LocalDateTime lastUpdate) { this.name = name; this.description = description; this.lastUpdate = lastUpdate; }

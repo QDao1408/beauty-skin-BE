@@ -19,6 +19,10 @@ public class Transaction {
     @NotNull
     private LocalDateTime transactionDate;
 
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
     public Transaction() {}
     public Transaction(double amount, LocalDateTime transactionDate) {
         this.amount = amount;

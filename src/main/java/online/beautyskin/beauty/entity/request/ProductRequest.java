@@ -30,6 +30,8 @@ public class ProductRequest {
 
     private long brandId;
 
+    private long categoryId;
+
     public ProductRequest() {
     }
 
@@ -111,5 +113,12 @@ public class ProductRequest {
 
     public void setBrandId(long brandId) {
         this.brandId = brandId;
+    }
+
+    public long getCategoryId() {
+        return categoryId;
+    }
+    public void setCategoryId(long categoryId) {
+        this.categoryId = categoryId;
     }
 }

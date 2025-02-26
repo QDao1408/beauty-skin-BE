@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class RoutineStep {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private long id;
     @Column(name = "Description")

@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class FAQs {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private long id;
     @Column(name = "Question")

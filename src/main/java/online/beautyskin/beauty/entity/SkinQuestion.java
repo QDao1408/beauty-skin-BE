@@ -1,26 +1,22 @@
 package online.beautyskin.beauty.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.List;
 
 @Entity
 public class SkinQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "quizid")
     private long id;
-    @NotBlank(message = "Question is not blank")
+    @NotBlank(message = "Question is not empty!")
     private String question;
-    @NotBlank(message = "typeNormal is not blank")
-    private String typeNormal;
-    @NotBlank(message = "typeOily is not blank")
-    private String typeOily;
-    @NotBlank(message = "typeCombine is not blank")
-    private String typeCombine;
-    @NotBlank(message = "typeDry is not blank")
-    private String typeDry;
+    @NotBlank(message = "Description is not empty!")
+    private String description;
+    @OneToMany(mappedBy = "skinQuestion")
+    private List<Answer> answers;
     private boolean isDelete = false;
 
     public long getId() {
@@ -31,14 +27,6 @@ public class SkinQuestion {
         this.id = id;
     }
 
-    public boolean isDelete() {
-        return isDelete;
-    }
-
-    public void setDelete(boolean delete) {
-        isDelete = delete;
-    }
-
     public String getQuestion() {
         return question;
     }
@@ -47,48 +35,29 @@ public class SkinQuestion {
         this.question = question;
     }
 
-    public String getTypeCombine() {
-        return typeCombine;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTypeCombine(String typeCombine) {
-        this.typeCombine = typeCombine;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getTypeDry() {
-        return typeDry;
+    public boolean isDelete() {
+        return isDelete;
     }
 
-    public void setTypeDry(String typeDry) {
-        this.typeDry = typeDry;
+    public void setDelete(boolean delete) {
+        isDelete = delete;
     }
 
-    public String getTypeNormal() {
-        return typeNormal;
-    }
-
-    public void setTypeNormal(String typeNormal) {
-        this.typeNormal = typeNormal;
-    }
-
-    public String getTypeOily() {
-        return typeOily;
-    }
-
-    public void setTypeOily(String typeOily) {
-        this.typeOily = typeOily;
+    public SkinQuestion(long id, String question, String description, boolean isDelete) {
+        this.id = id;
+        this.question = question;
+        this.description = description;
+        this.isDelete = isDelete;
     }
 
     public SkinQuestion() {
-    }
-
-    public SkinQuestion(long id, boolean isDelete, String question, String typeCombine, String typeDry, String typeNormal, String typeOily) {
-        this.id = id;
-        this.isDelete = isDelete;
-        this.question = question;
-        this.typeCombine = typeCombine;
-        this.typeDry = typeDry;
-        this.typeNormal = typeNormal;
-        this.typeOily = typeOily;
     }
 }

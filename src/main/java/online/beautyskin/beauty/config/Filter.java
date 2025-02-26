@@ -38,7 +38,16 @@ List<String> PUBLIC_API = List.of(
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/api/login",
-            "/api/register"
+            "/api/register",
+            //USER
+            "/api/get",
+            "/api/user/update",
+            //BLOG
+            "/api/blog/edit",
+            "/api/blog/getByDeleteIsFalse",
+            "/api/blog/create",
+            "/api/blog/delete",
+            "/api/blog/get"
     );
 
     boolean isPermitted(HttpServletRequest request) {

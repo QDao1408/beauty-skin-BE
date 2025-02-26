@@ -31,14 +31,14 @@ public class ProductAPI {
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity createProduct(@Valid @RequestBody ProductRequest product) {
-        products.add(productService.createProduct(product));
-        return ResponseEntity.ok(product);
+        Product p = productService.createProduct(product);
+        return ResponseEntity.ok(p);
     }
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity updateProduct(@PathVariable long id, @Valid @RequestBody Product product) {
-        return ResponseEntity.ok(productService.updateProduct(product));
+    public ResponseEntity updateProduct(@PathVariable long id, @Valid @RequestBody ProductRequest product) {
+        return ResponseEntity.ok(productService.updateProduct(id, product));
     }
 
     @DeleteMapping("/delete/{id}")

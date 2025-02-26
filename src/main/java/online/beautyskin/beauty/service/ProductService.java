@@ -4,6 +4,7 @@ import jakarta.persistence.Access;
 import online.beautyskin.beauty.entity.Product;
 import online.beautyskin.beauty.entity.request.ProductRequest;
 import online.beautyskin.beauty.repository.BrandRepository;
+import online.beautyskin.beauty.repository.CategoryRepository;
 import online.beautyskin.beauty.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -18,6 +19,9 @@ public class ProductService {
 
     @Autowired
     private BrandRepository brandRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public List<Product> getAllProducts() {
         return productRepository.findByIsDeletedFalse();
@@ -65,6 +69,7 @@ public class ProductService {
         p1.setStatus(productRequest.getStatus());
         p1.setInstruction(productRequest.getInstruction());
         p1.setDeleted(false);
+        p1.setCategory(categoryRepository.findById(productRequest.getCategoryId()));
         p1.setBrand(brandRepository.findById(productRequest.getBrandId()));
         return productRepository.save(p1);
     }

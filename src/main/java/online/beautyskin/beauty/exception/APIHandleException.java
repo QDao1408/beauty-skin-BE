@@ -31,7 +31,7 @@ public class APIHandleException {
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class) // dùng dể đánh dấu exception
     public ResponseEntity handleDuplicate(SQLIntegrityConstraintViolationException exception) {
         //exception.getMessage().con
-        return new ResponseEntity("Trùng tên đăng nhập / email", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NullPointerException.class)

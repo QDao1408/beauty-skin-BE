@@ -39,8 +39,8 @@ public class BrandAPI {
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity createBrand(@Valid @RequestBody BrandRequest brand) {
-        brandService.createBrand(brand);
-        return ResponseEntity.ok(brand);
+        Brand brand1 = brandService.createBrand(brand);
+        return ResponseEntity.ok(brand1);
     }
 
     @DeleteMapping("/delete")

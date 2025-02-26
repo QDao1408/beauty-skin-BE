@@ -28,7 +28,7 @@ public class BrandAPI {
         return ResponseEntity.ok(brands);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity updateBrand(@Valid @RequestBody Brand brand, @PathVariable long id) {
         Brand b = brandService.getBrandById(id);
@@ -43,7 +43,7 @@ public class BrandAPI {
         return ResponseEntity.ok(brand1);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity deleteBrand(@PathVariable long id) {
         Brand b = brandService.deleteBrandById(id);

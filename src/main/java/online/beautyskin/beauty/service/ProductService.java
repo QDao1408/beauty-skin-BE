@@ -54,9 +54,19 @@ public class ProductService {
         return productRepository.save(p1);
     }
 
-    public Product updateProduct(Product product) {
-
-        return productRepository.save(product);
+    public Product updateProduct(long id, ProductRequest productRequest) {
+        Product p1 = productRepository.findById(id);
+        p1.setName(productRequest.getName());
+        p1.setDescription(productRequest.getDescription());
+        p1.setStock(productRequest.getStock());
+        p1.setCreateDateTime(productRequest.getCreateDateTime());
+        p1.setLastUpdateDateTime(productRequest.getLastUpdateDateTime());
+        p1.setExpiredDateTime(productRequest.getExpiredDateTime());
+        p1.setStatus(productRequest.getStatus());
+        p1.setInstruction(productRequest.getInstruction());
+        p1.setDeleted(false);
+        p1.setBrand(brandRepository.findById(productRequest.getBrandId()));
+        return productRepository.save(p1);
     }
 
 

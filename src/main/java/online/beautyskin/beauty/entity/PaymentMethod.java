@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 public class PaymentMethod {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name="Name")
     private String name;

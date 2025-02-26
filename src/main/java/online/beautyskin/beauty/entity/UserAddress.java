@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Pattern;
 @Entity
 public class UserAddress {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private long addressId;
 

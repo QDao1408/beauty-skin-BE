@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class Image {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private long id;
     @Column(name = "URL")

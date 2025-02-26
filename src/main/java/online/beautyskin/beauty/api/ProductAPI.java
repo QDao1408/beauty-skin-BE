@@ -37,9 +37,8 @@ public class ProductAPI {
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity updateProduct(@PathVariable long id, @Valid @RequestBody ProductRequest product) {
-        productService.createProduct(product);
-        return ResponseEntity.ok(product);
+    public ResponseEntity updateProduct(@PathVariable long id, @Valid @RequestBody Product product) {
+        return ResponseEntity.ok(productService.updateProduct(product));
     }
 
     @DeleteMapping("/delete/{id}")

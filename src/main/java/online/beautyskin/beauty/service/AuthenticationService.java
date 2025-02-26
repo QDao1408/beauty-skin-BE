@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.service;
 
+import lombok.SneakyThrows;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.AuthenticationRequest;
 import online.beautyskin.beauty.entity.request.UserRequest;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Service
@@ -33,6 +35,7 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     private TokenService tokenService;
 
+    @SneakyThrows
     public User register(UserRequest userRequest) {
         User user = new User();
         passwordEncoder.encode(userRequest.getPassword());
@@ -43,8 +46,13 @@ public class AuthenticationService implements UserDetailsService {
         user.setMail(userRequest.getEmail());
         user.setFullName(userRequest.getFullName());
         user.setActive(true);
+        User u = null;
+        try {
+            u = authenticationRepository.save(user);
+        } catch (Exception exception) {
+            throw new SQLIntegrityConstraintViolationException("Username hoặc gmail đã tồn tại");
+        }
         // save
-        User u = authenticationRepository.save(user);
         return u;
     }
 

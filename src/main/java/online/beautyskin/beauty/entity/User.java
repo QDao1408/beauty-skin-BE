@@ -56,9 +56,6 @@ public class User implements UserDetails {
     @Column(name = "IsActive")
     private Boolean isActive = true;
 
-    @Column(name = "IsUpdate")
-    private boolean isUpdate = false;
-
     @Enumerated(value = EnumType.STRING)
     public RoleEnums roleEnums;
 

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity(name = "MappingProductSize")
 public class MappingProductSize {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MappingId")
     private long id;
     private double price;

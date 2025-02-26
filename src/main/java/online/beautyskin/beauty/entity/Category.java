@@ -12,11 +12,9 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column(name= "CategoryName")
+    @Column(name = "CategoryName")
     @NotBlank(message = "Category name can not be blank")
     private String name;
-    @Column(name = "ParentId")
-    private long parentId;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -25,7 +23,10 @@ public class Category {
     public List<Product> getProducts() {
         return products;
     }
-    public void setProducts(List<Product> products) { this.products = products; }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 
     public void addProduct(Product product) {
         products.add(product);
@@ -38,12 +39,13 @@ public class Category {
     }
 
     private boolean isDeleted = false;
+
     public Category() {
         this.isDeleted = false;
     }
-    public Category(String name, long parentId) {
+
+    public Category(String name) {
         this.name = name;
-        this.parentId = parentId;
         this.isDeleted = false;
     }
 
@@ -69,13 +71,5 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public long getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(long parentId) {
-        this.parentId = parentId;
     }
 }

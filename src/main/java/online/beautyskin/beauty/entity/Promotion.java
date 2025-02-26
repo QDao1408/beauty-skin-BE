@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 public class Promotion {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private long id;
     @Column(name = "Name")

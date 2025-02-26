@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 public class MappingProductImage {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private long id;
     @Column(name = "display_order")

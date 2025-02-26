@@ -7,7 +7,7 @@ import java.time.OffsetDateTime;
 @Entity
 public class CartDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "Quantity")
     private int quantity;

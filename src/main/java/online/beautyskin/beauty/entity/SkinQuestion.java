@@ -19,6 +19,9 @@ public class SkinQuestion {
     private List<Answer> answers;
     private boolean isDelete = false;
 
+    public SkinQuestion(String question, String description) {
+    }
+
     public long getId() {
         return id;
     }
@@ -49,6 +52,14 @@ public class SkinQuestion {
 
     public void setDelete(boolean delete) {
         isDelete = delete;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 
     public SkinQuestion(long id, String question, String description, boolean isDelete) {

@@ -1,6 +1,8 @@
 package online.beautyskin.beauty.api;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import online.beautyskin.beauty.entity.SkinQuestion;
+import online.beautyskin.beauty.entity.request.SkinQuestionRequest;
 import online.beautyskin.beauty.service.SkinQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +13,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/skinQuestion")
+@SecurityRequirement(name = "api")
 public class SkinQuestionAPI {
     List<SkinQuestion> skinQuestionList = new ArrayList<>();
     @Autowired
     SkinQuestionService skinQuestionService;
 
     @PostMapping("create")
-    public ResponseEntity createSkinQuestion(@RequestBody SkinQuestion skinQuestion){
-        SkinQuestion newSkinQuest = skinQuestionService.createSkinQuestion(skinQuestion);
+    public ResponseEntity createSkinQuestion(@RequestBody SkinQuestionRequest skinQuestionRequest){
+        SkinQuestion newSkinQuest = skinQuestionService.createSkinQuestion(skinQuestionRequest);
         return ResponseEntity.ok(newSkinQuest);
     }
     @DeleteMapping("delete/{id}")

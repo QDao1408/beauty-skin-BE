@@ -31,6 +31,7 @@ public class BrandService {
     public Brand createBrand(BrandRequest brandRequest) {
         Brand brand = new Brand();
         brand.setName(brandRequest.getName());
+        brand.setDescription(brandRequest.getDescription());
         brand.setDeleted(false);
         return brandRepository.save(brand);
     }

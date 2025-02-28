@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,12 +11,16 @@ public class Answer {
     private long id;
 
     @ManyToOne
-        @JoinColumn(name = "quizid")
+    @JoinColumn(name = "quizid")
+    @JsonIgnore
     private SkinQuestion skinQuestion;
 
     private String answer;
 
     private int points;
+
+    public Answer(String answer, int point, SkinQuestion skinQuestion) {
+    }
 
     public long getId() {
         return id;
@@ -39,6 +44,14 @@ public class Answer {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public SkinQuestion getSkinQuestion() {
+        return skinQuestion;
+    }
+
+    public void setSkinQuestion(SkinQuestion skinQuestion) {
+        this.skinQuestion = skinQuestion;
     }
 
     public Answer(long id, String answer, int points) {

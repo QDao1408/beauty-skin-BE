@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.api;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.UserUpdateRequest;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/user")
 @CrossOrigin("*")
+@SecurityRequirement(name = "api")
 public class UserAPI {
     @Autowired
     private UserService userService;

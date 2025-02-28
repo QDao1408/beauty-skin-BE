@@ -49,6 +49,10 @@ public class UserService {
     public String changePassword(Long id, ChangePasswordRequest request) {
         Optional<User> optionalUser = userRepository.findById(id);
 
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            return "New password and confirm password do not match";
+        }
+
         if (optionalUser.isEmpty()) {
             return "User not found!";
         }

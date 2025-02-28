@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -9,7 +10,7 @@ public class UserAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private long addressId;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "UserID",nullable = false)
@@ -36,6 +37,7 @@ public class UserAddress {
     private boolean isDeleted = false;
 
     @OneToOne(mappedBy = "userAddress", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Order order;
 
     public UserAddress() {}
@@ -48,8 +50,7 @@ public class UserAddress {
         this.ward = ward;
     }
 
-    public long getAddressId() { return addressId; }
-    public void setAddressId(long id) { this.addressId = id; }
+
     public String getReceiverName() { return receiverName; }
     public void setReceiverName(String receiverName) { this.receiverName = receiverName; }
     public String getReceiverPhone() { return receiverPhone; }
@@ -65,4 +66,27 @@ public class UserAddress {
     public boolean isDeleted() { return isDeleted; }
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }

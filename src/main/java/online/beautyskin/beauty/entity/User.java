@@ -63,6 +63,7 @@ public class User implements UserDetails {
     private UserSkinProfile skinProfile;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonIgnore
     private List<UserAddress> addresses;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
@@ -222,4 +223,15 @@ public class User implements UserDetails {
         this.mail = mail;
     }
 
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public CustomerCart getCustomerCart() {
+        return customerCart;
+    }
+
+    public void setCustomerCart(CustomerCart customerCart) {
+        this.customerCart = customerCart;
+    }
 }

@@ -48,4 +48,9 @@ public class APIHandleException {
     public ResponseEntity handleAuthorizeException(AuthException exception) {
         return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity handleRuntimeException(RuntimeException exception) {
+        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

@@ -30,8 +30,8 @@ public class SkinQuestionAPI {
         return ResponseEntity.ok(skinQuestion);
     }
     @PutMapping("update/{id}")
-    public ResponseEntity updateSkinQuestion(@PathVariable long id,@RequestBody SkinQuestion skinQuestion){
-        SkinQuestion newSkinQuestion = skinQuestionService.updateSkinQuestion(skinQuestion);
+    public ResponseEntity updateSkinQuestion(@PathVariable long id,@RequestBody SkinQuestionRequest skinQuestionRequest){
+        SkinQuestion newSkinQuestion = skinQuestionService.updateSkinQuestion(id, skinQuestionRequest);
         return ResponseEntity.ok(newSkinQuestion);
     }
     @GetMapping("getAll/{id}")

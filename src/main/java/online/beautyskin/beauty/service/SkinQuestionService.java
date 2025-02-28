@@ -47,18 +47,41 @@ public class SkinQuestionService {
         // Gán lại danh sách Answer vào SkinQuestion (chỉ cần nếu muốn phản hồi đầy đủ)
         skinQuestion.setAnswers(answers);
 
-        // Bước 6: Trả về SkinQuestion đã tạo
+        // Trả về SkinQuestion đã tạo
         return skinQuestion;
     }
 
     //remove
     public SkinQuestion removeSkinQuestion(long id){
         SkinQuestion skinQuestion = skinQuestionRepository.findSkinQuestionById(id);
-        skinQuestion.setDelete(true);
+        if (skinQuestion != null) {
+            skinQuestion.setDelete(true);
+        }else {
+            throw new RuntimeException("SkinQuestion not found");
+        }
         return skinQuestionRepository.save(skinQuestion);
     }
     //update
-    public SkinQuestion updateSkinQuestion(SkinQuestion skinQuestion){
+    public SkinQuestion updateSkinQuestion(long id, SkinQuestionRequest skinQuestionRequest){
+        SkinQuestion skinQuestion = skinQuestionRepository.findSkinQuestionById(id);
+        if (skinQuestion != null) {
+            skinQuestion.setQuestion(skinQuestionRequest.getQuestion());
+            skinQuestion.setDescription(skinQuestionRequest.getDescription());
+            if(skinQuestionRequest.getAnswer() != null){
+                List<Answer> answers = new ArrayList<>();
+                for (AnswerRequest answerRequest : skinQuestionRequest.getAnswer()) {
+                    Answer answer = new Answer();
+                    answer.setAnswer(answerRequest.getAnswer());
+                    answer.setPoints(answerRequest.getPoint());
+                    answer.setSkinQuestion(skinQuestion);
+                    answers.add(answer);
+                }
+                answerRepository.deleteAll(skinQuestion.getAnswers());
+                answerRepository.saveAll(answers);
+            }
+        }else {
+            throw new RuntimeException("SkinQuestion not found");
+        }
         return skinQuestionRepository.save(skinQuestion);
     }
     //get

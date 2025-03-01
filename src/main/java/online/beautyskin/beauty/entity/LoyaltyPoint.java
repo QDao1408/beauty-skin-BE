@@ -14,7 +14,7 @@ public class LoyaltyPoint {
     private double discount; // 5%, 7%, 10%
     private long amountLevel; // 5tr, 15tr, 30tr
 
-    @OneToOne(mappedBy = "loyaltyPoint", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "loyaltyPoint")
     private User user;
 
     public LoyaltyPoint() {}

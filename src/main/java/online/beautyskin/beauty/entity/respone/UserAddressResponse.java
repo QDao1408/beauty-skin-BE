@@ -1,6 +1,7 @@
-package online.beautyskin.beauty.entity.request;
+package online.beautyskin.beauty.entity.respone;
 
-public class UserAddressRequest {
+public class UserAddressResponse {
+    private long addressId;
     private long userId;
     private String receiverName;
     private String receiverPhone;
@@ -8,9 +9,27 @@ public class UserAddressRequest {
     private String city;
     private String district;
     private String ward;
-    private boolean isDeleted;
 
-    public UserAddressRequest() {}
+    public UserAddressResponse() {}
+
+    public UserAddressResponse(long addressId, long userId, String receiverName, String receiverPhone, String receiverAddress, String city, String district, String ward) {
+        this.addressId = addressId;
+        this.userId = userId;
+        this.receiverName = receiverName;
+        this.receiverPhone = receiverPhone;
+        this.receiverAddress = receiverAddress;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 
     public String getReceiverName() {
         return receiverName;
@@ -60,14 +79,12 @@ public class UserAddressRequest {
         this.ward = ward;
     }
 
-    public long getUserId() {
-        return userId;
+    public long getAddressId() {
+        return addressId;
+    }
+    public void setAddressId(long addressId) {
+        this.addressId = addressId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
 
-    public boolean isDeleted() { return isDeleted; }
-    public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
 }

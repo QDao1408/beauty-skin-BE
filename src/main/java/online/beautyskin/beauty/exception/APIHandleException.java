@@ -53,4 +53,14 @@ public class APIHandleException {
     public ResponseEntity handleRuntimeException(RuntimeException exception) {
         return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NullUserException.class)
+    public ResponseEntity handleNullUserException(NullUserException exception) {
+        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NullAddressException.class)
+    public ResponseEntity handleNullAddressException(NullAddressException exception) {
+        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

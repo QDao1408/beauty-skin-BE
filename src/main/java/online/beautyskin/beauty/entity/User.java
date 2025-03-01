@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,7 +75,7 @@ public class User implements UserDetails {
     private List<Feedback> feedbacks = new ArrayList<>();
 
     @OneToOne()
-    @JoinColumn(name = "rank")
+    @JoinColumn(name = "user_rank")
     private LoyaltyPoint loyaltyPoint;
 
     public User(){}

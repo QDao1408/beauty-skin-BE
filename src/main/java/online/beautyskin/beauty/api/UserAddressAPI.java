@@ -25,17 +25,17 @@ public class UserAddressAPI {
         return ResponseEntity.ok(userAddressService.createAddress(userAddressRequest));
     }
 
-    @GetMapping("/getAvailabe")
+    @GetMapping("/getAvailable")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity getAvailable() {
         return ResponseEntity.ok(userAddressService.getAvailableAddress());
     }
 
-//    @GetMapping("/getByUser/{id}")
-//    @PreAuthorize("hasAuthority('USER')")
-//    public ResponseEntity getByUser(@PathVariable long userId) {
-//        return ResponseEntity.ok(userAddressService.getAddressById(userId));
-//    }
+    @GetMapping("/getByUser/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity getByUser(@PathVariable long id) {
+        return ResponseEntity.ok(userAddressService.findByUserId(id));
+    }
 
 //    @PutMapping("/update/{id}")
 //    @PreAuthorize("hasAuthority('USER')")

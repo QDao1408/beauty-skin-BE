@@ -3,11 +3,15 @@ package online.beautyskin.beauty.service;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.UserAddress;
 import online.beautyskin.beauty.entity.request.UserAddressRequest;
+import online.beautyskin.beauty.entity.respone.UserAddressResponse;
 import online.beautyskin.beauty.repository.UserAddressRepository;
 import online.beautyskin.beauty.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import online.beautyskin.beauty.exception.NullUserException;
+import online.beautyskin.beauty.exception.NullAddressException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,12 +23,60 @@ public class UserAddressService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<UserAddress> getAddressById(long id) {
-        return userAddressRepository.findByIdAndIsDeletedFalse(id);
+//    public List<UserAddressResponse> getAddressById(long id) {
+//        List<UserAddress> addresses = userAddressRepository.findByIsDeletedFalse();
+//        UserAddressResponse addressResponse = new UserAddressResponse();
+//        List<UserAddressResponse> addressesResponse = new ArrayList<>();
+//        for(UserAddress a : addresses) {
+//            if(a.getId() == id) {
+//                addressResponse.setAddressId(a.getId());
+//                addressResponse.setCity(a.getCity());
+//                addressResponse.setDistrict(a.getDistrict());
+//                addressResponse.setWard(a.getWard());
+//                addressResponse.setUserId(a.getId());
+//                addressResponse.setReceiverAddress(a.getReceiverAddress());
+//                addressResponse.setReceiverPhone(a.getReceiverPhone());
+//                addressResponse.setReceiverName(a.getReceiverName());
+//                addressesResponse.add(addressResponse);
+//            } else if(userRepository.findById(id) == null) {
+//                throw new NullUserException("User không tồn tại");
+//            }
+//            if(addressesResponse == null) {
+//                throw new NullAddressException("User chưa thêm địa chỉ nhận hàng");
+//            }
+//        }
+//        return addressesResponse;
+//    }
+
+    public List<UserAddressResponse> findByUserId(Long userId) {
+        List<UserAddressResponse> userAddressList = new ArrayList<>();
+        if(userRepository.findById(userId).isEmpty()) {
+                throw new NullUserException("User không tồn tại");
+        }
+        userAddressList = userAddressRepository.findByIdAndIsDeletedFalse(userId);
+        if(userAddressList.isEmpty()) {
+            throw new NullAddressException("User chưa thêm địa chỉ nhận hàng");
+        }
+        return userAddressList;
     }
 
-    public List<UserAddress> getAvailableAddress() {
-        return userAddressRepository.findByIsDeletedFalse();
+    public List<UserAddressResponse> getAvailableAddress() {
+        List<UserAddress> addresses = userAddressRepository.findByIsDeletedFalse();
+        List<UserAddressResponse> addressesResponse = new ArrayList<>();
+        for(UserAddress a : addresses) {
+            UserAddressResponse addressResponse = new UserAddressResponse();
+            addressResponse.setAddressId(a.getId());
+            addressResponse.setCity(a.getCity());
+            addressResponse.setDistrict(a.getDistrict());
+            addressResponse.setWard(a.getWard());
+            addressResponse.setUserId(a.getId());
+            addressResponse.setReceiverAddress(a.getReceiverAddress());
+            addressResponse.setReceiverPhone(a.getReceiverPhone());
+            addressResponse.setReceiverName(a.getReceiverName());
+            addressResponse.setUserId(a.getUser().getId());
+            addressesResponse.add(addressResponse);
+        }
+        return addressesResponse;
     }
 
     public UserAddress createAddress(UserAddressRequest userAddressRequest) {
@@ -48,7 +100,7 @@ public class UserAddressService {
         userAddress.setReceiverAddress(userAddressRequest.getReceiverAddress());
         userAddress.setReceiverName(userAddressRequest.getReceiverName());
         userAddress.setReceiverPhone(userAddressRequest.getReceiverPhone());
-        userAddress.setDeleted(false);
+        userAddress.setDeleted(userAddressRequest.isDeleted());
         userAddress.setUser(userRepository.findById(id));
         return userAddressRepository.save(userAddress);
     }

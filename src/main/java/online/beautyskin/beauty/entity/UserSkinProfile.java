@@ -17,15 +17,15 @@ public class UserSkinProfile {
     private boolean isDeleted = false;
 
     @OneToOne
-    @JoinColumn(name = "UserID", nullable = false, unique = true)
+    @JoinColumn(name = "UserID", unique = true)
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "TypeID", nullable = false)
+    @JoinColumn(name = "TypeID")
     private SkinType skinType;
 
     @OneToOne
-    @JoinColumn(name = "ConcernID", nullable = false)
+    @JoinColumn(name = "ConcernID")
     private SkinConcern skinConcern;
 
     public UserSkinProfile() {}

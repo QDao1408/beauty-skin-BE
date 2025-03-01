@@ -17,6 +17,7 @@ public class Brand {
     @Column(name = "Description")
     private String description;
     private boolean isDeleted;
+    private String imageUrl;
 
     @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -48,4 +49,12 @@ public class Brand {
     public void setDescription(String description) { this.description = description; }
     public boolean isDeleted() { return isDeleted; }
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

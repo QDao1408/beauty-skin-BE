@@ -78,6 +78,7 @@ public class SkinQuestionService {
                 }
                 answerRepository.deleteAll(skinQuestion.getAnswers());
                 answerRepository.saveAll(answers);
+                skinQuestion.setAnswers(answers);
             }
         }else {
             throw new RuntimeException("SkinQuestion not found");

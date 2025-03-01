@@ -37,11 +37,11 @@ public class UserAddressAPI {
         return ResponseEntity.ok(userAddressService.findByUserId(id));
     }
 
-//    @PutMapping("/update/{id}")
-//    @PreAuthorize("hasAuthority('USER')")
-//    public ResponseEntity update(@Valid @RequestBody UserAddressRequest userAddressRequest, @PathVariable long id) {
-//        return ResponseEntity.ok(userAddressService.updateAddress(id, userAddressRequest));
-//    }
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity update(@Valid @RequestBody UserAddressRequest userAddressRequest, @PathVariable long id) {
+        return ResponseEntity.ok(userAddressService.updateAddress(id, userAddressRequest));
+    }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('USER')")

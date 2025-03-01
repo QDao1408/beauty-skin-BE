@@ -59,6 +59,8 @@ public class User implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     public RoleEnums roleEnums;
 
+    private double totalAmount;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserSkinProfile skinProfile;
 
@@ -72,6 +74,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnore
     private List<Feedback> feedbacks = new ArrayList<>();
+
+    @OneToOne()
+    @JoinColumn(name = "rank")
+    private LoyaltyPoint loyaltyPoint;
 
     public User(){}
 
@@ -233,5 +239,21 @@ public class User implements UserDetails {
 
     public void setCustomerCart(CustomerCart customerCart) {
         this.customerCart = customerCart;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public LoyaltyPoint getLoyaltyPoint() {
+        return loyaltyPoint;
+    }
+
+    public void setLoyaltyPoint(LoyaltyPoint loyaltyPoint) {
+        this.loyaltyPoint = loyaltyPoint;
     }
 }

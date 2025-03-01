@@ -47,10 +47,7 @@ public class Product {
 
     private boolean isDeleted;
 
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<MappingProductSize> mappingProductSizes = new ArrayList<>();
+    private double price;
 
     @ManyToOne
     @JoinColumn(name = "brand_id")
@@ -96,14 +93,6 @@ public class Product {
 
     public List<MappingProductImage> getMappingProductImages() { return mappingProductImages; }
     public void setMappingProductImages(List<MappingProductImage> mappingProductImages) { this.mappingProductImages = mappingProductImages; }
-    public void addMappingProductSizes(MappingProductSize mappingProductSize) {
-        this.mappingProductSizes.add(mappingProductSize);
-        mappingProductSize.setProduct(this);
-    }
-    public void removeMappingProductSizes(MappingProductSize mappingProductSize) {
-        this.mappingProductSizes.remove(mappingProductSize);
-        mappingProductSize.setProduct(null);
-    }
 
     public List<Feedback> getFeedbacks() { return feedbacks; }
     public void setFeedbacks(List<Feedback> feedbacks) { this.feedbacks = feedbacks; }
@@ -123,22 +112,6 @@ public class Product {
     public Brand getBrand() { return brand; }
     public void setBrand(Brand brand) { this.brand = brand; }
 
-    public List<MappingProductSize> getProductSizeMappings() {
-        return mappingProductSizes;
-    }
-    public void setProductSizeMappings(List<MappingProductSize> mappingProductSizes) {
-        this.mappingProductSizes = mappingProductSizes;
-    }
-
-    public void addProductSizeMapping(MappingProductSize mappingProductSize) {
-        mappingProductSizes.add(mappingProductSize);
-        mappingProductSize.setProduct(this);
-    }
-
-    public void removeProductSizeMapping(MappingProductSize mappingProductSize) {
-        mappingProductSizes.remove(mappingProductSize);
-        mappingProductSize.setProduct(null);
-    }
 
     public Product() {
     }
@@ -174,6 +147,6 @@ public class Product {
     public void setInstruction(String instruction) { this.instruction = instruction; }
     public boolean isDeleted() { return isDeleted; }
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
-
-
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
 }

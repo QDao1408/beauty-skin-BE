@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.api;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import online.beautyskin.beauty.entity.Blog;
 import online.beautyskin.beauty.service.BlogService;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/blog")
+@SecurityRequirement(name = "api")
 public class BlogAPI {
 
     List<Blog> blogs = new ArrayList<>();

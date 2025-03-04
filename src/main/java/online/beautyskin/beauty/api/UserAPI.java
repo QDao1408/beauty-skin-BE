@@ -45,8 +45,8 @@ public class UserAPI {
     }
 
     @PostMapping("/forgetPassword")
-    public ResponseEntity forgetPassword(@RequestParam String username, @RequestParam String mail) {
-        return ResponseEntity.ok(userService.forgetPassword(username,mail));
+    public ResponseEntity forgetPassword(@RequestParam String mail) {
+        return ResponseEntity.ok(userService.forgetPassword(mail));
     }
 
 }

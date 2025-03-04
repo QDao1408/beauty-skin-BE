@@ -34,10 +34,9 @@ public class SkinQuestionAPI {
         SkinQuestion newSkinQuestion = skinQuestionService.updateSkinQuestion(id, skinQuestionRequest);
         return ResponseEntity.ok(newSkinQuestion);
     }
-    @GetMapping("getAll/{id}")
+    @GetMapping("getAll")
     public ResponseEntity getAllQuestion(){
-        skinQuestionList = skinQuestionService.getSkinQuestion();
-        return ResponseEntity.ok(skinQuestionList);
+        return ResponseEntity.ok(skinQuestionService.getSkinQuestion());
     }
     @GetMapping("getDeleteIsFalse")
     public ResponseEntity getDeleteIsFalse(){

@@ -48,8 +48,8 @@ public class UserAddressService {
 //        return addressesResponse;
 //    }
 
-    public List<UserAddressResponse> findByUserId(Long userId) {
-        List<UserAddressResponse> userAddressList = new ArrayList<>();
+    public List<UserAddress> findByUserId(Long userId) {
+        List<UserAddress> userAddressList = new ArrayList<>();
         if(userRepository.findById(userId).isEmpty()) {
                 throw new NullUserException("User không tồn tại");
         }
@@ -65,15 +65,10 @@ public class UserAddressService {
         List<UserAddressResponse> addressesResponse = new ArrayList<>();
         for(UserAddress a : addresses) {
             UserAddressResponse addressResponse = new UserAddressResponse();
-            addressResponse.setAddressId(a.getId());
-            addressResponse.setCity(a.getCity());
-            addressResponse.setDistrict(a.getDistrict());
-            addressResponse.setWard(a.getWard());
-            addressResponse.setUserId(a.getId());
-            addressResponse.setReceiverAddress(a.getReceiverAddress());
-            addressResponse.setReceiverPhone(a.getReceiverPhone());
-            addressResponse.setReceiverName(a.getReceiverName());
-            addressResponse.setUserId(a.getUser().getId());
+            addressResponse.setName(a.getReceiverName());
+            addressResponse.setAddress(a.getReceiverAddress());
+            addressResponse.setPhone(a.getReceiverPhone());
+            addressResponse.setId(a.getId());
             addressesResponse.add(addressResponse);
         }
         return addressesResponse;

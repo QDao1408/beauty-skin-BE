@@ -1,90 +1,49 @@
 package online.beautyskin.beauty.entity.respone;
 
 public class UserAddressResponse {
-    private long addressId;
-    private long userId;
-    private String receiverName;
-    private String receiverPhone;
-    private String receiverAddress;
-    private String city;
-    private String district;
-    private String ward;
+    private String name;
+    private String phone;
+    private String address;
+    private long id;
 
     public UserAddressResponse() {}
 
-    public UserAddressResponse(long addressId, long userId, String receiverName, String receiverPhone, String receiverAddress, String city, String district, String ward) {
-        this.addressId = addressId;
-        this.userId = userId;
-        this.receiverName = receiverName;
-        this.receiverPhone = receiverPhone;
-        this.receiverAddress = receiverAddress;
-        this.city = city;
-        this.district = district;
-        this.ward = ward;
+    public UserAddressResponse(String name, String phone, String address, long id) {
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+        this.id = id;
     }
 
-    public long getUserId() {
-        return userId;
+    public String getName() {
+        return name;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getReceiverName() {
-        return receiverName;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getReceiverPhone() {
-        return receiverPhone;
+    public String getAddress() {
+        return address;
     }
 
-    public void setReceiverPhone(String receiverPhone) {
-        this.receiverPhone = receiverPhone;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getReceiverAddress() {
-        return receiverAddress;
+    public long getId() {
+        return id;
     }
 
-    public void setReceiverAddress(String receiverAddress) {
-        this.receiverAddress = receiverAddress;
+    public void setId(long id) {
+        this.id = id;
     }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getWard() {
-        return ward;
-    }
-
-    public void setWard(String ward) {
-        this.ward = ward;
-    }
-
-    public long getAddressId() {
-        return addressId;
-    }
-    public void setAddressId(long addressId) {
-        this.addressId = addressId;
-    }
-
-
 }

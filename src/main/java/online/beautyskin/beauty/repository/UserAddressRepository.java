@@ -14,10 +14,9 @@ public interface UserAddressRepository extends JpaRepository<UserAddress, Long> 
     UserAddress findById(long id);
     List<UserAddress> findByIsDeletedFalse();
 
-    @Query("SELECT new online.beautyskin.beauty.entity.respone.UserAddressResponse(a.id, a.user.id, a.receiverAddress, a.city, a.district, " +
-            "a.ward, a.receiverName, a.receiverPhone) FROM UserAddress a WHERE a.user.id = :userId")
-    List<UserAddressResponse> findByIdAndIsDeletedFalse(@Param("userId") Long userId);
+//    @Query("SELECT new online.beautyskin.beauty.entity.respone.UserAddressResponse(a.id, a.user.id, a.receiverAddress, a.city, a.district, " +
+//            "a.ward, a.receiverName, a.receiverPhone) FROM UserAddress a WHERE a.user.id = :userId")
+//    List<UserAddressResponse> findByIdAndIsDeletedFalse(@Param("userId") Long userId);
 
-
-
+    List<UserAddress> findByIdAndIsDeletedFalse(long id);
 }

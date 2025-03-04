@@ -70,8 +70,8 @@ public class UserService {
         return "Password changed successfully!";
     }
 
-    public String forgetPassword(String username, String mail) {
-        Optional<User> optionalUser = userRepository.findByUsernameAndMail(username, mail);
+    public String forgetPassword(String mail) {
+        Optional<User> optionalUser = userRepository.findByMail(mail);
         if (optionalUser.isEmpty()) {
             return "User not found!";
         }

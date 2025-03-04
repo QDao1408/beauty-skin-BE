@@ -18,5 +18,5 @@ public interface UserAddressRepository extends JpaRepository<UserAddress, Long> 
 //            "a.ward, a.receiverName, a.receiverPhone) FROM UserAddress a WHERE a.user.id = :userId")
 //    List<UserAddressResponse> findByIdAndIsDeletedFalse(@Param("userId") Long userId);
 
-    List<UserAddress> findByIdAndIsDeletedFalse(long id);
+    List<UserAddress> findByUserIdAndIsDeletedFalse(long id);
 }

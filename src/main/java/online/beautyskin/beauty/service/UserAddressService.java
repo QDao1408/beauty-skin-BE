@@ -48,12 +48,12 @@ public class UserAddressService {
 //        return addressesResponse;
 //    }
 
-    public List<UserAddress> findByUserId(Long userId) {
+    public List<UserAddress> findByUserId(long userId) {
         List<UserAddress> userAddressList = new ArrayList<>();
-        if(userRepository.findById(userId).isEmpty()) {
+        if(userRepository.findById(userId) == null) {
                 throw new NullUserException("User không tồn tại");
         }
-        userAddressList = userAddressRepository.findByIdAndIsDeletedFalse(userId);
+        userAddressList = userAddressRepository.findByUserIdAndIsDeletedFalse(userId);
         if(userAddressList.isEmpty()) {
             throw new NullAddressException("User chưa thêm địa chỉ nhận hàng");
         }
@@ -65,10 +65,13 @@ public class UserAddressService {
         List<UserAddressResponse> addressesResponse = new ArrayList<>();
         for(UserAddress a : addresses) {
             UserAddressResponse addressResponse = new UserAddressResponse();
-            addressResponse.setName(a.getReceiverName());
-            addressResponse.setAddress(a.getReceiverAddress());
-            addressResponse.setPhone(a.getReceiverPhone());
             addressResponse.setId(a.getId());
+            addressResponse.setCity(a.getCity());
+            addressResponse.setAddress(a.getReceiverAddress());
+            addressResponse.setName(a.getReceiverName());
+            addressResponse.setPhone(a.getReceiverPhone());
+            addressResponse.setWard(a.getWard());
+            addressResponse.setDistrict(a.getDistrict());
             addressesResponse.add(addressResponse);
         }
         return addressesResponse;

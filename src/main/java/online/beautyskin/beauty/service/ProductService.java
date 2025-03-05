@@ -1,6 +1,8 @@
 package online.beautyskin.beauty.service;
 
 import jakarta.persistence.Access;
+import online.beautyskin.beauty.entity.Brand;
+import online.beautyskin.beauty.entity.Category;
 import online.beautyskin.beauty.entity.Product;
 import online.beautyskin.beauty.entity.request.ProductRequest;
 import online.beautyskin.beauty.repository.BrandRepository;
@@ -75,5 +77,19 @@ public class ProductService {
     }
 
 
+    public List<Product> getFromCate(String categoryName) {
+        Category category = categoryRepository.findByName(categoryName);
+        if (category != null) {
+            return productRepository.findByCategory(category);
+        }
+        return List.of();
+    }
 
+    public List<Product> getFromBrand(String brandName) {
+        Brand brand = brandRepository.findByName(brandName);
+        if (brand != null) {
+            return productRepository.findByBrand(brand);
+        }
+        return List.of();
+    }
 }

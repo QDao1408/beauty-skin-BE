@@ -23,7 +23,7 @@ public class Product {
     private String description;
 
     @Column(name = "Stock")
-    private BigDecimal stock;
+    private int stock;
 
     @Column(name = "CreateDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") // Handles offset like +07:00
@@ -119,7 +119,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String description, BigDecimal stock, OffsetDateTime createDateTime, OffsetDateTime lastUpdateDateTime, OffsetDateTime expiredDateTime, ProductEnums status, String instruction, boolean isDeleted) {
+    public Product(String name, String description, int stock, OffsetDateTime createDateTime, OffsetDateTime lastUpdateDateTime, OffsetDateTime expiredDateTime, ProductEnums status, String instruction, boolean isDeleted) {
         this.name = name;
         this.description = description;
         this.stock = stock;
@@ -136,8 +136,8 @@ public class Product {
     public void setName(String name) { this.name = name; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-    public BigDecimal getStock() { return stock; }
-    public void setStock(BigDecimal stock) { this.stock = stock; }
+    public int getStock() { return stock; }
+    public void setStock(int stock) { this.stock = stock; }
     public OffsetDateTime getCreateDateTime() { return createDateTime; }
     public void setCreateDateTime(OffsetDateTime createDateTime) { this.createDateTime = createDateTime; }
     public OffsetDateTime getLastUpdateDateTime() { return lastUpdateDateTime; }
@@ -216,4 +216,5 @@ public class Product {
     public void setRoutineSteps(List<RoutineStep> routineSteps) {
         this.routineSteps = routineSteps;
     }
+
 }

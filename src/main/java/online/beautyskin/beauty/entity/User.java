@@ -258,4 +258,12 @@ public class User implements UserDetails {
     public void setLoyaltyPoint(LoyaltyPoint loyaltyPoint) {
         this.loyaltyPoint = loyaltyPoint;
     }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 }

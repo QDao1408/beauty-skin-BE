@@ -14,7 +14,7 @@ public class ProductRequest {
 
     private String description;
 
-    private BigDecimal stock;
+    private int stock;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") // Handles offset like +07:00
 
     private OffsetDateTime createDateTime;
@@ -51,11 +51,11 @@ public class ProductRequest {
         this.description = description;
     }
 
-    public BigDecimal getStock() {
+    public int getStock() {
         return stock;
     }
 
-    public void setStock(BigDecimal stock) {
+    public void setStock(int stock) {
         this.stock = stock;
     }
 

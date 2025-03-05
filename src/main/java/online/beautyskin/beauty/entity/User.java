@@ -78,6 +78,9 @@ public class User implements UserDetails {
     @JoinColumn(name = "user_rank")
     private LoyaltyPoint loyaltyPoint;
 
+    @OneToMany(mappedBy = "user")
+    List<Order> orders = new ArrayList<>();
+
     public User(){}
 
     public void addFeedback(Feedback feedback){

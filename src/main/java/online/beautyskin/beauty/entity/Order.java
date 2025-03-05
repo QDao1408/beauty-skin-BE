@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "`Order`")
+@Entity()
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,9 +38,6 @@ public class Order {
     @JsonIgnore
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
-    public List<OrderDetail> getOrderDetails() { return orderDetails; }
-    public void setOrderDetails(List<OrderDetail> orderDetails) { this.orderDetails = orderDetails; }
-
     @OneToOne
     @JoinColumn(name = "address_id")
     private UserAddress userAddress;
@@ -47,6 +45,14 @@ public class Order {
     @OneToOne
     @JoinColumn(name = "payment_id")
     private PaymentMethod paymentMethod;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
+    public List<OrderDetail> getOrderDetails() { return orderDetails; }
+    public void setOrderDetails(List<OrderDetail> orderDetails) { this.orderDetails = orderDetails; }
 
     public void addOrderDetail(OrderDetail orderDetail) {
         orderDetails.add(orderDetail);
@@ -68,5 +74,50 @@ public class Order {
     public void setPaymentStatus(PaymentStatusEnums paymentStatus) { this.paymentStatus = paymentStatus; }
     public double getAmount() { return amount; }
     public void setAmount(double amount) { this.amount = amount; }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public List<Promotion> getPromotions() {
+        return promotions;
+    }
+
+    public void setPromotions(List<Promotion> promotions) {
+        this.promotions = promotions;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
+
+    public UserAddress getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(UserAddress userAddress) {
+        this.userAddress = userAddress;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 
 }

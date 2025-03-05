@@ -23,12 +23,18 @@ public class OrderDetail {
     @Min(0)
     private double totalPrice;
 
-    @OneToOne
+//    @OneToOne
+//    @JoinColumn(name = "product_id")
+//    private Product product;
+
+    @ManyToOne
     @JoinColumn(name = "product_id")
-    private Product product;
+    @JsonIgnore
+    Product product;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonIgnore
     private Order order;
 
     public Order getOrder() {

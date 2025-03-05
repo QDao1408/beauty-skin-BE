@@ -18,16 +18,16 @@ public class UserAddress {
 
 
     @Column(name = "ReceiverName")
-    private String receiverName;
+    private String name;
     @Column(name = "ReceiverPhone")
     @Pattern(regexp = "(0[3|5|7|8|9])+([0-9]{8})\\b")
-    private String receiverPhone;
+    private String phone;
     @Column(name = "Address")
     @NotNull
-    private String receiverAddress;
+    private String address;
     @Column(name = "City")
     @NotNull
-    private String city;
+    private String province;
     @Column(name = "District")
     @NotNull
     private String district;
@@ -41,24 +41,39 @@ public class UserAddress {
     private Order order;
 
     public UserAddress() {}
-    public UserAddress(String receiverName, String receiverPhone, String receiverAddress, String city, String district, String ward) {
-        this.receiverName = receiverName;
-        this.receiverPhone = receiverPhone;
-        this.receiverAddress = receiverAddress;
-        this.city = city;
-        this.district = district;
-        this.ward = ward;
+
+    public String getName() {
+        return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getReceiverName() { return receiverName; }
-    public void setReceiverName(String receiverName) { this.receiverName = receiverName; }
-    public String getReceiverPhone() { return receiverPhone; }
-    public void setReceiverPhone(String receiverPhone) { this.receiverPhone = receiverPhone; }
-    public String getReceiverAddress() { return receiverAddress; }
-    public void setReceiverAddress(String receiverAddress) { this.receiverAddress = receiverAddress; }
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
     public String getDistrict() { return district; }
     public void setDistrict(String district) { this.district = district; }
     public String getWard() { return ward; }

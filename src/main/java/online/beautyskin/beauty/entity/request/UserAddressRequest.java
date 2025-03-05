@@ -9,6 +9,7 @@ public class UserAddressRequest {
     private String district;
     private String ward;
     private boolean isDeleted;
+    private boolean isDefault;
 
     public UserAddressRequest() {}
 
@@ -70,4 +71,12 @@ public class UserAddressRequest {
 
     public boolean isDeleted() { return isDeleted; }
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
+    }
 }

@@ -64,8 +64,11 @@ public class Product {
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private CartDetails cartDetails;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    private OrderDetail orderDetail;
+//    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+//    private OrderDetail orderDetail;
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

@@ -4,18 +4,22 @@ import jakarta.persistence.Access;
 import online.beautyskin.beauty.entity.Brand;
 import online.beautyskin.beauty.entity.Category;
 import online.beautyskin.beauty.entity.Product;
+import online.beautyskin.beauty.entity.SkinType;
 import online.beautyskin.beauty.entity.request.ProductRequest;
 import online.beautyskin.beauty.repository.BrandRepository;
 import online.beautyskin.beauty.repository.CategoryRepository;
 import online.beautyskin.beauty.repository.ProductRepository;
+import online.beautyskin.beauty.repository.SkinTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ProductService {
+
     @Autowired
     private ProductRepository productRepository;
 
@@ -24,6 +28,9 @@ public class ProductService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private SkinTypeRepository skinTypeRepository;
 
     public List<Product> getAllProducts() {
         return productRepository.findByIsDeletedFalse();
@@ -91,5 +98,12 @@ public class ProductService {
             return productRepository.findByBrand(brand);
         }
         return List.of();
+    }
+
+    public List<Product> getBySkinType(long skinTypeId) {
+        List<Product> products = productRepository.findBySkinTypesIdAndIsDeletedFalse(skinTypeId);
+
+        return products;
+
     }
 }

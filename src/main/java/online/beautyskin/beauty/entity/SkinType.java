@@ -15,6 +15,7 @@ public class SkinType {
     private String typeName;
     @Column(name = "Description")
     private String description;
+    private boolean isDeleted = false;
 
 
 
@@ -57,5 +58,13 @@ public class SkinType {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

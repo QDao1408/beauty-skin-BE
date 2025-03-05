@@ -9,4 +9,5 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
 
     List<Brand> findByIsDeletedFalse();
     Brand findById(long id);
+    Brand findByName(String brandName);
 }

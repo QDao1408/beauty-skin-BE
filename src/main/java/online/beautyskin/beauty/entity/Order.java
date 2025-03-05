@@ -35,7 +35,6 @@ public class Order {
     private Transaction transaction;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
     @OneToOne

@@ -152,4 +152,68 @@ public class Product {
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
+
+    public CartDetails getCartDetails() {
+        return cartDetails;
+    }
+
+    public void setCartDetails(CartDetails cartDetails) {
+        this.cartDetails = cartDetails;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+    public List<Promotion> getPromotions() {
+        return promotions;
+    }
+
+    public void setPromotions(List<Promotion> promotions) {
+        this.promotions = promotions;
+    }
+
+    public List<SkinType> getSkinTypes() {
+        return skinTypes;
+    }
+
+    public void setSkinTypes(List<SkinType> skinTypes) {
+        this.skinTypes = skinTypes;
+    }
+
+    public List<SkinConcern> getSkinConcerns() {
+        return skinConcerns;
+    }
+
+    public void setSkinConcerns(List<SkinConcern> skinConcerns) {
+        this.skinConcerns = skinConcerns;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public List<Form> getForms() {
+        return forms;
+    }
+
+    public void setForms(List<Form> forms) {
+        this.forms = forms;
+    }
+
+    public List<RoutineStep> getRoutineSteps() {
+        return routineSteps;
+    }
+
+    public void setRoutineSteps(List<RoutineStep> routineSteps) {
+        this.routineSteps = routineSteps;
+    }
 }

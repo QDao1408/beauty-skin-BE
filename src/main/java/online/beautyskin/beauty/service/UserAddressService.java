@@ -23,6 +23,8 @@ public class UserAddressService {
     @Autowired
     private UserRepository userRepository;
 
+    List<UserAddress> address = new ArrayList<>();
+
 //    public List<UserAddressResponse> getAddressById(long id) {
 //        List<UserAddress> addresses = userAddressRepository.findByIsDeletedFalse();
 //        UserAddressResponse addressResponse = new UserAddressResponse();
@@ -77,7 +79,17 @@ public class UserAddressService {
         return addressesResponse;
     }
 
+    public boolean hasAddress(long userId) {
+        boolean result = true;
+        address = userAddressRepository.findByUserIdAndIsDeletedFalse(userId);
+        if (address.isEmpty()) {
+            result = false;
+        }
+        return result;
+    }
+
     public UserAddress createAddress(UserAddressRequest userAddressRequest) {
+
         UserAddress userAddress = new UserAddress();
         userAddress.setProvince(userAddressRequest.getProvince());
         userAddress.setDistrict(userAddressRequest.getDistrict());
@@ -86,7 +98,17 @@ public class UserAddressService {
         userAddress.setName(userAddressRequest.getName());
         userAddress.setPhone(userAddressRequest.getPhone());
         userAddress.setUser(userRepository.findById(userAddressRequest.getUserId()));
+        userAddress.setDefault(userAddressRequest.isDefault());
         userAddress.setDeleted(false);
+
+        if (userAddress.isDefault() && hasAddress(userAddress.getUser().getId())) {
+            List<UserAddress> a = findByUserId(userAddress.getUser().getId());
+            for (UserAddress address1 : a) {
+                if(address1.getId() != userAddressRequest.getUserId()) {
+                    address1.setDefault(false);
+                }
+            }
+        }
         return userAddressRepository.save(userAddress);
     }
 
@@ -98,8 +120,16 @@ public class UserAddressService {
         userAddress.setAddress(userAddressRequest.getAddress());
         userAddress.setName(userAddressRequest.getName());
         userAddress.setPhone(userAddressRequest.getPhone());
-        userAddress.setDeleted(userAddressRequest.isDeleted());
-        userAddress.setUser(userRepository.findById(id));
+        userAddress.setDefault(userAddressRequest.isDefault());
+
+        if (userAddress.isDefault() && hasAddress(userAddress.getUser().getId())) {
+            List<UserAddress> a = findByUserId(userAddress.getUser().getId());
+            for (UserAddress address1 : a) {
+                if(address1.getId() != id) {
+                    address1.setDefault(false);
+                }
+            }
+        }
         return userAddressRepository.save(userAddress);
     }
 

@@ -2,46 +2,46 @@ package online.beautyskin.beauty.entity.request;
 
 public class UserAddressRequest {
     private long userId;
-    private String receiverName;
-    private String receiverPhone;
-    private String receiverAddress;
-    private String city;
+    private String name;
+    private String phone;
+    private String address;
+    private String province;
     private String district;
     private String ward;
     private boolean isDeleted;
 
     public UserAddressRequest() {}
 
-    public String getReceiverName() {
-        return receiverName;
+    public String getName() {
+        return name;
     }
 
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getReceiverPhone() {
-        return receiverPhone;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setReceiverPhone(String receiverPhone) {
-        this.receiverPhone = receiverPhone;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getReceiverAddress() {
-        return receiverAddress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setReceiverAddress(String receiverAddress) {
-        this.receiverAddress = receiverAddress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getCity() {
-        return city;
+    public String getProvince() {
+        return province;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public String getDistrict() {

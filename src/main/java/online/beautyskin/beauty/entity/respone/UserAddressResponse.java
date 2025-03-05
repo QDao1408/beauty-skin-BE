@@ -2,7 +2,7 @@ package online.beautyskin.beauty.entity.respone;
 
 public class UserAddressResponse {
     private long id;
-    private String city;
+    private String province;
     private String district;
     private String address;
     private String name;
@@ -12,15 +12,7 @@ public class UserAddressResponse {
     public UserAddressResponse() {
     }
 
-    public UserAddressResponse(long id, String city, String district, String address, String name, String phone, String ward) {
-        this.id = id;
-        this.city = city;
-        this.district = district;
-        this.address = address;
-        this.name = name;
-        this.phone = phone;
-        this.ward = ward;
-    }
+
 
     public long getId() {
         return id;
@@ -30,12 +22,12 @@ public class UserAddressResponse {
         this.id = id;
     }
 
-    public String getCity() {
-        return city;
+    public String getProvince() {
+        return province;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public String getDistrict() {

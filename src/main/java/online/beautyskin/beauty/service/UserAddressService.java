@@ -66,10 +66,10 @@ public class UserAddressService {
         for(UserAddress a : addresses) {
             UserAddressResponse addressResponse = new UserAddressResponse();
             addressResponse.setId(a.getId());
-            addressResponse.setCity(a.getCity());
-            addressResponse.setAddress(a.getReceiverAddress());
-            addressResponse.setName(a.getReceiverName());
-            addressResponse.setPhone(a.getReceiverPhone());
+            addressResponse.setProvince(a.getProvince());
+            addressResponse.setAddress(a.getAddress());
+            addressResponse.setName(a.getName());
+            addressResponse.setPhone(a.getPhone());
             addressResponse.setWard(a.getWard());
             addressResponse.setDistrict(a.getDistrict());
             addressesResponse.add(addressResponse);
@@ -79,12 +79,12 @@ public class UserAddressService {
 
     public UserAddress createAddress(UserAddressRequest userAddressRequest) {
         UserAddress userAddress = new UserAddress();
-        userAddress.setCity(userAddressRequest.getCity());
+        userAddress.setProvince(userAddressRequest.getProvince());
         userAddress.setDistrict(userAddressRequest.getDistrict());
         userAddress.setWard(userAddressRequest.getWard());
-        userAddress.setReceiverAddress(userAddressRequest.getReceiverAddress());
-        userAddress.setReceiverName(userAddressRequest.getReceiverName());
-        userAddress.setReceiverPhone(userAddressRequest.getReceiverPhone());
+        userAddress.setAddress(userAddressRequest.getAddress());
+        userAddress.setName(userAddressRequest.getName());
+        userAddress.setPhone(userAddressRequest.getPhone());
         userAddress.setUser(userRepository.findById(userAddressRequest.getUserId()));
         userAddress.setDeleted(false);
         return userAddressRepository.save(userAddress);
@@ -92,12 +92,12 @@ public class UserAddressService {
 
     public UserAddress updateAddress(long id, UserAddressRequest userAddressRequest) {
         UserAddress userAddress = userAddressRepository.findById(id);
-        userAddress.setCity(userAddressRequest.getCity());
+        userAddress.setProvince(userAddressRequest.getProvince());
         userAddress.setDistrict(userAddressRequest.getDistrict());
         userAddress.setWard(userAddressRequest.getWard());
-        userAddress.setReceiverAddress(userAddressRequest.getReceiverAddress());
-        userAddress.setReceiverName(userAddressRequest.getReceiverName());
-        userAddress.setReceiverPhone(userAddressRequest.getReceiverPhone());
+        userAddress.setAddress(userAddressRequest.getAddress());
+        userAddress.setName(userAddressRequest.getName());
+        userAddress.setPhone(userAddressRequest.getPhone());
         userAddress.setDeleted(userAddressRequest.isDeleted());
         userAddress.setUser(userRepository.findById(id));
         return userAddressRepository.save(userAddress);

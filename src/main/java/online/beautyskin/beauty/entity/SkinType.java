@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class SkinType {
             joinColumns = @JoinColumn(name = "type_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
+    @JsonIgnore
     private List<Product> products = new ArrayList<Product>();
 
     @OneToOne(mappedBy = "skinType", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -66,5 +68,29 @@ public class SkinType {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public void addProducts(Product product) {
+        this.products.add(product);
+        product.addSkinType2(this);
+    }
+    public void addProducts2(Product product) {
+        this.products.add(product);
+    }
+
+    public void removeProduct(Product product) {
+        this.products.remove(product);
+        product.removeSkinType2(this);
+    }
+    public void removeProduct2(Product product) {
+        this.products.remove(product);
     }
 }

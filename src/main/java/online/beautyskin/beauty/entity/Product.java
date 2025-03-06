@@ -78,6 +78,7 @@ public class Product {
     private List<Promotion> promotions = new ArrayList<>();
 
     @ManyToMany(mappedBy = "products")
+    @JsonIgnore
     private List<SkinType> skinTypes = new ArrayList<>();
 
     @ManyToMany(mappedBy = "products")
@@ -181,8 +182,21 @@ public class Product {
         return skinTypes;
     }
 
-    public void setSkinTypes(List<SkinType> skinTypes) {
-        this.skinTypes = skinTypes;
+    public void addSkinType(SkinType type) {
+        this.skinTypes.add(type);
+        type.addProducts2(this);
+    }
+
+    public void removeSkinType(SkinType type) {
+        this.skinTypes.remove(type);
+        type.removeProduct2(this);
+    }
+    public void addSkinType2(SkinType type) {
+        this.skinTypes.add(type);
+    }
+
+    public void removeSkinType2(SkinType type) {
+        this.skinTypes.remove(type);
     }
 
     public List<SkinConcern> getSkinConcerns() {
@@ -217,8 +231,12 @@ public class Product {
         this.routineSteps = routineSteps;
     }
 
-    public void addSkinTypes(SkinType type) {
-        skinTypes.add(type);
-    }
 
+    public void setSkinTypes(List<SkinType> skinTypes) {
+        this.skinTypes.removeAll(this.skinTypes);
+        this.skinTypes.addAll(skinTypes);
+        for(SkinType type : skinTypes) {
+            type.addProducts2(this);
+        }
+    }
 }

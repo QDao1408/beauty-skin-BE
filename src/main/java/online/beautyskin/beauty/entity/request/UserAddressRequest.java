@@ -69,11 +69,11 @@ public class UserAddressRequest {
         this.userId = userId;
     }
 
-    public boolean isDefault() {
+    public boolean getIsDefault() {
         return isDefault;
     }
 
-    public void setDefault(boolean aDefault) {
+    public void setIsDefault(boolean aDefault) {
         isDefault = aDefault;
     }
 }

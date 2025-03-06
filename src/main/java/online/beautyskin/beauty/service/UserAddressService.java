@@ -112,7 +112,7 @@ public class UserAddressService {
         userAddress.setName(userAddressRequest.getName());
         userAddress.setPhone(userAddressRequest.getPhone());
         userAddress.setUser(userRepository.findById(userAddressRequest.getUserId()));
-        userAddress.setDefault(userAddressRequest.isDefault());
+        userAddress.setDefault(userAddressRequest.getIsDefault());
         userAddress.setDeleted(false);
 
         if (userAddress.isDefault() && hasAddress(userAddress.getUser().getId())) {
@@ -148,7 +148,7 @@ public class UserAddressService {
         userAddress.setAddress(userAddressRequest.getAddress());
         userAddress.setName(userAddressRequest.getName());
         userAddress.setPhone(userAddressRequest.getPhone());
-        userAddress.setDefault(userAddressRequest.isDefault());
+        userAddress.setDefault(userAddressRequest.getIsDefault());
 
         if (userAddress.isDefault() && hasAddress(userAddress.getUser().getId())) {
             List<UserAddress> a = userAddressRepository.findByUserIdAndIsDeletedFalse(userAddress.getUser().getId());

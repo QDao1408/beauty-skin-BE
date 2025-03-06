@@ -13,4 +13,5 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     public Product findById(long id);
     List<Product> findByCategory(Category category);
     List<Product> findByBrand(Brand brand);
+    List<Product> findBySkinTypesIdAndIsDeletedFalse(long skinTypeId);
 }

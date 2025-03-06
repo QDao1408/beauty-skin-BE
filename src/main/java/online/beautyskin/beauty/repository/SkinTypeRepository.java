@@ -9,4 +9,5 @@ public interface SkinTypeRepository extends JpaRepository<SkinType, Long> {
 
     SkinType findById(long id);
     List<SkinType> findByIsDeletedFalse();
+    SkinType findByIdAndIsDeletedFalse(long id);
 }

@@ -2,12 +2,15 @@ package online.beautyskin.beauty.entity.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
+import online.beautyskin.beauty.entity.SkinType;
 import online.beautyskin.beauty.enums.ProductEnums;
+import org.apache.catalina.LifecycleState;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 public class ProductRequest {
     private String name;
@@ -31,6 +34,8 @@ public class ProductRequest {
     private long brandId;
 
     private long categoryId;
+
+    private List<Long> skinTypeId;
 
     public ProductRequest() {
     }
@@ -120,5 +125,13 @@ public class ProductRequest {
     }
     public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<Long> getSkinTypeId() {
+        return skinTypeId;
+    }
+
+    public void setSkinTypeId(List<Long> skinTypeId) {
+        this.skinTypeId = skinTypeId;
     }
 }

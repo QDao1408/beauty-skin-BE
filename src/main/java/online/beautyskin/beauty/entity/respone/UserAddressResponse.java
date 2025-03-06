@@ -8,6 +8,7 @@ public class UserAddressResponse {
     private String name;
     private String phone;
     private String ward;
+    private boolean isDefault;
 
     public UserAddressResponse() {
     }
@@ -68,5 +69,13 @@ public class UserAddressResponse {
 
     public void setWard(String ward) {
         this.ward = ward;
+    }
+
+    public boolean getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 }

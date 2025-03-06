@@ -33,6 +33,11 @@ public class ProductAPI {
         products = productService.getFromCate(category);
         return ResponseEntity.ok(products);
     }
+    @GetMapping("/getBySkinType")
+    public ResponseEntity getProductBySkinType(@PathVariable long skinTypeId) {
+        products = productService.getBySkinType(skinTypeId);
+        return ResponseEntity.ok(products);
+    }
 
     @GetMapping("/getFormBrand")
     public ResponseEntity getProductFromBrand(@RequestParam String brand) {

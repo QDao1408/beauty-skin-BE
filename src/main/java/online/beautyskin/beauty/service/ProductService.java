@@ -56,6 +56,9 @@ public class ProductService {
         product.setExpiredDateTime(productrequest.getExpiredDateTime());
         product.setStatus(productrequest.getStatus());
         product.setInstruction(productrequest.getInstruction());
+
+        //product.addSkinTypes(skinTypeRepository.findById(productrequest.getSkinTypeId()));
+
         product.setDeleted(false);
 
         return productRepository.save(product);

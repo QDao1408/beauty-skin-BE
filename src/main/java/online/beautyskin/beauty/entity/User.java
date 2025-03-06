@@ -79,6 +79,7 @@ public class User implements UserDetails {
     private LoyaltyPoint loyaltyPoint;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     List<Order> orders = new ArrayList<>();
 
     public User(){}

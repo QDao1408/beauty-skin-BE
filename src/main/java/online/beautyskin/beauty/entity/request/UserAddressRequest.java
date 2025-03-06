@@ -10,6 +10,7 @@ public class UserAddressRequest {
     private String ward;
     private boolean isDefault;
 
+
     public UserAddressRequest() {}
 
     public String getName() {

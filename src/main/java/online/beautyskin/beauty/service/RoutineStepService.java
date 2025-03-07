@@ -7,6 +7,8 @@ import online.beautyskin.beauty.repository.RoutineStepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RoutineStepService {
 
@@ -37,7 +39,15 @@ public class RoutineStepService {
 //
 //    }
 
+    public List<RoutineStep> getAll() {
+        return repository.findByIsDeletedFalse();
+    }
 
+    public RoutineStep delete(long id) {
+        RoutineStep step = repository.findById(id);
+        step.setDeleted(false);
+        return repository.save(step);
+    }
 
 
 }

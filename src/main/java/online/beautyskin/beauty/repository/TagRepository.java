@@ -9,4 +9,6 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 
     Tag findById(long id);
     List<Tag> findByIsDeletedFalse();
+
+    Tag findByIdAndIsDeletedFalse(long id);
 }

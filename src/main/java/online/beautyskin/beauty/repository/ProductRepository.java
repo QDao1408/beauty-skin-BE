@@ -21,4 +21,11 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
             "where s.id = :id")
     List<Product> findBySkinTypesIdAndIsDeletedFalse(long id);
 
+    List<Product> findBySkinConcernsIdAndIsDeletedFalse(long concernId);
+
+    List<Product> findByTagsIdAndIsDeletedFalse(long tagId);
+
+    List<Product> findByRoutineStepsIdAndIsDeletedFalse(long stepId);
+
+    List<Product> findByFormsIdAndIsDeletedFalse(long id);
 }

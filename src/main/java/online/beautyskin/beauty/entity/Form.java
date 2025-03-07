@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -17,12 +18,14 @@ public class Form {
     private String description;
     private boolean isDeleted = false;
 
-    @ManyToMany
-    @JoinTable(
-            name = "mapping_product_form",
-            joinColumns = @JoinColumn(name = "form_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
+//    @ManyToMany
+//    @JoinTable(
+//            name = "mapping_product_form",
+//            joinColumns = @JoinColumn(name = "form_id"),
+//            inverseJoinColumns = @JoinColumn(name = "product_id")
+//    )
+    @ManyToMany(mappedBy = "forms", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
     public Form() {}
@@ -34,4 +37,6 @@ public class Form {
     public void setDescription(String description) { this.description = description; }
     public boolean isDeleted() { return isDeleted; }
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
+
+
 }

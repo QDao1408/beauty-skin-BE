@@ -24,9 +24,9 @@ public class Order {
     private OrderStatusEnums orderStatus;
     @Column(name = "PaymentStatus")
     private PaymentStatusEnums paymentStatus;
-    @Column(name = "Amount")
+    @Column(name = "TotalPrice")
     @Min(0)
-    private double amount;
+    private double totalPrice;
 
     @ManyToMany(mappedBy = "orders")
     private List<Promotion> promotions = new ArrayList<>();
@@ -47,6 +47,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
 
@@ -71,8 +72,14 @@ public class Order {
     public void setOrderStatus(OrderStatusEnums orderStatus) { this.orderStatus = orderStatus; }
     public PaymentStatusEnums getPaymentStatus() { return paymentStatus; }
     public void setPaymentStatus(PaymentStatusEnums paymentStatus) { this.paymentStatus = paymentStatus; }
-    public double getAmount() { return amount; }
-    public void setAmount(double amount) { this.amount = amount; }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 
     public void setId(long id) {
         this.id = id;

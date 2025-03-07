@@ -30,17 +30,15 @@ public class BrandAPI {
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity updateBrand(@Valid @RequestBody Brand brand, @PathVariable long id) {
-        Brand b = brandService.getBrandById(id);
-        brandService.updateBrand(b);
-        return ResponseEntity.ok(b);
+    public ResponseEntity updateBrand(@Valid @RequestBody BrandRequest brandRequest, @PathVariable long id) {
+        return ResponseEntity.ok(brandService.updateBrand(brandRequest, id));
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity createBrand(@Valid @RequestBody BrandRequest brand) {
-        Brand brand1 = brandService.createBrand(brand);
-        return ResponseEntity.ok(brand1);
+    public ResponseEntity createBrand(@Valid @RequestBody BrandRequest brandRequest) {
+        Brand brand = brandService.createBrand(brandRequest);
+        return ResponseEntity.ok(brand);
     }
 
     @DeleteMapping("/delete/{id}")

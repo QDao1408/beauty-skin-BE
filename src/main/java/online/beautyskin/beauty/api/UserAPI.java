@@ -33,7 +33,7 @@ public class UserAPI {
 
 
 
-    @PutMapping("/inActive/{id}")
+    @GetMapping("/inActive/{id}")
     public ResponseEntity inActive(@PathVariable long id) {
         User user = userService.findById(id);
         return ResponseEntity.ok(user);

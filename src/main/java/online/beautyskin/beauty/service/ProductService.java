@@ -1,6 +1,7 @@
 package online.beautyskin.beauty.service;
 
 import jakarta.persistence.Access;
+import lombok.extern.slf4j.Slf4j;
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.ProductRequest;
 import online.beautyskin.beauty.repository.BrandRepository;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class ProductService {
 
@@ -55,10 +57,9 @@ public class ProductService {
         product.setExpiredDateTime(productrequest.getExpiredDateTime());
         product.setStatus(productrequest.getStatus());
         product.setInstruction(productrequest.getInstruction());
-        product.setSkinTypes(addSkinType(productrequest.getSkinTypeId()));
-
+        List<SkinType> skinTypes = addSkinType(productrequest.getSkinTypeId());
+        product.setSkinTypes(skinTypes);
         product.setDeleted(false);
-
         return productRepository.save(product);
     }
 
@@ -92,7 +93,8 @@ public class ProductService {
         p1.setDeleted(false);
         p1.setCategory(categoryRepository.findById(productRequest.getCategoryId()));
         p1.setBrand(brandRepository.findById(productRequest.getBrandId()));
-        p1.setSkinTypes(addSkinType(productRequest.getSkinTypeId()));
+        List<SkinType> types = addSkinType(productRequest.getSkinTypeId());
+        p1.setSkinTypes(types);
         return productRepository.save(p1);
     }
 

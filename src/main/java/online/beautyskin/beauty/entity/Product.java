@@ -217,4 +217,8 @@ public class Product {
         this.routineSteps = routineSteps;
     }
 
+    public void addSkinTypes(SkinType type) {
+        skinTypes.add(type);
+    }
+
 }

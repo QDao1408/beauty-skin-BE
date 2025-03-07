@@ -35,6 +35,7 @@ public class UserAddress {
     @NotNull
     private String ward;
     private boolean isDeleted = false;
+    private boolean isDefault;
 
     @OneToOne(mappedBy = "userAddress", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -103,5 +104,13 @@ public class UserAddress {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 }

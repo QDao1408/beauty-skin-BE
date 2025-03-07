@@ -1,10 +1,7 @@
 package online.beautyskin.beauty.service;
 
 import jakarta.persistence.Access;
-import online.beautyskin.beauty.entity.Brand;
-import online.beautyskin.beauty.entity.Category;
-import online.beautyskin.beauty.entity.Product;
-import online.beautyskin.beauty.entity.SkinType;
+import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.ProductRequest;
 import online.beautyskin.beauty.repository.BrandRepository;
 import online.beautyskin.beauty.repository.CategoryRepository;
@@ -14,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -56,12 +55,21 @@ public class ProductService {
         product.setExpiredDateTime(productrequest.getExpiredDateTime());
         product.setStatus(productrequest.getStatus());
         product.setInstruction(productrequest.getInstruction());
-
-        //product.addSkinTypes(skinTypeRepository.findById(productrequest.getSkinTypeId()));
+        product.setSkinTypes(addSkinType(productrequest.getSkinTypeId()));
 
         product.setDeleted(false);
 
         return productRepository.save(product);
+    }
+
+    public List<SkinType> addSkinType(List<Long> typeId) {
+        List<SkinType> types = new ArrayList<>();
+        if(!typeId.isEmpty()) {
+            for(long id : typeId) {
+                types.add(skinTypeRepository.findByIdAndIsDeletedFalse(id));
+            }
+        }
+        return types;
     }
 
     public Product deleteProduct(long id) {
@@ -71,6 +79,7 @@ public class ProductService {
     }
 
     public Product updateProduct(long id, ProductRequest productRequest) {
+
         Product p1 = productRepository.findById(id);
         p1.setName(productRequest.getName());
         p1.setDescription(productRequest.getDescription());
@@ -83,6 +92,7 @@ public class ProductService {
         p1.setDeleted(false);
         p1.setCategory(categoryRepository.findById(productRequest.getCategoryId()));
         p1.setBrand(brandRepository.findById(productRequest.getBrandId()));
+        p1.setSkinTypes(addSkinType(productRequest.getSkinTypeId()));
         return productRepository.save(p1);
     }
 
@@ -105,7 +115,6 @@ public class ProductService {
 
     public List<Product> getBySkinType(long skinTypeId) {
         List<Product> products = productRepository.findBySkinTypesIdAndIsDeletedFalse(skinTypeId);
-
         return products;
 
     }

@@ -20,7 +20,7 @@ public class SkinTypeService {
 
     public SkinType create(SkinTypeRequest request) {
         SkinType type = new SkinType();
-        type.setTypeName(request.getName());
+        type.setName(request.getName());
         type.setDescription(request.getDescription());
         return repo.save(type);
     }
@@ -33,7 +33,7 @@ public class SkinTypeService {
 
     public SkinType update(long id, SkinTypeRequest request) {
         SkinType type = repo.findById(id);
-        type.setTypeName(request.getName());
+        type.setName(request.getName());
         type.setDescription(request.getDescription());
         return repo.save(type);
     }

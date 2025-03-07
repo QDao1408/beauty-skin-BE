@@ -22,7 +22,8 @@ public class UserAddressAPI {
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity create(@Valid @RequestBody UserAddressRequest userAddressRequest) {
-        return ResponseEntity.ok(userAddressService.createAddress(userAddressRequest));
+        UserAddress address = userAddressService.createAddress(userAddressRequest);
+        return ResponseEntity.ok(userAddressService.responseAddress(address));
     }
 
     @GetMapping("/getAvailable")
@@ -40,13 +41,15 @@ public class UserAddressAPI {
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity update(@Valid @RequestBody UserAddressRequest userAddressRequest, @PathVariable long id) {
-        return ResponseEntity.ok(userAddressService.updateAddress(id, userAddressRequest));
+        UserAddress address = userAddressService.updateAddress(id, userAddressRequest);
+        return ResponseEntity.ok(userAddressService.responseAddress(address));
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity delete(@PathVariable long id) {
-        return ResponseEntity.ok(userAddressService.deleteAddress(id));
+        UserAddress address = userAddressService.deleteAddress(id);
+        return ResponseEntity.ok(userAddressService.responseAddress(address));
     }
 
 }

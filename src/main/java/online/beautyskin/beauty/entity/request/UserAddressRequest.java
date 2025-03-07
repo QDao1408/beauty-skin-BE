@@ -8,7 +8,8 @@ public class UserAddressRequest {
     private String province;
     private String district;
     private String ward;
-    private boolean isDeleted;
+    private boolean isDefault;
+
 
     public UserAddressRequest() {}
 
@@ -68,6 +69,11 @@ public class UserAddressRequest {
         this.userId = userId;
     }
 
-    public boolean isDeleted() { return isDeleted; }
-    public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
+    public boolean getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(boolean aDefault) {
+        isDefault = aDefault;
+    }
 }

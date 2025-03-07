@@ -48,4 +48,12 @@ public class Routine {
     public void setLastUpdate(LocalDateTime lastUpdate) { this.lastUpdate = lastUpdate; }
     public boolean isDeleted() { return isDeleted; }
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
+
+    public SkinType getSkinType() {
+        return skinType;
+    }
+
+    public void setSkinType(SkinType skinType) {
+        this.skinType = skinType;
+    }
 }

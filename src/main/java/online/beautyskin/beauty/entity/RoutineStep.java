@@ -49,4 +49,12 @@ public class RoutineStep {
     public void setStepOrder(int stepOrder) { this.stepOrder = stepOrder; }
     public boolean isDeleted() { return isDeleted; }
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
+
+    public Routine getRoutine() {
+        return routine;
+    }
+
+    public void setRoutine(Routine routine) {
+        this.routine = routine;
+    }
 }

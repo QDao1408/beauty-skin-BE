@@ -77,9 +77,17 @@ public class Product {
     @ManyToMany(mappedBy = "products")
     private List<Promotion> promotions = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "products")
-    @JsonIgnore
+//    @ManyToMany(mappedBy = "products", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+//    private List<SkinType> skinTypes = new ArrayList<>();
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "mapping_product_skinType",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "type_id")
+    )
     private List<SkinType> skinTypes = new ArrayList<>();
+
 
     @ManyToMany(mappedBy = "products")
     private List<SkinConcern> skinConcerns = new ArrayList<>();
@@ -233,10 +241,6 @@ public class Product {
 
 
     public void setSkinTypes(List<SkinType> skinTypes) {
-        this.skinTypes.removeAll(this.skinTypes);
-        this.skinTypes.addAll(skinTypes);
-        for(SkinType type : skinTypes) {
-            type.addProducts2(this);
-        }
+        this.skinTypes = skinTypes;
     }
 }

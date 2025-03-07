@@ -20,14 +20,20 @@ public class SkinType {
 
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "mapping_product_skinType",
-            joinColumns = @JoinColumn(name = "type_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
+//    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+//    @JoinTable(
+//            name = "mapping_product_skinType",
+//            joinColumns = @JoinColumn(name = "type_id"),
+//            inverseJoinColumns = @JoinColumn(name = "product_id")
+//    )
+//    @JsonIgnore
+//    private List<Product> products = new ArrayList<Product>();
+
+    @ManyToMany(mappedBy = "skinTypes", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonIgnore
-    private List<Product> products = new ArrayList<Product>();
+    private List<Product> products = new ArrayList<>();
+
+
 
     @OneToOne(mappedBy = "skinType", cascade = CascadeType.ALL, orphanRemoval = true)
     private Routine routine;

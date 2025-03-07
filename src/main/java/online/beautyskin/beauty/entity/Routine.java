@@ -37,6 +37,17 @@ public class Routine {
     @JsonIgnore
     private List<RoutineStep> routineSteps = new ArrayList<>();
 
+
+    public void addRoutineStep(RoutineStep step) {
+        routineSteps.add(step);
+        step.setRoutine(this);
+    }
+
+    public void removeRoutineStep(RoutineStep step) {
+        routineSteps.remove(step);
+        step.setRoutine(null);
+    }
+
     public Routine() {}
     public Routine(String name, String description, LocalDateTime lastUpdate) { this.name = name; this.description = description; this.lastUpdate = lastUpdate; }
     public long getId() { return id; }

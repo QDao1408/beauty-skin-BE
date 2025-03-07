@@ -40,6 +40,30 @@ public class ProductAPI {
         return ResponseEntity.ok(products);
     }
 
+    @GetMapping("/getBySkinConcerns/{id}")
+    public ResponseEntity getProductFromSkinConcern(@PathVariable long id) {
+        products = productService.getBySkinConcern(id);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/getByTags/{id}")
+    public ResponseEntity getProductFromTag(@PathVariable long id) {
+        products = productService.getByTag(id);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/getByRoutineStep/{id}")
+    public ResponseEntity getProductFromRoutineStep(@PathVariable long id) {
+        products = productService.getByRoutineStep(id);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/getByForm/{id}")
+    public ResponseEntity getProductFromForm(@PathVariable long id) {
+        products = productService.getByForm(id);
+        return ResponseEntity.ok(products);
+    }
+
     @GetMapping("/getFormBrand")
     public ResponseEntity getProductFromBrand(@RequestParam String brand) {
         products = productService.getFromBrand(brand);

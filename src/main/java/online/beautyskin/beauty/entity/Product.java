@@ -89,16 +89,40 @@ public class Product {
     private List<SkinType> skinTypes = new ArrayList<>();
 
 
-    @ManyToMany(mappedBy = "products")
+//    @ManyToMany(mappedBy = "products")
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_product_skinConcern",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "concern_id")
+    )
     private List<SkinConcern> skinConcerns = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "products")
+//    @ManyToMany(mappedBy = "products")
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_product_tag",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
     private List<Tag> tags = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "products")
+    //    @ManyToMany(mappedBy = "products")
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_product_form",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "form_id")
+    )
     private List<Form> forms = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_product_routine_step",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "step_id")
+    )
+//    @ManyToMany(mappedBy = "products")
     private List<RoutineStep> routineSteps = new ArrayList<>();
 
 
@@ -243,4 +267,6 @@ public class Product {
     public void setSkinTypes(List<SkinType> skinTypes) {
         this.skinTypes = skinTypes;
     }
+
+
 }

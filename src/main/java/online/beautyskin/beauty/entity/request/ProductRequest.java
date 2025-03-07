@@ -37,6 +37,14 @@ public class ProductRequest {
 
     private List<Long> skinTypeId;
 
+    private List<Long> skinConcernId;
+
+    private List<Long> tagId;
+
+    private List<Long> routineSteps;
+
+    private List<Long> forms;
+
     public ProductRequest() {
     }
 
@@ -133,5 +141,37 @@ public class ProductRequest {
 
     public void setSkinTypeId(List<Long> skinTypeId) {
         this.skinTypeId = skinTypeId;
+    }
+
+    public List<Long> getSkinConcernId() {
+        return skinConcernId;
+    }
+
+    public void setSkinConcernId(List<Long> skinConcernId) {
+        this.skinConcernId = skinConcernId;
+    }
+
+    public List<Long> getTagId() {
+        return tagId;
+    }
+
+    public void setTagId(List<Long> tagId) {
+        this.tagId = tagId;
+    }
+
+    public List<Long> getRoutineSteps() {
+        return routineSteps;
+    }
+
+    public void setRoutineSteps(List<Long> routineSteps) {
+        this.routineSteps = routineSteps;
+    }
+
+    public List<Long> getForms() {
+        return forms;
+    }
+
+    public void setForms(List<Long> forms) {
+        this.forms = forms;
     }
 }

@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 
@@ -15,7 +16,6 @@ public class RoutineStep {
     @Column(name = "Description")
     private String description;
     @Column(name = "StepName")
-    @Min(1)
     private String stepName;
     @Column(name = "StepOrder")
     @Min(1)
@@ -26,12 +26,14 @@ public class RoutineStep {
     @JoinColumn(name = "routine_id", nullable = false)
     private Routine routine;
 
-    @ManyToMany
-    @JoinTable(
-            name = "mapping_product_routine_step",
-            joinColumns = @JoinColumn(name = "step_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
+//    @ManyToMany
+//    @JoinTable(
+//            name = "mapping_product_routine_step",
+//            joinColumns = @JoinColumn(name = "step_id"),
+//            inverseJoinColumns = @JoinColumn(name = "product_id")
+//    )
+    @ManyToMany(mappedBy = "routineSteps", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
     public RoutineStep() {}

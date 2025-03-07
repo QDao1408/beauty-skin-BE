@@ -15,6 +15,7 @@ public class SkinConcern {
     private String name;
     @Column(name = "Description")
     private String description;
+    private boolean isDeleted;
 
     @ManyToMany
     @JoinTable(
@@ -51,5 +52,13 @@ public class SkinConcern {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

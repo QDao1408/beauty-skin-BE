@@ -79,6 +79,7 @@ public class User implements UserDetails {
     private LoyaltyPoint loyaltyPoint;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     List<Order> orders = new ArrayList<>();
 
     public User(){}
@@ -257,5 +258,13 @@ public class User implements UserDetails {
 
     public void setLoyaltyPoint(LoyaltyPoint loyaltyPoint) {
         this.loyaltyPoint = loyaltyPoint;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

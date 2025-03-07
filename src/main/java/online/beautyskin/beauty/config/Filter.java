@@ -89,7 +89,7 @@ List<String> PUBLIC_API = List.of(
             //check xem token co dung hay ko => lay thong tin account tu token
             User user = new User();
             try {
-                tokenService.getUserByToken(token);
+                user = tokenService.getUserByToken(token);
             }catch (ExpiredJwtException e){
                 //response token het han
                 resolver.resolveException(request,response,null, new AuthException("Expired token!"));

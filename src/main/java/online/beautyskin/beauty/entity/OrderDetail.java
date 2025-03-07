@@ -19,7 +19,7 @@ public class OrderDetail {
     @Column(name = "UnitPrice")
     @Min(0)
     private double unitPrice;
-    @Column(name = "TotalAmount")
+    @Column(name = "TotalPrice")
     @Min(0)
     private double totalPrice;
 

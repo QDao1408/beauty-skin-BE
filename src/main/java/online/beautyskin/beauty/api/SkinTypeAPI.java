@@ -43,7 +43,7 @@ public class SkinTypeAPI {
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity update(@PathVariable long id, SkinTypeRequest request) {
+    public ResponseEntity update(@PathVariable long id, @RequestBody SkinTypeRequest request) {
         return ResponseEntity.ok(service.update(id, request));
     }
 

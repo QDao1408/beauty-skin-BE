@@ -13,7 +13,7 @@ public class SkinType {
     @Column(name = "TypeID")
     private Long id;
     @Column(name = "Type")
-    private String typeName;
+    private String name;
     @Column(name = "Description")
     private String description;
     private boolean isDeleted = false;
@@ -35,8 +35,8 @@ public class SkinType {
     public SkinType() {
     }
 
-    public SkinType(final String typeName, final String description) {
-        this.typeName = typeName;
+    public SkinType(final String name, final String description) {
+        this.name = name;
         this.description = description;
     }
 
@@ -44,14 +44,12 @@ public class SkinType {
         return id;
     }
 
-
-
-    public String getTypeName() {
-        return typeName;
+    public String getName() {
+        return name;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

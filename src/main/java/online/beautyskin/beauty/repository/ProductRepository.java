@@ -1,7 +1,7 @@
 package online.beautyskin.beauty.repository;
 
-import online.beautyskin.beauty.entity.Brand;
 import online.beautyskin.beauty.entity.Category;
+import online.beautyskin.beauty.entity.Image;
 import online.beautyskin.beauty.entity.Product;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,12 +13,7 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     public List<Product> findByIsDeletedFalse();
     public Product findById(long id);
     List<Product> findByCategory(Category category);
-    List<Product> findByBrand(Brand brand);
 
-    @Query("select p " +
-            "from Product p " +
-            "join  p.skinTypes s " +
-            "where s.id = :id")
     List<Product> findBySkinTypesIdAndIsDeletedFalse(long id);
 
     List<Product> findBySkinConcernsIdAndIsDeletedFalse(long concernId);
@@ -28,4 +23,5 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     List<Product> findByRoutineStepsIdAndIsDeletedFalse(long stepId);
 
     List<Product> findByFormsIdAndIsDeletedFalse(long id);
+    List<Image> findByImagesIdAndIsDeletedFalse(long id);
 }

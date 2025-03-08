@@ -49,9 +49,8 @@ public class Product {
 
     private double price;
 
-    @ManyToOne
-    @JoinColumn(name = "brand_id")
-    private Brand brand;
+    private String ingredient;
+
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -70,9 +69,6 @@ public class Product {
     @JsonIgnore
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<MappingProductImage> mappingProductImages = new ArrayList<>();
 
     @ManyToMany(mappedBy = "products")
     private List<Promotion> promotions = new ArrayList<>();
@@ -125,10 +121,15 @@ public class Product {
 //    @ManyToMany(mappedBy = "products")
     private List<RoutineStep> routineSteps = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_product_image",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
+    )
+//    @ManyToMany(mappedBy = "products")
+    private List<Image> images = new ArrayList<>();
 
-
-    public List<MappingProductImage> getMappingProductImages() { return mappingProductImages; }
-    public void setMappingProductImages(List<MappingProductImage> mappingProductImages) { this.mappingProductImages = mappingProductImages; }
 
     public List<Feedback> getFeedbacks() { return feedbacks; }
     public void setFeedbacks(List<Feedback> feedbacks) { this.feedbacks = feedbacks; }
@@ -145,8 +146,7 @@ public class Product {
     public Category getCategory() { return category; }
 
 
-    public Brand getBrand() { return brand; }
-    public void setBrand(Brand brand) { this.brand = brand; }
+
 
 
     public Product() {
@@ -268,5 +268,19 @@ public class Product {
         this.skinTypes = skinTypes;
     }
 
+    public List<Image> getImages() {
+        return images;
+    }
 
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public String getIngredient() {
+        return ingredient;
+    }
+
+    public void setIngredient(String ingredient) {
+        this.ingredient = ingredient;
+    }
 }

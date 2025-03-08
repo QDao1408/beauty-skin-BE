@@ -21,8 +21,6 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private BrandRepository brandRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -42,6 +40,12 @@ public class ProductService {
     @Autowired
     private FormRepository formRepository;
 
+    @Autowired
+    private ImageRepository imageRepository;
+
+    @Autowired
+    private PromotionRepository promotionRepository;
+
     public List<Product> getAllProducts() {
         return productRepository.findByIsDeletedFalse();
     }
@@ -59,13 +63,14 @@ public class ProductService {
         Product product = new Product();
         product.setName(productRequest.getName());
         product.setDescription(productRequest.getDescription());
-        product.setBrand(brandRepository.findById(productRequest.getBrandId()));
         product.setStock(productRequest.getStock());
         product.setCreateDateTime(productRequest.getCreateDateTime());
         product.setLastUpdateDateTime(productRequest.getLastUpdateDateTime());
         product.setExpiredDateTime(productRequest.getExpiredDateTime());
         product.setStatus(productRequest.getStatus());
         product.setInstruction(productRequest.getInstruction());
+        product.setPrice(productRequest.getPrice());
+        product.setIngredient(productRequest.getIngredient());
 
         List<SkinType> skinTypes = addSkinType(productRequest.getSkinTypeId());
         product.setSkinTypes(skinTypes);
@@ -81,6 +86,12 @@ public class ProductService {
 
         List<Form> forms = addForm(productRequest.getForms());
         product.setForms(forms);
+
+        List<Image> images = addImage(productRequest.getImages());
+        product.setImages(images);
+
+        List<Promotion> promotions = addPromo(productRequest.getPromotions());
+        product.setPromotions(promotions);
 
         product.setDeleted(false);
         return productRepository.save(product);
@@ -136,6 +147,26 @@ public class ProductService {
         return forms;
     }
 
+    public List<Image> addImage(List<Long> imageId) {
+        List<Image> images = new ArrayList<>();
+        if(!imageId.isEmpty()) {
+            for(long id : imageId) {
+                images.add(imageRepository.findByIdAndIsDeletedFalse(id));
+            }
+        }
+        return images;
+    }
+
+    public List<Promotion> addPromo(List<Long> promoId) {
+        List<Promotion> promotions = new ArrayList<>();
+        if(!promoId.isEmpty()) {
+            for(long id : promoId) {
+                promotions.add(promotionRepository.findByIdAndIsDeletedFalse(id));
+            }
+        }
+        return promotions;
+    }
+
     public Product deleteProduct(long id) {
         Product p1 = productRepository.findById(id);
         p1.setDeleted(true);
@@ -155,7 +186,8 @@ public class ProductService {
         p1.setInstruction(productRequest.getInstruction());
         p1.setDeleted(false);
         p1.setCategory(categoryRepository.findById(productRequest.getCategoryId()));
-        p1.setBrand(brandRepository.findById(productRequest.getBrandId()));
+        p1.setPrice(productRequest.getPrice());
+        p1.setIngredient(productRequest.getIngredient());
 
         List<SkinType> types = addSkinType(productRequest.getSkinTypeId());
         p1.setSkinTypes(types);
@@ -172,6 +204,12 @@ public class ProductService {
         List<Form> forms = addForm(productRequest.getForms());
         p1.setForms(forms);
 
+        List<Image> images = addImage(productRequest.getImages());
+        p1.setImages(images);
+
+        List<Promotion> promotions = addPromo(productRequest.getPromotions());
+        p1.setPromotions(promotions);
+
         return productRepository.save(p1);
     }
 
@@ -184,13 +222,6 @@ public class ProductService {
         return List.of();
     }
 
-    public List<Product> getFromBrand(String brandName) {
-        Brand brand = brandRepository.findByName(brandName);
-        if (brand != null) {
-            return productRepository.findByBrand(brand);
-        }
-        return List.of();
-    }
 
     public List<Product> getBySkinType(long skinTypeId) {
         List<Product> products = productRepository.findBySkinTypesIdAndIsDeletedFalse(skinTypeId);

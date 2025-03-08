@@ -35,6 +35,10 @@ public class ProductRequest {
 
     private long categoryId;
 
+    private double price;
+
+    private String ingredient;
+
     private List<Long> skinTypeId;
 
     private List<Long> skinConcernId;
@@ -44,6 +48,10 @@ public class ProductRequest {
     private List<Long> routineSteps;
 
     private List<Long> forms;
+
+    private List<Long> images;
+
+    private List<Long> promotions;
 
     public ProductRequest() {
     }
@@ -173,5 +181,37 @@ public class ProductRequest {
 
     public void setForms(List<Long> forms) {
         this.forms = forms;
+    }
+
+    public List<Long> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Long> images) {
+        this.images = images;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getIngredient() {
+        return ingredient;
+    }
+
+    public void setIngredient(String ingredient) {
+        this.ingredient = ingredient;
+    }
+
+    public List<Long> getPromotions() {
+        return promotions;
+    }
+
+    public void setPromotions(List<Long> promotions) {
+        this.promotions = promotions;
     }
 }

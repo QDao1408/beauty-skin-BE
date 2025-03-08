@@ -1,9 +1,12 @@
 package online.beautyskin.beauty.entity.request;
 
+import java.util.List;
+
 public class RoutineRequest {
     private String name;
     private String description;
     private long skinTypeId;
+    //private List<Long> stepId;
 
     public RoutineRequest() {
     }
@@ -31,4 +34,16 @@ public class RoutineRequest {
     public void setSkinTypeId(Long skinTypeId) {
         this.skinTypeId = skinTypeId;
     }
+
+    public void setSkinTypeId(long skinTypeId) {
+        this.skinTypeId = skinTypeId;
+    }
+
+//    public List<Long> getStepId() {
+//        return stepId;
+//    }
+//
+//    public void setStepId(List<Long> stepId) {
+//        this.stepId = stepId;
+//    }
 }

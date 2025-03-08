@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -22,8 +23,9 @@ public class RoutineStep {
     private int stepOrder;
     private boolean isDeleted = false;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "routine_id", nullable = false)
+    @JsonBackReference
     private Routine routine;
 
 //    @ManyToMany

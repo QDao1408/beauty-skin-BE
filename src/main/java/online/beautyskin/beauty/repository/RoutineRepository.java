@@ -9,4 +9,5 @@ public interface RoutineRepository extends JpaRepository<Routine, Long> {
 
     Routine findById(long id);
     List<Routine> findByIsDeletedFalse();
+    Routine findByIdAndIsDeletedFalse(long id);
 }

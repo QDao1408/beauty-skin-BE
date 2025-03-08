@@ -12,22 +12,18 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private long id;
+
+
+
     @Column(name = "URL")
     private String url;
     private boolean isDeleted = false;
 
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(mappedBy = "images", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonIgnore
-    private List<MappingProductImage> mappingProductImages = new ArrayList<>();
+    private List<Product> products = new ArrayList<Product>();
 
-    public void addMappingProductImage(MappingProductImage mappingProductImage) {
-        this.mappingProductImages.add(mappingProductImage);
-        mappingProductImage.setImage(this);
-    }
-    public void removeMappingProductImage(MappingProductImage mappingProductImage) {
-        this.mappingProductImages.remove(mappingProductImage);
-        mappingProductImage.setImage(null);
-    }
+
 
     public Image() {}
     public Image(String url) { this.url = url; }
@@ -36,7 +32,13 @@ public class Image {
     public void setUrl(String url) { this.url = url; }
     public boolean isDeleted() { return isDeleted; }
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
-    public List<MappingProductImage> getMappingProductImages() {return mappingProductImages; }
-    public void setMappingProductImages(List<MappingProductImage> mappingProductImages) { this.mappingProductImages = mappingProductImages; }
     public long getId() { return this.id; }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 }

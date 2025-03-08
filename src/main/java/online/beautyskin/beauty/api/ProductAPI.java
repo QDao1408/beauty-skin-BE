@@ -64,12 +64,6 @@ public class ProductAPI {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/getFormBrand")
-    public ResponseEntity getProductFromBrand(@RequestParam String brand) {
-        products = productService.getFromBrand(brand);
-        return ResponseEntity.ok(products);
-    }
-
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity createProduct(@Valid @RequestBody ProductRequest product) {

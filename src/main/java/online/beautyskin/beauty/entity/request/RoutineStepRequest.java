@@ -12,7 +12,7 @@ public class RoutineStepRequest {
 
     private int stepOrder;
 
-    private Routine routine;
+    private Long routine;
 
     public RoutineStepRequest() {
     }
@@ -41,11 +41,11 @@ public class RoutineStepRequest {
         this.stepOrder = stepOrder;
     }
 
-    public Routine getRoutine() {
+    public Long getRoutine() {
         return routine;
     }
 
-    public void setRoutine(Routine routine) {
+    public void setRoutine(Long routine) {
         this.routine = routine;
     }
 }

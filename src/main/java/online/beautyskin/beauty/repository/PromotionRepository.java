@@ -13,4 +13,6 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
     List<Promotion> findValidPromotions();
 
     List<Promotion> findAllByIsDeletedFalse();
+
+    Promotion findByIdAndIsDeletedFalse(long id);
 }

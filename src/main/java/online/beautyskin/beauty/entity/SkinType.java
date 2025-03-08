@@ -35,8 +35,9 @@ public class SkinType {
 
 
 
-    @OneToOne(mappedBy = "skinType", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Routine routine;
+    @OneToMany(mappedBy = "skinType", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Routine> routines;
 
     public SkinType() {
     }
@@ -96,5 +97,13 @@ public class SkinType {
     }
     public void removeProduct2(Product product) {
         this.products.remove(product);
+    }
+
+    public List<Routine> getRoutines() {
+        return routines;
+    }
+
+    public void setRoutines(List<Routine> routines) {
+        this.routines = routines;
     }
 }

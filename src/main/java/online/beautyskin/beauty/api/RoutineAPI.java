@@ -25,6 +25,7 @@ public class RoutineAPI {
         return ResponseEntity.ok(service.getAll());
     }
 
+
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity create(@Valid @RequestBody RoutineRequest request) {

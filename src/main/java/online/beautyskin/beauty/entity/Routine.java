@@ -1,6 +1,7 @@
 package online.beautyskin.beauty.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.util.RouteMatcher;
@@ -29,12 +30,12 @@ public class Routine {
     private LocalDateTime lastUpdate;
     private boolean isDeleted = false;
 
-    @OneToOne
-    @JoinColumn(name = "type_id")
+    @ManyToOne
+    @JoinColumn(name = "skinType")
     private SkinType skinType;
 
     @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+    @JsonManagedReference
     private List<RoutineStep> routineSteps = new ArrayList<>();
 
 
@@ -46,6 +47,14 @@ public class Routine {
     public void removeRoutineStep(RoutineStep step) {
         routineSteps.remove(step);
         step.setRoutine(null);
+    }
+
+    public List<RoutineStep> getRoutineSteps() {
+        return routineSteps;
+    }
+
+    public void setRoutineSteps(List<RoutineStep> routineSteps) {
+        this.routineSteps = routineSteps;
     }
 
     public Routine() {}

@@ -2,7 +2,9 @@ package online.beautyskin.beauty.entity;
 
 import jakarta.persistence.*;
 
-import java.time.OffsetDateTime;
+
+import java.time.LocalDateTime;
+
 
 @Entity
 public class CartDetails {
@@ -12,7 +14,7 @@ public class CartDetails {
     @Column(name = "Quantity")
     private int quantity;
     @Column(name = "LastUpdate")
-    private OffsetDateTime lastUpdate;
+    private LocalDateTime lastUpdate;
     @ManyToOne
     @JoinColumn(name = "cart_id")
     private CustomerCart customerCart;
@@ -23,7 +25,7 @@ public class CartDetails {
 
     private boolean isDeleted = false;
     public CartDetails() {}
-    public CartDetails(int quantity, OffsetDateTime lastUpdate) {
+    public CartDetails(int quantity, LocalDateTime lastUpdate) {
         this.quantity = quantity;
         this.lastUpdate = lastUpdate;
     }
@@ -31,8 +33,8 @@ public class CartDetails {
     public long getId() { return id; }
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
-    public OffsetDateTime getLastUpdate() { return lastUpdate; }
-    public void setLastUpdate(OffsetDateTime lastUpdate) { this.lastUpdate = lastUpdate; }
+    public LocalDateTime getLastUpdate() { return lastUpdate; }
+    public void setLastUpdate(LocalDateTime lastUpdate) { this.lastUpdate = lastUpdate; }
     public CustomerCart getCustomerCart() { return customerCart; }
     public void setCustomerCart(CustomerCart customerCart) { this.customerCart = customerCart; }
     public Product getProduct() { return product; }

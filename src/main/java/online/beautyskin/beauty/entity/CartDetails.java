@@ -3,6 +3,7 @@ package online.beautyskin.beauty.entity;
 import jakarta.persistence.*;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -23,11 +24,22 @@ public class CartDetails {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    private BigDecimal subtotal;
+
     private boolean isDeleted = false;
     public CartDetails() {}
-    public CartDetails(int quantity, LocalDateTime lastUpdate) {
+
+    public CartDetails(long id, int quantity, LocalDateTime lastUpdate, CustomerCart customerCart, Product product, BigDecimal subtotal, boolean isDeleted) {
+        this.id = id;
         this.quantity = quantity;
         this.lastUpdate = lastUpdate;
+        this.customerCart = customerCart;
+        this.product = product;
+        this.subtotal = subtotal;
+        this.isDeleted = isDeleted;
+    }
+
+    public CartDetails(CustomerCart cart, Product product, int quantity, BigDecimal subtotal) {
     }
 
     public long getId() { return id; }
@@ -39,4 +51,27 @@ public class CartDetails {
     public void setCustomerCart(CustomerCart customerCart) { this.customerCart = customerCart; }
     public Product getProduct() { return product; }
     public void setProduct(Product product) { this.product = product; }
+    public void updateSubtotal() {
+        this.subtotal = BigDecimal.valueOf(product.getPrice() * quantity);
+    }
+
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
 }

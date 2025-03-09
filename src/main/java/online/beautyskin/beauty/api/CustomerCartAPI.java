@@ -16,18 +16,15 @@ public class CustomerCartAPI {
     @Autowired
     private CustomerCartService customerCartService;
 
-    @GetMapping("/getAllCart")
-    public ResponseEntity getAllCart() {
-        return ResponseEntity.ok(customerCartService.findAllCart());
+    @PostMapping("/{userId}/add/{productId}/{quantity}")
+    public ResponseEntity<String> addToCart(@PathVariable Long userId, @PathVariable Long productId, @PathVariable int quantity) {
+        customerCartService.addProductToCart(userId, productId, quantity);
+        return ResponseEntity.ok("Product added to cart!");
     }
 
-    @GetMapping("/getCartByCustomerId/{id}")
-    public ResponseEntity getCartByCustomerId(@PathVariable long id) {
-        return ResponseEntity.ok(customerCartService.getCartById(id));
-    }
-
-    @PostMapping("/createCart")
-    public ResponseEntity createCart(@RequestBody CustomerCartRequest customerCartRequest) {
-        return ResponseEntity.ok(customerCartService.createCart(customerCartRequest));
+    @DeleteMapping("/{userId}/remove/{productId}")
+    public ResponseEntity<String> removeFromCart(@PathVariable Long userId, @PathVariable Long productId) {
+        customerCartService.removeProductFromCart(userId, productId);
+        return ResponseEntity.ok("Product removed from cart!");
     }
 }

@@ -61,6 +61,7 @@ public class Product {
     private List<Feedback> feedbacks = new ArrayList<>();
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
     private CartDetails cartDetails;
 
 //    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)

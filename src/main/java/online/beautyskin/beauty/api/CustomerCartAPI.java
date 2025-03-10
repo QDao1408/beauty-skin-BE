@@ -27,4 +27,9 @@ public class CustomerCartAPI {
         customerCartService.removeProductFromCart(userId, productId);
         return ResponseEntity.ok("Product removed from cart!");
     }
+
+    @GetMapping("/showCart")
+    public ResponseEntity showCart() {
+        return ResponseEntity.ok(customerCartService.getCart());
+    }
 }

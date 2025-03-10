@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/order")
 @SecurityRequirement(name = "api")
 public class OrderAPI {
 
@@ -26,19 +26,19 @@ public class OrderAPI {
         return ResponseEntity.ok(urlPayment);
     }
 
-    @GetMapping("getAll")
+    @GetMapping("/getAll")
     public ResponseEntity getAll() {
         List<Order> orders = orderService.getAll();
         return ResponseEntity.ok(orders);
     }
 
-    @GetMapping("getByUser")
+    @GetMapping("/getByUser")
     public ResponseEntity getOrdersByUser() {
         List<Order> orders = orderService.getOrderByUser();
         return ResponseEntity.ok(orders);
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/updateStatus/{id}")
     public ResponseEntity updateStatus(@RequestParam OrderStatusEnums status, @PathVariable long id){
         Order order = orderService.updateStatus(status,id);
         return ResponseEntity.ok(order);

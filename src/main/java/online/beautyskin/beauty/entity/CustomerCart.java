@@ -26,7 +26,6 @@ public class CustomerCart {
     private LocalDateTime lastUpdate;
 
     @OneToMany(mappedBy = "customerCart", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<CartDetails> cartDetails = new ArrayList<>();
 
 
@@ -39,4 +38,12 @@ public class CustomerCart {
     public void setLastUpdate(LocalDateTime lastUpdate) { this.lastUpdate = lastUpdate; }
     public List<CartDetails> getCartDetails() { return cartDetails; }
     public void setCartDetails(List<CartDetails> cartDetails) { this.cartDetails = cartDetails; }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

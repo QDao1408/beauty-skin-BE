@@ -5,9 +5,6 @@ import online.beautyskin.beauty.entity.CartDetails;
 import online.beautyskin.beauty.entity.CustomerCart;
 import online.beautyskin.beauty.entity.Product;
 import online.beautyskin.beauty.entity.User;
-import online.beautyskin.beauty.entity.request.CartDetailsRequest;
-import online.beautyskin.beauty.entity.request.CustomerCartRequest;
-import online.beautyskin.beauty.entity.respone.ShoppingCartResponse;
 import online.beautyskin.beauty.repository.CartDetailsRepository;
 import online.beautyskin.beauty.repository.CustomerCartRepository;
 import online.beautyskin.beauty.repository.ProductRepository;
@@ -18,10 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomerCartService {
@@ -60,8 +54,17 @@ public class CustomerCartService {
         } else {
             CartDetails cartDetail = new CartDetails(cart, product, quantity, BigDecimal.valueOf(product.getPrice() * quantity));
             cart.getCartDetails().add(cartDetail);
+            cartDetail.setCustomerCart(cart);
+            cartDetail.setProduct(product);
+            cartDetail.setQuantity(quantity);
             cartDetailsRepository.save(cartDetail);
         }
+
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (CartDetails cartDetail : cart.getCartDetails()) {
+            totalPrice = totalPrice.add(cartDetail.getSubtotal());
+        }
+        cart.setTotalPrice(totalPrice);
 
         cart.setLastUpdate(LocalDateTime.now());
         customerCartRepository.save(cart);
@@ -75,5 +78,11 @@ public class CustomerCartService {
         cartDetailsRepository.delete(cartDetail);
         cart.setLastUpdate(LocalDateTime.now());
         customerCartRepository.save(cart);
+    }
+
+    public Optional<CustomerCart> getCart() {
+        User currentUser = userUtils.getCurrentUser();
+        Optional<CustomerCart> customerCart = customerCartRepository.findByUser(currentUser);
+        return customerCart;
     }
 }

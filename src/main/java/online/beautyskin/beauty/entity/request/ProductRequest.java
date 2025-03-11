@@ -1,14 +1,8 @@
 package online.beautyskin.beauty.entity.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import online.beautyskin.beauty.entity.SkinType;
 import online.beautyskin.beauty.enums.ProductEnums;
-import org.apache.catalina.LifecycleState;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -47,7 +41,7 @@ public class ProductRequest {
 
     private List<Long> routineSteps;
 
-    private List<Long> forms;
+    private List<Long> formIds;
 
     private List<Long> images;
 
@@ -175,12 +169,12 @@ public class ProductRequest {
         this.routineSteps = routineSteps;
     }
 
-    public List<Long> getForms() {
-        return forms;
+    public List<Long> getFormIds() {
+        return formIds;
     }
 
-    public void setForms(List<Long> forms) {
-        this.forms = forms;
+    public void setFormIds(List<Long> formIds) {
+        this.formIds = formIds;
     }
 
     public List<Long> getImages() {

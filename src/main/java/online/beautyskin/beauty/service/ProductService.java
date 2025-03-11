@@ -1,15 +1,11 @@
 package online.beautyskin.beauty.service;
 
-import jakarta.persistence.Access;
 import lombok.extern.slf4j.Slf4j;
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.ProductRequest;
 import online.beautyskin.beauty.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +80,7 @@ public class ProductService {
         List<RoutineStep> steps = addRoutineStep(productRequest.getRoutineSteps());
         product.setRoutineSteps(steps);
 
-        List<Form> forms = addForm(productRequest.getForms());
+        List<Form> forms = addForm(productRequest.getFormIds());
         product.setForms(forms);
 
         List<Image> images = addImage(productRequest.getImages());
@@ -175,42 +171,42 @@ public class ProductService {
 
     public Product updateProduct(long id, ProductRequest productRequest) {
 
-        Product p1 = productRepository.findById(id);
-        p1.setName(productRequest.getName());
-        p1.setDescription(productRequest.getDescription());
-        p1.setStock(productRequest.getStock());
-        p1.setCreateDateTime(productRequest.getCreateDateTime());
-        p1.setLastUpdateDateTime(productRequest.getLastUpdateDateTime());
-        p1.setExpiredDateTime(productRequest.getExpiredDateTime());
-        p1.setStatus(productRequest.getStatus());
-        p1.setInstruction(productRequest.getInstruction());
-        p1.setDeleted(false);
-        p1.setCategory(categoryRepository.findById(productRequest.getCategoryId()));
-        p1.setPrice(productRequest.getPrice());
-        p1.setIngredient(productRequest.getIngredient());
+        Product product = productRepository.findById(id);
+        product.setName(productRequest.getName());
+        product.setDescription(productRequest.getDescription());
+        product.setStock(productRequest.getStock());
+        product.setCreateDateTime(productRequest.getCreateDateTime());
+        product.setLastUpdateDateTime(productRequest.getLastUpdateDateTime());
+        product.setExpiredDateTime(productRequest.getExpiredDateTime());
+        product.setStatus(productRequest.getStatus());
+        product.setInstruction(productRequest.getInstruction());
+        product.setPrice(productRequest.getPrice());
+        product.setIngredient(productRequest.getIngredient());
 
-        List<SkinType> types = addSkinType(productRequest.getSkinTypeId());
-        p1.setSkinTypes(types);
+        List<SkinType> skinTypes = addSkinType(productRequest.getSkinTypeId());
+        product.setSkinTypes(skinTypes);
 
-        List<SkinConcern> concerns = addSkinConcern(productRequest.getSkinConcernId());
-        p1.setSkinConcerns(concerns);
+        List<SkinConcern> skinConcerns = addSkinConcern(productRequest.getSkinConcernId());
+        product.setSkinConcerns(skinConcerns);
 
         List<Tag> tags = addProductTag(productRequest.getTagId());
-        p1.setTags(tags);
+        product.setTags(tags);
 
         List<RoutineStep> steps = addRoutineStep(productRequest.getRoutineSteps());
-        p1.setRoutineSteps(steps);
+        product.setRoutineSteps(steps);
 
-        List<Form> forms = addForm(productRequest.getForms());
-        p1.setForms(forms);
+        List<Form> forms = addForm(productRequest.getFormIds());
+        product.setForms(forms);
 
         List<Image> images = addImage(productRequest.getImages());
-        p1.setImages(images);
+        product.setImages(images);
 
         List<Promotion> promotions = addPromo(productRequest.getPromotions());
-        p1.setPromotions(promotions);
+        product.setPromotions(promotions);
 
-        return productRepository.save(p1);
+        product.setDeleted(false);
+
+        return productRepository.save(product);
     }
 
 

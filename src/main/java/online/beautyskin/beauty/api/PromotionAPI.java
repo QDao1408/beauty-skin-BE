@@ -1,15 +1,18 @@
 package online.beautyskin.beauty.api;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import online.beautyskin.beauty.entity.Promotion;
 import online.beautyskin.beauty.service.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/promotion")
+@SecurityRequirement(name = "api")
 public class PromotionAPI {
     @Autowired
     private PromotionService promotionService;
@@ -29,18 +32,21 @@ public class PromotionAPI {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity create(@RequestBody Promotion promotion) {
         Promotion promo1 = promotionService.createPromotion(promotion);
         return ResponseEntity.ok(promo1);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity delete(@RequestBody Promotion promotion, @PathVariable long id) {
         Promotion del = promotionService.deletePromotion(promotion);
         return ResponseEntity.ok(del);
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity update(@RequestBody Promotion promotion, @PathVariable long id) {
         Promotion upd = promotionService.updatePromotion(promotion);
         return ResponseEntity.ok(upd);

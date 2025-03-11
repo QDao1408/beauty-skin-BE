@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 
@@ -18,6 +19,7 @@ public class CartDetails {
     private LocalDateTime lastUpdate;
     @ManyToOne
     @JoinColumn(name = "cart_id")
+    @JsonIgnore
     private CustomerCart customerCart;
 
     @OneToOne

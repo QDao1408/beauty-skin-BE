@@ -46,8 +46,9 @@ public class ProductService {
         return productRepository.findByIsDeletedFalse();
     }
 
+
     public Product getProductById(long id) {
-        return productRepository.findById(id);
+        return productRepository.findByIdAndIsDeletedFalse(id);
     }
 
     // viết sql

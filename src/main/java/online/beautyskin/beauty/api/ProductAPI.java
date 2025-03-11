@@ -64,6 +64,12 @@ public class ProductAPI {
         return ResponseEntity.ok(products);
     }
 
+    @GetMapping("/getById/{id}")
+    public ResponseEntity getProductById(@PathVariable long id) {
+        Product product = productService.getProductById(id);
+        return ResponseEntity.ok(product);
+    }
+
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity createProduct(@Valid @RequestBody ProductRequest product) {

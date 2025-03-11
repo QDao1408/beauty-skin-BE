@@ -24,6 +24,7 @@ public class CustomerCart {
 
     @Column(name = "TotalPrice")
     private BigDecimal totalPrice;
+
     private LocalDateTime lastUpdate;
 
     @OneToMany(mappedBy = "customerCart", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -57,12 +57,14 @@ public class CustomerCartService {
             cartDetail.setCustomerCart(cart);
             cartDetail.setProduct(product);
             cartDetail.setQuantity(quantity);
+            cartDetail.updateSubtotal();
             cartDetailsRepository.save(cartDetail);
         }
 
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (CartDetails cartDetail : cart.getCartDetails()) {
-            totalPrice = totalPrice.add(cartDetail.getSubtotal());
+            BigDecimal subtotal = cartDetail.getSubtotal() != null ? cartDetail.getSubtotal() : BigDecimal.ZERO;
+            totalPrice = totalPrice.add(subtotal);
         }
         cart.setTotalPrice(totalPrice);
 

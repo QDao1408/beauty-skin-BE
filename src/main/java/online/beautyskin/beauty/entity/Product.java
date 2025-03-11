@@ -19,7 +19,8 @@ public class Product {
     @Column(name = "Product_Name")
     private String name;
 
-    @Column(name = "Description")
+    @Lob  // Marks this as a large object (TEXT/BLOB)
+    @Column(columnDefinition = "TEXT") // Optional, ensures it maps to MySQL TEXT
     private String description;
 
     @Column(name = "Stock")
@@ -42,13 +43,17 @@ public class Product {
 
     @Column(name = "Status")
     private ProductEnums status;
-    @Column(name = "Instruction")
+
+    @Lob  // Marks this as a large object (TEXT/BLOB)
+    @Column(columnDefinition = "TEXT") // Optional, ensures it maps to MySQL TEXT
     private String instruction;
 
     private boolean isDeleted;
 
     private double price;
 
+    @Lob  // Marks this as a large object (TEXT/BLOB)
+    @Column(columnDefinition = "TEXT") // Optional, ensures it maps to MySQL TEXT
     private String ingredient;
 
 

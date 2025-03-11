@@ -68,6 +68,7 @@ public class ProductService {
         product.setInstruction(productRequest.getInstruction());
         product.setPrice(productRequest.getPrice());
         product.setIngredient(productRequest.getIngredient());
+        product.setCategory(categoryRepository.findById(productRequest.getCategoryId()));
 
         List<SkinType> skinTypes = addSkinType(productRequest.getSkinTypeId());
         product.setSkinTypes(skinTypes);
@@ -183,6 +184,7 @@ public class ProductService {
         product.setInstruction(productRequest.getInstruction());
         product.setPrice(productRequest.getPrice());
         product.setIngredient(productRequest.getIngredient());
+        product.setCategory(categoryRepository.findById(productRequest.getCategoryId()));
 
         List<SkinType> skinTypes = addSkinType(productRequest.getSkinTypeId());
         product.setSkinTypes(skinTypes);

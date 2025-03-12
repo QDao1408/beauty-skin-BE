@@ -77,20 +77,20 @@ public class ProductAPI {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity createProduct(@Valid @RequestBody ProductRequest product) {
         Product p = productService.createProduct(product);
         return ResponseEntity.ok(p);
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity updateProduct(@PathVariable long id, @Valid @RequestBody ProductRequest product) {
         return ResponseEntity.ok(productService.updateProduct(id, product));
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity deleteProduct(@PathVariable long id) {
         Product p = productService.deleteProduct(id);
         return ResponseEntity.ok(p);

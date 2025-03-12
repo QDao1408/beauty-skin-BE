@@ -23,26 +23,25 @@ public class SkinTypeAPI {
     private SkinTypeService service;
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity create(@RequestBody SkinTypeRequest request) {
         return ResponseEntity.ok(service.create(request));
     }
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity getAll() {
         types = service.getAll();
         return ResponseEntity.ok(types);
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity delete(@PathVariable long id) {
         return ResponseEntity.ok(service.delete(id));
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity update(@PathVariable long id, @RequestBody SkinTypeRequest request) {
         return ResponseEntity.ok(service.update(id, request));
     }

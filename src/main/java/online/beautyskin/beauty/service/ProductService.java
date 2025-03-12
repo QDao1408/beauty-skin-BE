@@ -17,7 +17,6 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-
     @Autowired
     private CategoryRepository categoryRepository;
 

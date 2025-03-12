@@ -47,7 +47,9 @@ List<String> PUBLIC_API = List.of(
             "/api/blog/getByDeleteIsFalse",
             "/api/blog/create",
             "/api/blog/delete",
-            "/api/blog/get"
+            "/api/blog/get",
+            "/api/user/forgot-password",
+            "/api/user/reset-password"
     );
 
     boolean isPermitted(HttpServletRequest request) {

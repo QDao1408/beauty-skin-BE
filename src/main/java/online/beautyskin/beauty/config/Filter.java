@@ -78,6 +78,9 @@ List<String> PUBLIC_API = List.of(
         if(method.equals("GET") && matcher.match("/api/blog/getByDeleteIsFalse", uri)) {
             return true;
         }
+        if(method.equals("GET") && matcher.match("/api/skinQuestion/getDeleteIsFalse", uri)) {
+            return true;
+        }
         return PUBLIC_API.stream().anyMatch(m -> matcher.match(m, uri));
     }
 

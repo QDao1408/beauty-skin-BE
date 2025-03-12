@@ -24,7 +24,6 @@ public class AuthenticationAPI {
     @PostMapping("register")
     public ResponseEntity register(@Valid @RequestBody UserRequest userRequest) {
         User user = authenticationService.register(userRequest);
-
         return ResponseEntity.ok(user);
     }
 

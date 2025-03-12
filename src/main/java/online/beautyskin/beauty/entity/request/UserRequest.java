@@ -3,6 +3,7 @@ package online.beautyskin.beauty.entity.request;
 public class UserRequest {
     private String username;
     private String password;
+    private String confirmPassword;
     private String email;
     private String fullName;
 
@@ -36,5 +37,13 @@ public class UserRequest {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

@@ -38,16 +38,7 @@ List<String> PUBLIC_API = List.of(
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/api/login",
-            "/api/register",
-            //USER
-            "/api/get",
-            "/api/user/update",
-            //BLOG
-            "/api/blog/edit",
-            "/api/blog/getByDeleteIsFalse",
-            "/api/blog/create",
-            "/api/blog/delete",
-            "/api/blog/get"
+            "/api/register"
     );
 
     boolean isPermitted(HttpServletRequest request) {
@@ -79,6 +70,9 @@ List<String> PUBLIC_API = List.of(
             return true;
         }
         if(method.equals("GET") && matcher.match("/api/skinQuestion/getDeleteIsFalse", uri)) {
+            return true;
+        }
+        if(method.equals("PATCH") && matcher.match("/api/Order/updateStatus/{id}", uri)) {
             return true;
         }
         return PUBLIC_API.stream().anyMatch(m -> matcher.match(m, uri));

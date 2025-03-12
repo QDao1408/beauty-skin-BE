@@ -28,6 +28,12 @@ public class ProductAPI {
         return ResponseEntity.ok(products);
     }
 
+    @GetMapping("/getByName")
+    public ResponseEntity getProductsByName(@RequestParam String name) {
+        products = productService.getProductsByName(name);
+        return ResponseEntity.ok(products);
+    }
+
     @GetMapping("/getFormCate")
     public ResponseEntity getProductFromCate(@RequestParam String category) {
         products = productService.getFromCate(category);

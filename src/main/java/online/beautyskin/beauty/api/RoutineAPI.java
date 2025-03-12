@@ -20,26 +20,25 @@ public class RoutineAPI {
     private RoutineService service;
 
     @GetMapping("/get")
-    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity create(@Valid @RequestBody RoutineRequest request) {
         return ResponseEntity.ok(service.save(request));
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity update(@PathVariable long id, @Valid @RequestBody RoutineRequest request) {
         return ResponseEntity.ok(service.update(id,request));
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity delete(@PathVariable long id) {
         return ResponseEntity.ok(service.delete(id));
     }

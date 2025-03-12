@@ -57,6 +57,27 @@ List<String> PUBLIC_API = List.of(
         if(method.equals("GET") && matcher.match("/api/product/**", uri)) {
             return true;
         }
+        if(method.equals("GET") && matcher.match("/api/skinConcern/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/skinType/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/tag/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/promotion/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/form/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/category/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/blog/getByDeleteIsFalse", uri)) {
+            return true;
+        }
         return PUBLIC_API.stream().anyMatch(m -> matcher.match(m, uri));
     }
 

@@ -38,14 +38,20 @@ public class AuthenticationService implements UserDetailsService {
     @SneakyThrows
     public User register(UserRequest userRequest) {
         User user = new User();
-        passwordEncoder.encode(userRequest.getPassword());
 
-        user.roleEnums = RoleEnums.USER;
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        user.setUsername(userRequest.getUsername());
-        user.setMail(userRequest.getEmail());
-        user.setFullName(userRequest.getFullName());
-        user.setActive(true);
+        if(userRequest.getConfirmPassword().equals(userRequest.getPassword())) {
+
+            passwordEncoder.encode(userRequest.getPassword());
+
+            user.roleEnums = RoleEnums.USER;
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+            user.setUsername(userRequest.getUsername());
+            user.setMail(userRequest.getEmail());
+            user.setFullName(userRequest.getFullName());
+            user.setActive(true);
+        } else {
+            throw new SQLIntegrityConstraintViolationException("Xác nhận mặt khẩu không khớp");
+        }
         User u = null;
         try {
             u = authenticationRepository.save(user);

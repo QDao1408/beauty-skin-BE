@@ -51,11 +51,6 @@ public class ProductService {
         return productRepository.findByIdAndIsDeletedFalse(id);
     }
 
-    // viết sql
-    public Product getProductByName(String name) {
-        return productRepository.findByName(name);
-    }
-
     public Product createProduct(ProductRequest productRequest) {
         Product product = new Product();
         product.setName(productRequest.getName());
@@ -244,6 +239,11 @@ public class ProductService {
 
     public List<Product> getByForm(long id) {
         List<Product> products = productRepository.findByFormsIdAndIsDeletedFalse(id);
+        return products;
+    }
+
+    public List<Product> getProductsByName(String name) {
+        List<Product> products = productRepository.findByName(name);
         return products;
     }
 }

@@ -9,7 +9,10 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface ProductRepository extends CrudRepository<Product, Long> {
-    public Product findByName(String name);
+
+
+    @Query("select p from Product p where p.name like %:name%")
+    public List<Product> findByName(String name);
     public List<Product> findByIsDeletedFalse();
     public Product findById(long id);
     List<Product> findByCategory(Category category);

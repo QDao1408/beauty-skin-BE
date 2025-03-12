@@ -82,6 +82,10 @@ public class User implements UserDetails {
     @JsonIgnore
     List<Order> orders = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private PasswordResetToken passwordResetToken;
+
     public User(){}
 
     public void addFeedback(Feedback feedback){

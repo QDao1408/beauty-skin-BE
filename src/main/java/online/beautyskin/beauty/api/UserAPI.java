@@ -82,7 +82,7 @@ public class UserAPI {
             return ResponseEntity.badRequest().body("Token has expired.");
         }
 
-        if(!newPassword.equals(confirmPassword)) {
+        if (!newPassword.equals(confirmPassword)) {
             return ResponseEntity.badRequest().body("Confirm password not matched");
         }
 
@@ -95,6 +95,7 @@ public class UserAPI {
         resetTokenRepository.delete(resetToken);
 
         return ResponseEntity.ok("Password reset successfully.");
+    }
     @PostMapping("/forgetPassword")
     @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity forgetPassword(@RequestParam String mail) {

@@ -136,6 +136,8 @@ public class Product {
 //    @ManyToMany(mappedBy = "products")
     private List<Image> images = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "favoriteProducts")
+    private List<Favorites> favoritedByUsers = new ArrayList<>();
 
     public List<Feedback> getFeedbacks() { return feedbacks; }
     public void setFeedbacks(List<Feedback> feedbacks) { this.feedbacks = feedbacks; }
@@ -288,5 +290,13 @@ public class Product {
 
     public void setIngredient(String ingredient) {
         this.ingredient = ingredient;
+    }
+
+    public List<Favorites> getFavoritedByUsers() {
+        return favoritedByUsers;
+    }
+
+    public void setFavoritedByUsers(List<Favorites> favoritedByUsers) {
+        this.favoritedByUsers = favoritedByUsers;
     }
 }

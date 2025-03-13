@@ -21,6 +21,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static online.beautyskin.beauty.enums.OrderStatusEnums.IN_PROGRESS;
+
 @Service
 public class OrderService {
 
@@ -69,6 +71,7 @@ public class OrderService {
             }
         }
         order.setTotalPrice(totalPrice);
+        order.setOrderStatus(IN_PROGRESS);
         Order newOrder = orderRepository.save(order);
         return createURLPayment(newOrder);
     }

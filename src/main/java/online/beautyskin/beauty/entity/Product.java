@@ -69,8 +69,6 @@ public class Product {
     @JsonIgnore
     private CartDetails cartDetails;
 
-//    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-//    private OrderDetail orderDetail;
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<OrderDetail> orderDetails = new ArrayList<>();

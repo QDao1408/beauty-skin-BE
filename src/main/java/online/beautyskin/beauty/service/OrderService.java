@@ -51,9 +51,11 @@ public class OrderService {
 
         double totalPrice = 0;
         order.setOrderDate(LocalDateTime.now());
+
         for (OrderDetailsRequest orderDetailsRequest: orderRequest.getDetails()) {
             OrderDetail orderDetail = new OrderDetail();
             Product product = productRepository.findById(orderDetailsRequest.getProductId());
+
             if (product.getStock() >= orderDetailsRequest.getQuantity()) {
                 orderDetail.setProduct(product);
                 orderDetail.setQuantity(orderDetailsRequest.getQuantity());
@@ -61,9 +63,6 @@ public class OrderService {
                 orderDetail.setTotalPrice(product.getPrice() * orderDetailsRequest.getQuantity());
                 orderDetail.setOrder(order);
                 details.add(orderDetail);
-
-                product.setStock(product.getStock()  - orderDetailsRequest.getQuantity());
-                productRepository.save(product);
 
                 totalPrice += orderDetail.getTotalPrice();
             }else {
@@ -153,6 +152,24 @@ public class OrderService {
     public Order updateStatus(OrderStatusEnums status, long id) {
         Order order = orderRepository.findOrderById(id);
         order.setOrderStatus(status);
+
+        if (status == OrderStatusEnums.PAID){
+            for (OrderDetail orderDetail : order.getOrderDetails()){
+                Product product = orderDetail.getProduct();
+                if (product.getStock() >= orderDetail.getQuantity()){
+                    product.setStock(product.getStock() - orderDetail.getQuantity());
+                    productRepository.save(product);
+                }else {
+                    throw new RuntimeException("Not enough stock for product: "+ product.getName());
+                }
+            }
+        } else if (status == OrderStatusEnums.CANCELLED) {
+            for (OrderDetail orderDetail : order.getOrderDetails()){
+                Product product = orderDetail.getProduct();
+                product.setStock(product.getStock() + orderDetail.getQuantity());
+                productRepository.save(product);
+            }
+        }
         return orderRepository.save(order);
     }
 }

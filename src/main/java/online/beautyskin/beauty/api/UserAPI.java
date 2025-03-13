@@ -68,39 +68,21 @@ public class UserAPI {
 
     @PostMapping("/forgot-password")
 
-    public String forgotPassword(@RequestParam String email) {
-        resetTokenService.sendResetPasswordEmail(email);
-        return "Reset password link sent to email.";
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        String rs = resetTokenService.sendResetPasswordEmail(email);
+        return ResponseEntity.ok(rs);
     }
 
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String newPassword, @RequestParam String confirmPassword) {
-        PasswordResetToken resetToken = resetTokenRepository.findByToken(token)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
-
-        if (resetToken.isExpired()) {
-            return ResponseEntity.badRequest().body("Token has expired.");
-        }
-
-        if (!newPassword.equals(confirmPassword)) {
-            return ResponseEntity.badRequest().body("Confirm password not matched");
-        }
-
-        // Update Password
-        User user = resetToken.getUser();
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
-
-        // Delete the used token
-        resetTokenRepository.delete(resetToken);
-
-        return ResponseEntity.ok("Password reset successfully.");
+        String rs = userService.resetPassword(token, newPassword, confirmPassword);
+        return ResponseEntity.ok(rs);
     }
-    @PostMapping("/forgetPassword")
-    @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity forgetPassword(@RequestParam String mail) {
-        return ResponseEntity.ok(userService.forgetPassword(mail));
-
-    }
+//    @PostMapping("/forgetPassword")
+//    @PreAuthorize("hasAnyAuthority('USER')")
+//    public ResponseEntity forgetPassword(@RequestParam String mail) {
+//        return ResponseEntity.ok(userService.forgetPassword(mail));
+//
+//    }
 
 }

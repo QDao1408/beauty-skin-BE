@@ -1,11 +1,14 @@
 package online.beautyskin.beauty.service;
 
+import online.beautyskin.beauty.entity.PasswordResetToken;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.ChangePasswordRequest;
 import online.beautyskin.beauty.entity.request.UserRequest;
 import online.beautyskin.beauty.entity.request.UserUpdateRequest;
+import online.beautyskin.beauty.repository.PasswordResetTokenRepository;
 import online.beautyskin.beauty.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,12 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private PasswordResetTokenRepository resetTokenRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     public User update(UserUpdateRequest user, long id) {
         User newUser = userRepository.findById(id);
@@ -70,25 +79,52 @@ public class UserService {
         return "Password changed successfully!";
     }
 
-    public String forgetPassword(String mail) {
-        Optional<User> optionalUser = userRepository.findByMail(mail);
-        if (optionalUser.isEmpty()) {
-            return "User not found!";
-        }
-        User user = optionalUser.get();
+    public String resetPassword(String token, String newPassword, String confirmPassword) {
+        PasswordResetToken resetToken = resetTokenRepository.findByToken(token)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
 
-        String newPassword = generatePassword();
+
+        if (resetToken.isExpired()) {
+            return ("Token has expired.");
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            return ("Confirm password not matched");
+        }
+
+        // Update Password
+        User user = resetToken.getUser();
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
-        return "Your password has been changed: "+newPassword;
+
+        // Delete the used token
+        resetTokenRepository.delete(resetToken);
+
+
+        emailService.notifyPasswordChanged(user);
+
+        return ("Password reset successfully.");
     }
 
-    private static final String SPECIAL_CHARACTERS = "@$#*!%&";
-    private static final SecureRandom RANDOM = new SecureRandom();
-    public static String generatePassword() {
-        String uuid = UUID.randomUUID().toString().replace("-", "").toUpperCase(); // Chuyển UUID thành chữ hoa
-        String randomSpecial = String.valueOf(SPECIAL_CHARACTERS.charAt(RANDOM.nextInt(SPECIAL_CHARACTERS.length())));
-        String randomDigit = String.valueOf(RANDOM.nextInt(10)); // Chọn số từ 0-9
-        return uuid.substring(0, 8) + randomSpecial + randomDigit; // Đảm bảo đúng regex
-    }
+//    public String forgetPassword(String mail) {
+//        Optional<User> optionalUser = userRepository.findByMail(mail);
+//        if (optionalUser.isEmpty()) {
+//            return "User not found!";
+//        }
+//        User user = optionalUser.get();
+//
+//        String newPassword = generatePassword();
+//        user.setPassword(passwordEncoder.encode(newPassword));
+//        userRepository.save(user);
+//        return "Your password has been changed: "+newPassword;
+//    }
+//
+//    private static final String SPECIAL_CHARACTERS = "@$#*!%&";
+//    private static final SecureRandom RANDOM = new SecureRandom();
+//    public static String generatePassword() {
+//        String uuid = UUID.randomUUID().toString().replace("-", "").toUpperCase(); // Chuyển UUID thành chữ hoa
+//        String randomSpecial = String.valueOf(SPECIAL_CHARACTERS.charAt(RANDOM.nextInt(SPECIAL_CHARACTERS.length())));
+//        String randomDigit = String.valueOf(RANDOM.nextInt(10)); // Chọn số từ 0-9
+//        return uuid.substring(0, 8) + randomSpecial + randomDigit; // Đảm bảo đúng regex
+//    }
 }

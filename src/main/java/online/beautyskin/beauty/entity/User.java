@@ -82,9 +82,9 @@ public class User implements UserDetails {
     @JsonIgnore
     List<Order> orders = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private PasswordResetToken passwordResetToken;
+    private List<PasswordResetToken> passwordResetTokens = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Favorites favorites;
@@ -282,5 +282,13 @@ public class User implements UserDetails {
 
     public void setFavorites(Favorites favorites) {
         this.favorites = favorites;
+    }
+
+    public List<PasswordResetToken> getPasswordResetTokens() {
+        return passwordResetTokens;
+    }
+
+    public void setPasswordResetTokens(List<PasswordResetToken> passwordResetTokens) {
+        this.passwordResetTokens = passwordResetTokens;
     }
 }

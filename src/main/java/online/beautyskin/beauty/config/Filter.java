@@ -50,7 +50,7 @@ List<String> PUBLIC_API = List.of(
             "/api/blog/delete",
             "/api/blog/get",
             "/api/user/forgot-password",
-            "/api/user/reset-password"
+            "/api/user/reset-password",
             "/api/register"
 
     );

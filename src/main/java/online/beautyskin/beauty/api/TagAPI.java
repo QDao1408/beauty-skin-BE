@@ -21,25 +21,24 @@ public class TagAPI {
 
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity get() {
         return ResponseEntity.ok(service.getAll());
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity create(@Valid @RequestBody TagRequest request) {
         return ResponseEntity.ok(service.create(request));
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity update(@PathVariable long id, @Valid @RequestBody TagRequest request) {
         return ResponseEntity.ok(service.update(id, request));
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity delete(@PathVariable long id) {
         return ResponseEntity.ok(service.delete(id));
     }

@@ -8,6 +8,7 @@ import online.beautyskin.beauty.repository.OrderRepository;
 import online.beautyskin.beauty.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,18 +22,21 @@ public class OrderAPI {
     private OrderService orderService;
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity createOrder(@RequestBody OrderRequest orderRequest) throws Exception{
         String urlPayment = orderService.create(orderRequest);
         return ResponseEntity.ok(urlPayment);
     }
 
     @GetMapping("/getAll")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity getAll() {
         List<Order> orders = orderService.getAll();
         return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/getByUser")
+    @PreAuthorize("hasAnyAuthority('User')")
     public ResponseEntity getOrdersByUser() {
         List<Order> orders = orderService.getOrderByUser();
         return ResponseEntity.ok(orders);

@@ -86,6 +86,10 @@ public class User implements UserDetails {
     @JsonIgnore
     private PasswordResetToken passwordResetToken;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Favorites favorites;
+
+
     public User(){}
 
     public void addFeedback(Feedback feedback){
@@ -270,5 +274,13 @@ public class User implements UserDetails {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public Favorites getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(Favorites favorites) {
+        this.favorites = favorites;
     }
 }

@@ -38,6 +38,7 @@ List<String> PUBLIC_API = List.of(
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/api/login",
+
             "/api/register",
             //USER
             "/api/get",
@@ -50,6 +51,8 @@ List<String> PUBLIC_API = List.of(
             "/api/blog/get",
             "/api/user/forgot-password",
             "/api/user/reset-password"
+            "/api/register"
+
     );
 
     boolean isPermitted(HttpServletRequest request) {
@@ -57,6 +60,33 @@ List<String> PUBLIC_API = List.of(
         String uri = request.getRequestURI();
         String method = request.getMethod();
         if(method.equals("GET") && matcher.match("/api/product/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/skinConcern/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/skinType/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/tag/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/promotion/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/form/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/category/**", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/blog/getByDeleteIsFalse", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/skinQuestion/getDeleteIsFalse", uri)) {
+            return true;
+        }
+        if(method.equals("PATCH") && matcher.match("/api/Order/updateStatus/{id}", uri)) {
             return true;
         }
         return PUBLIC_API.stream().anyMatch(m -> matcher.match(m, uri));

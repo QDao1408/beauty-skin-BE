@@ -91,7 +91,7 @@ public class OrderService {
         String tmnCode = "8FDRRU1S";
         String secretKey = "2LS6HWZV3VANKGVZW4IFO7L0J8A3406K";
         String vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        String returnURL = "http://beautyskinshop.online/?orderId="+order.getId();
+        String returnURL = "http://beautyskinshop.online/checkout/payment-result/?orderId="+order.getId();
 
         String currCode = "VND";
         Map<String, String> vnpParams = new TreeMap<>();

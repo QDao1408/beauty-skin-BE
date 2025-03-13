@@ -64,6 +64,9 @@ public class OrderService {
                 orderDetail.setOrder(order);
                 details.add(orderDetail);
 
+                product.setStock(product.getStock() - orderDetail.getQuantity());
+                productRepository.save(product);
+
                 totalPrice += orderDetail.getTotalPrice();
             }else {
                 throw new RuntimeException("quantity is not enough");
@@ -152,18 +155,7 @@ public class OrderService {
     public Order updateStatus(OrderStatusEnums status, long id) {
         Order order = orderRepository.findOrderById(id);
         order.setOrderStatus(status);
-
-        if (status == OrderStatusEnums.PAID){
-            for (OrderDetail orderDetail : order.getOrderDetails()){
-                Product product = orderDetail.getProduct();
-                if (product.getStock() >= orderDetail.getQuantity()){
-                    product.setStock(product.getStock() - orderDetail.getQuantity());
-                    productRepository.save(product);
-                }else {
-                    throw new RuntimeException("Not enough stock for product: "+ product.getName());
-                }
-            }
-        } else if (status == OrderStatusEnums.CANCELLED) {
+        if (status == OrderStatusEnums.CANCELLED) {
             for (OrderDetail orderDetail : order.getOrderDetails()){
                 Product product = orderDetail.getProduct();
                 product.setStock(product.getStock() + orderDetail.getQuantity());

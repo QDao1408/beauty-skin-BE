@@ -21,9 +21,9 @@ public class Order {
     @Column(name = "OrderDate", nullable = false)
     private LocalDateTime orderDate;
     @Column(name = "OrderStatus")
+    @Enumerated(value = EnumType.STRING)
     private OrderStatusEnums orderStatus;
     @Column(name = "PaymentStatus")
-    @Enumerated(value = EnumType.STRING)
     private PaymentStatusEnums paymentStatus;
     @Column(name = "TotalPrice")
     @Min(0)

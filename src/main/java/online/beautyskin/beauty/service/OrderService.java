@@ -4,6 +4,7 @@ import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.OrderDetailsRequest;
 import online.beautyskin.beauty.entity.request.OrderRequest;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
+import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.repository.OrderRepository;
 import online.beautyskin.beauty.repository.ProductRepository;
 import online.beautyskin.beauty.utils.UserUtils;
@@ -22,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static online.beautyskin.beauty.enums.OrderStatusEnums.IN_PROGRESS;
+import static online.beautyskin.beauty.enums.PaymentStatusEnums.PENDING;
 
 @Service
 public class OrderService {
@@ -64,8 +66,8 @@ public class OrderService {
                 orderDetail.setOrder(order);
                 details.add(orderDetail);
 
-                product.setStock(product.getStock() - orderDetail.getQuantity());
-                productRepository.save(product);
+//                product.setStock(product.getStock() - orderDetail.getQuantity());
+//                productRepository.save(product);
 
                 totalPrice += orderDetail.getTotalPrice();
             }else {
@@ -73,7 +75,8 @@ public class OrderService {
             }
         }
         order.setTotalPrice(totalPrice);
-        order.setOrderStatus(IN_PROGRESS);
+        order.setPaymentStatus(PaymentStatusEnums.PENDING);
+        order.setOrderStatus(OrderStatusEnums.PENDING);
         Order newOrder = orderRepository.save(order);
         return createURLPayment(newOrder);
     }
@@ -96,7 +99,8 @@ public class OrderService {
         String tmnCode = "8FDRRU1S";
         String secretKey = "2LS6HWZV3VANKGVZW4IFO7L0J8A3406K";
         String vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        String returnURL = "http://beautyskinshop.online/checkout/payment-result/?orderId="+order.getId();
+//        String returnURL = "http://beautyskinshop.online/checkout/payment-result/?orderId="+order.getId();
+        String returnURL = "http://localhost:5173/checkout/payment-result/?orderId="+order.getId();
 
         String currCode = "VND";
         Map<String, String> vnpParams = new TreeMap<>();
@@ -152,9 +156,16 @@ public class OrderService {
         return result.toString();
     }
 
-    public Order updateStatus(OrderStatusEnums status, long id) {
+    public Order updateStatusOrder(OrderStatusEnums status, long id) {
         Order order = orderRepository.findOrderById(id);
         order.setOrderStatus(status);
+        if (status == IN_PROGRESS){
+            for (OrderDetail orderDetail : order.getOrderDetails()){
+                Product product = orderDetail.getProduct();
+                product.setStock(product.getStock() - orderDetail.getQuantity());
+                productRepository.save(product);
+            }
+        }
         if (status == OrderStatusEnums.CANCELLED) {
             for (OrderDetail orderDetail : order.getOrderDetails()){
                 Product product = orderDetail.getProduct();
@@ -162,6 +173,12 @@ public class OrderService {
                 productRepository.save(product);
             }
         }
+        return orderRepository.save(order);
+    }
+
+    public Order updateStatusPayment(PaymentStatusEnums status, long id) {
+        Order order = orderRepository.findOrderById(id);
+        order.setPaymentStatus(status);
         return orderRepository.save(order);
     }
 }

@@ -78,6 +78,13 @@ public class UserAPI {
         String rs = userService.resetPassword(token, newPassword, confirmPassword);
         return ResponseEntity.ok(rs);
     }
+
+    @PostMapping("/reset-password-2")
+    public ResponseEntity<String> resetPassword2(@RequestParam String newPassword, @RequestParam String confirmPassword) {
+        String token = "";
+        String rs = userService.resetPassword(token, newPassword, confirmPassword);
+        return ResponseEntity.ok(rs);
+    }
 //    @PostMapping("/forgetPassword")
 //    @PreAuthorize("hasAnyAuthority('USER')")
 //    public ResponseEntity forgetPassword(@RequestParam String mail) {

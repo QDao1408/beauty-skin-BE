@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import online.beautyskin.beauty.entity.Order;
 import online.beautyskin.beauty.entity.request.OrderRequest;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
+import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.repository.OrderRepository;
 import online.beautyskin.beauty.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,15 @@ public class OrderAPI {
         return ResponseEntity.ok(orders);
     }
 
-    @PatchMapping("/updateStatus/{id}")
+    @PatchMapping("/updateStatusOrder/{id}")
     public ResponseEntity updateStatus(@RequestParam OrderStatusEnums status, @PathVariable long id){
-        Order order = orderService.updateStatus(status,id);
+        Order order = orderService.updateStatusOrder(status,id);
+        return ResponseEntity.ok(order);
+    }
+
+    @PatchMapping("/updateStatusPayment/{id}")
+    public ResponseEntity updateStatusPayment(@RequestParam PaymentStatusEnums status, @PathVariable long id){
+        Order order = orderService.updateStatusPayment(status,id);
         return ResponseEntity.ok(order);
     }
 }

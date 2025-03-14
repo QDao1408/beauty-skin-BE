@@ -1,7 +1,10 @@
 package online.beautyskin.beauty.enums;
 
 public enum OrderStatusEnums {
+    PENDING,
     IN_PROGRESS,
-    PAID,
+    SHIPPED,
+    DELIVERED,
     CANCELLED,
+    RETURNED
 }

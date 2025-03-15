@@ -7,6 +7,7 @@ import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.repository.OrderRepository;
 import online.beautyskin.beauty.repository.ProductRepository;
+import online.beautyskin.beauty.repository.UserAddressRepository;
 import online.beautyskin.beauty.utils.UserUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class OrderService {
     private ProductRepository productRepository;
 
     @Autowired
+    private UserAddressRepository addressRepository;
+
+    @Autowired
     UserUtils userUtils;
 
 
@@ -48,8 +52,11 @@ public class OrderService {
 
         User user = userUtils.getCurrentUser();
         order.setUser(user);
-//        order.setUserAddress(user.getAddresses().get(0));
 
+        UserAddress userAddress = addressRepository.findFirstByUserIdAndIsDeletedFalse(user.getId())
+                .orElseThrow(() -> new RuntimeException("No active address found for user"));
+
+        order.setUserAddress(userAddress);
 
         double totalPrice = 0;
         order.setOrderDate(LocalDateTime.now());

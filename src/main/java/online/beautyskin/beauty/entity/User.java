@@ -291,4 +291,5 @@ public class User implements UserDetails {
     public void setPasswordResetTokens(List<PasswordResetToken> passwordResetTokens) {
         this.passwordResetTokens = passwordResetTokens;
     }
+
 }

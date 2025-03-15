@@ -109,7 +109,13 @@ public class UserService {
     public User lockUser(long id) {
         User user = userRepository.findById(id);
         user.setActive(false);
-        return user;
+        return userRepository.save(user);
+    }
+
+    public User unLockUser(long id) {
+        User user = userRepository.findById(id);
+        user.setActive(true);
+        return userRepository.save(user);
     }
 
 //    public String forgetPassword(String mail) {

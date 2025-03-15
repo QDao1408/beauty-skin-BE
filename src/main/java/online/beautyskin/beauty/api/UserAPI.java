@@ -51,6 +51,13 @@ public class UserAPI {
         return ResponseEntity.ok(user);
     }
 
+    @PutMapping("/unlock/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity unLockUser(@PathVariable long id) {
+        User user = userService.unLockUser(id);
+        return ResponseEntity.ok(user);
+    }
+
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('MANAGER')")

@@ -43,15 +43,9 @@ List<String> PUBLIC_API = List.of(
             //USER
             "/api/get",
             "/api/user/update",
-            //BLOG
-            "/api/blog/edit",
-            "/api/blog/getByDeleteIsFalse",
-            "/api/blog/create",
-            "/api/blog/delete",
-            "/api/blog/get",
+
             "/api/user/forgot-password",
-            "/api/user/reset-password",
-            "/api/register"
+            "/api/user/reset-password"
 
     );
 
@@ -87,6 +81,9 @@ List<String> PUBLIC_API = List.of(
             return true;
         }
         if(method.equals("PATCH") && matcher.match("/api/Order/updateStatus/{id}", uri)) {
+            return true;
+        }
+        if(method.equals("GET") && matcher.match("/api/feedback/", uri)) {
             return true;
         }
         return PUBLIC_API.stream().anyMatch(m -> matcher.match(m, uri));

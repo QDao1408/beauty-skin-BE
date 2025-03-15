@@ -106,6 +106,12 @@ public class UserService {
         return ("Password reset successfully.");
     }
 
+    public User lockUser(long id) {
+        User user = userRepository.findById(id);
+        user.setActive(false);
+        return user;
+    }
+
 //    public String forgetPassword(String mail) {
 //        Optional<User> optionalUser = userRepository.findByMail(mail);
 //        if (optionalUser.isEmpty()) {

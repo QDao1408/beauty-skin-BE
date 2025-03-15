@@ -24,6 +24,7 @@ public class Order {
     @Enumerated(value = EnumType.STRING)
     private OrderStatusEnums orderStatus;
     @Column(name = "PaymentStatus")
+    @Enumerated(value = EnumType.STRING)
     private PaymentStatusEnums paymentStatus;
     @Column(name = "TotalPrice")
     @Min(0)

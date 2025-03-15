@@ -16,6 +16,9 @@ public class UserAddress {
     @JoinColumn(name = "UserID",nullable = false)
     private User user;
 
+    @OneToOne(mappedBy = "userAddress", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Order order;
 
     @Column(name = "ReceiverName")
     private String name;
@@ -36,10 +39,6 @@ public class UserAddress {
     private String ward;
     private boolean isDeleted = false;
     private boolean isDefault;
-
-    @OneToOne(mappedBy = "userAddress", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Order order;
 
     public UserAddress() {}
 

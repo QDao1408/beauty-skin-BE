@@ -44,6 +44,14 @@ public class UserAPI {
         return ResponseEntity.ok(user1);
     }
 
+    @PutMapping("/lock/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity lockUser(@PathVariable long id) {
+        User user = userService.lockUser(id);
+        return ResponseEntity.ok(user);
+    }
+
+
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity delete(@PathVariable long id) {
@@ -51,8 +59,6 @@ public class UserAPI {
         userService.delete(u);
         return ResponseEntity.ok(u);
     }
-
-
 
     @GetMapping("/inActive/{id}")
     public ResponseEntity inActive(@PathVariable long id) {

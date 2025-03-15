@@ -38,6 +38,7 @@ public class FeedbackAPI {
     }
     //update
     @PutMapping("update/{feedbackId}")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity update(@PathVariable long feedbackId,@RequestBody FeedbackRequest feedBack){
         return ResponseEntity.ok(feedBackService.updateFeedback(feedbackId, feedBack));
     }

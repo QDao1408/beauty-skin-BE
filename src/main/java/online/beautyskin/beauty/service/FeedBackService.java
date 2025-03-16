@@ -1,10 +1,10 @@
 package online.beautyskin.beauty.service;
 
-import online.beautyskin.beauty.entity.Feedback;
-import online.beautyskin.beauty.entity.Product;
-import online.beautyskin.beauty.entity.User;
+import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.FeedbackRequest;
+import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.repository.FeedBackRepository;
+import online.beautyskin.beauty.repository.OrderDetailRepository;
 import online.beautyskin.beauty.repository.ProductRepository;
 import online.beautyskin.beauty.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,41 +23,67 @@ public class FeedBackService {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    OrderDetailRepository orderDetailRepository;
     //create
-    public Feedback createFeedback(long productId, FeedbackRequest feedbackRequest){
-        User user = userUtils.getCurrentUser();
-        Product product = productRepository.findById(productId);
-        if (product == null){
-            throw new RuntimeException("Product not found");
-        }else {
-            Feedback feedback = new Feedback();
-            feedback.setRating(feedbackRequest.getRating());
-            feedback.setComment(feedbackRequest.getComment());
-            feedback.setFeedBackDate(LocalDate.now());
-            feedback.setUser(user);
-            feedback.setProduct(product);
-            product.setFeedbacks(List.of(feedback));
-            return feedBackRepository.save(feedback);
+    public Feedback createFeedback(FeedbackRequest feedbackRequest){
+        OrderDetail orderDetail = orderDetailRepository.findById(feedbackRequest.getOrderId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy chi tiết đơn hàng!"));
+
+        Product product = orderDetail.getProduct();
+        Order order = orderDetail.getOrder();
+
+        // Kiểm tra trạng thái đơn hàng
+        if (!OrderStatusEnums.DELIVERED.equals(order.getOrderStatus())) {
+            throw new RuntimeException("Order chưa được giao, không thể đánh giá!");
         }
+
+        // Kiểm tra xem user đã feedback chưa
+        User user = userUtils.getCurrentUser();
+        boolean hasFeedback = product.getFeedbacks()
+                .stream()
+                .anyMatch(feedback -> feedback.getUser().getId().equals(user.getId()));
+
+        if (hasFeedback) {
+            throw new RuntimeException("Bạn đã đánh giá sản phẩm này rồi!");
+        }
+
+        // Tạo Feedback mới
+        Feedback feedback = new Feedback();
+        feedback.setUser(user);
+        feedback.setRating(feedbackRequest.getRating());
+        feedback.setComment(feedbackRequest.getComment());
+        feedback.setImage(feedbackRequest.getImage());
+        feedback.setFeedBackDate(LocalDate.now());
+        feedback.setProduct(product);
+
+        return feedBackRepository.save(feedback);
     }
     //remove
     public Feedback removeFeedback(long id){
-        Feedback feedback = feedBackRepository.findFeedbackById(id);
+        Feedback feedback = feedBackRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy Feedback!"));
         feedback.setDelete(true);
         return feedBackRepository.save(feedback);
     }
     //update
     public Feedback updateFeedback(long id, FeedbackRequest feedbackRequest){
-        Feedback feedback = feedBackRepository.findFeedbackById(id);
-        if (feedback == null){
-            throw new RuntimeException("Feedback not found");
-        }else {
+        Feedback feedback = feedBackRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy Feedback!"));
+
+        // Kiểm tra quyền user
+        User currentUser = userUtils.getCurrentUser();
+        if (!feedback.getUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("Bạn không có quyền chỉnh sửa feedback này!");
+        }
+
             feedback.setRating(feedbackRequest.getRating());
             feedback.setComment(feedbackRequest.getComment());
+            feedback.setImage(feedbackRequest.getImage());
             feedback.setFeedBackDate(LocalDate.now());
-            feedback.setUser(userUtils.getCurrentUser());
             return feedBackRepository.save(feedback);
-        }
+
     }
 
     //display
@@ -67,7 +93,7 @@ public class FeedBackService {
     public List<Feedback> getFeedbackByDeleteIsFalse(){
         return feedBackRepository.findByIsDeleteFalse();
     }
-    public Feedback getFeedbackById(long id){
-        return feedBackRepository.findFeedbackById(id);
+    public List<Feedback> getFeedbackByProductId(long productId){
+        return feedBackRepository.findByProductId(productId);
     }
 }

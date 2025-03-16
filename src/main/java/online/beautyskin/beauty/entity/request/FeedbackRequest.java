@@ -6,11 +6,21 @@ import jakarta.validation.constraints.Min;
 import java.time.LocalDate;
 
 public class FeedbackRequest {
+    private Long OrderId;
     @Min(value = 0)
     @Max(value = 5)
     private float rating;
     private String comment;
+    private String image;
     private LocalDate feedBackDate;
+
+    public Long getOrderId() {
+        return OrderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        OrderId = orderId;
+    }
 
     public float getRating() {
         return rating;
@@ -34,5 +44,13 @@ public class FeedbackRequest {
 
     public void setFeedBackDate(LocalDate feedBackDate) {
         this.feedBackDate = feedBackDate;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

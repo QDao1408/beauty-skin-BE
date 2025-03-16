@@ -58,17 +58,9 @@ public class FeedBackService {
         feedback.setImage(feedbackRequest.getImage());
         feedback.setFeedBackDate(LocalDate.now());
         feedback.setProduct(product);
-        feedback.setFeedbackStatus(FeedbackEnums.PENDING);
+        feedback.setFeedbackStatus(FeedbackEnums.SUCCESS);
 
         return feedBackRepository.save(feedback);
-    }
-
-    //trigger
-    public Feedback updateFeedbackStatus(FeedbackEnums feedbackStatus,long id) {
-        Feedback feedback = feedBackRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Không tìm thấy Feedback!"));
-        feedback.setFeedbackStatus(feedbackStatus);
-        return feedback;
     }
 
     //remove

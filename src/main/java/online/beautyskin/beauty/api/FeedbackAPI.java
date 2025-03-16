@@ -32,13 +32,6 @@ public class FeedbackAPI {
         return ResponseEntity.ok(feedBackService.createFeedback(feedBack));
     }
 
-    @PatchMapping("/updateStatusFeedback/{id}")
-    @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity updateStatusFeedback(@RequestParam FeedbackEnums status, @PathVariable long id){
-        Feedback feedback = feedBackService.updateFeedbackStatus(status,id);
-        return ResponseEntity.ok(feedback);
-    }
-
     //remove
     @DeleteMapping("delete/{feedbackId}")
     @PreAuthorize("hasAuthority('MANAGER')")

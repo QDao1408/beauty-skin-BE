@@ -28,7 +28,7 @@ public class FeedBackService {
     OrderDetailRepository orderDetailRepository;
     //create
     public Feedback createFeedback(FeedbackRequest feedbackRequest){
-        OrderDetail orderDetail = orderDetailRepository.findById(feedbackRequest.getOrderId())
+        OrderDetail orderDetail = orderDetailRepository.findById(feedbackRequest.getOrderDetailId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy chi tiết đơn hàng!"));
 
         Product product = orderDetail.getProduct();

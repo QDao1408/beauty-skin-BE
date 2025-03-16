@@ -135,7 +135,7 @@ public class AuthenticationService implements UserDetailsService {
         emailDetails.setMsgBody("hello abc");
         emailDetails.setButtonValue("Reset Password");
         emailDetails.setFullName(user.getFullName());
-        emailDetails.setLink("https://beautyskinshop.online?token=" + tokenService.generateToken(user));
+        emailDetails.setLink("http://beautyskinshop.online/reset-password?token=" + tokenService.generateToken(user));
 
         Runnable r = new Runnable() { // cho pass api trước r gửi mail sau
             @Override

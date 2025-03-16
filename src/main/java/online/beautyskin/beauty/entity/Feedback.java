@@ -22,6 +22,7 @@ public class Feedback {
     private float rating;
     private String comment;
     private LocalDate feedBackDate;
+    private String image;
     private boolean isDelete = false;
 
     @ManyToOne
@@ -81,6 +82,13 @@ public class Feedback {
         this.rating = rating;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public Feedback() {
     }

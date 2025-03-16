@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class UserAddress {
     @Id
@@ -16,9 +19,9 @@ public class UserAddress {
     @JoinColumn(name = "UserID",nullable = false)
     private User user;
 
-    @OneToOne(mappedBy = "userAddress", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userAddress")
     @JsonIgnore
-    private Order order;
+    private List<Order> orders = new ArrayList<>();
 
     @Column(name = "ReceiverName")
     private String name;
@@ -97,12 +100,12 @@ public class UserAddress {
         this.user = user;
     }
 
-    public Order getOrder() {
-        return order;
+    public List<Order> getOrders() {
+        return orders;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     public boolean isDefault() {

@@ -22,7 +22,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UserID")
-    private long id;
+    private Long id;
 
     @Column(name = "Full_Name")
     private String fullName;
@@ -113,11 +113,11 @@ public class User implements UserDetails {
         isDeleted = deleted;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

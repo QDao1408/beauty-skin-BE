@@ -3,18 +3,13 @@ package online.beautyskin.beauty.service;
 import online.beautyskin.beauty.entity.PasswordResetToken;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.ChangePasswordRequest;
-import online.beautyskin.beauty.entity.request.UserRequest;
 import online.beautyskin.beauty.entity.request.UserUpdateRequest;
-import online.beautyskin.beauty.repository.PasswordResetTokenRepository;
 import online.beautyskin.beauty.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
@@ -24,11 +19,6 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordResetTokenRepository resetTokenRepository;
-
-    @Autowired
-    private EmailService emailService;
 
     public User update(UserUpdateRequest user, long id) {
         User newUser = userRepository.findById(id);
@@ -78,34 +68,6 @@ public class UserService {
         userRepository.save(user);
         return "Password changed successfully!";
     }
-
-    public String resetPassword(String token, String newPassword, String confirmPassword) {
-        PasswordResetToken resetToken = resetTokenRepository.findByToken(token)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
-
-
-        if (resetToken.isExpired()) {
-            return ("Token has expired.");
-        }
-
-        if (!newPassword.equals(confirmPassword)) {
-            return ("Confirm password not matched");
-        }
-
-        // Update Password
-        User user = resetToken.getUser();
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
-
-        // Delete the used token
-        resetTokenRepository.delete(resetToken);
-
-
-        emailService.notifyPasswordChanged(user);
-
-        return ("Password reset successfully.");
-    }
-
     public User lockUser(long id) {
         User user = userRepository.findById(id);
         user.setActive(false);

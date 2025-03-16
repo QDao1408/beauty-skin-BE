@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import online.beautyskin.beauty.enums.FeedbackEnums;
 
 import java.time.LocalDate;
 
@@ -24,6 +25,8 @@ public class Feedback {
     private LocalDate feedBackDate;
     private String image;
     private boolean isDelete = false;
+    @Enumerated(value = EnumType.STRING)
+    private FeedbackEnums feedbackStatus;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -88,6 +91,14 @@ public class Feedback {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public FeedbackEnums getFeedbackStatus() {
+        return feedbackStatus;
+    }
+
+    public void setFeedbackStatus(FeedbackEnums feedbackStatus) {
+        this.feedbackStatus = feedbackStatus;
     }
 
     public Feedback() {

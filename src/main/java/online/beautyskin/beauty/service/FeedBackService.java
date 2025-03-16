@@ -4,7 +4,7 @@ import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.FeedbackRequest;
 import online.beautyskin.beauty.enums.FeedbackEnums;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
-import online.beautyskin.beauty.repository.FeedBackRepository;
+import online.beautyskin.beauty.repository.FeedbackRepository;
 import online.beautyskin.beauty.repository.OrderDetailRepository;
 import online.beautyskin.beauty.repository.ProductRepository;
 import online.beautyskin.beauty.utils.UserUtils;
@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class FeedBackService {
     @Autowired
-    FeedBackRepository feedBackRepository;
+    FeedbackRepository feedBackRepository;
 
     @Autowired
     UserUtils userUtils;
@@ -32,9 +32,8 @@ public class FeedBackService {
         OrderDetail orderDetail = orderDetailRepository.findById(feedbackRequest.getOrderDetailId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy chi tiết đơn hàng!"));
 
-        Product product = orderDetail.getProduct();
-        Order order = orderDetail.getOrder();
 
+        Order order = orderDetail.getOrder();
         // Kiểm tra trạng thái đơn hàng
         if (!OrderStatusEnums.DELIVERED.equals(order.getOrderStatus())) {
             throw new RuntimeException("Order chưa được giao, không thể đánh giá!");
@@ -42,12 +41,13 @@ public class FeedBackService {
 
         // Kiểm tra xem user đã feedback chưa
         User user = userUtils.getCurrentUser();
-        boolean hasFeedback = product.getFeedbacks()
-                .stream()
-                .anyMatch(feedback -> feedback.getUser().getId().equals(user.getId()));
-
-        if (hasFeedback) {
-            throw new RuntimeException("Bạn đã đánh giá sản phẩm này rồi!");
+//        orderDetail.getProduct().getFeedbacks().stream().forEach(feedback -> {
+//            if (feedback.getUser().getId() == user.getId()) {
+//                throw new RuntimeException("FEEDBACK RỒI AI CHO FEEDBACK NUA HẢ???");
+//            }
+//        });
+        if (orderDetail.isFeedback()){
+            throw new RuntimeException("FEEDBACK RỒI GÌ MÀ FEEDBACK HOÀI VẬY!!!");
         }
 
         // Tạo Feedback mới
@@ -57,9 +57,10 @@ public class FeedBackService {
         feedback.setComment(feedbackRequest.getComment());
         feedback.setImage(feedbackRequest.getImage());
         feedback.setFeedBackDate(LocalDate.now());
-        feedback.setProduct(product);
-        feedback.setFeedbackStatus(FeedbackEnums.SUCCESS);
+        feedback.setProduct(orderDetail.getProduct());
 
+        orderDetail.setFeedback(true);
+        orderDetailRepository.save(orderDetail);
         return feedBackRepository.save(feedback);
     }
 

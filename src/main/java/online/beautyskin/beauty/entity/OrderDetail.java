@@ -22,10 +22,7 @@ public class OrderDetail {
     @Column(name = "TotalPrice")
     @Min(0)
     private double totalPrice;
-
-//    @OneToOne
-//    @JoinColumn(name = "product_id")
-//    private Product product;
+    private boolean feedback = false;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -63,4 +60,11 @@ public class OrderDetail {
     public double getTotalPrice() { return totalPrice; }
     public void setTotalPrice(double totalPrice) { this.totalPrice = totalPrice; }
 
+    public boolean isFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(boolean feedback) {
+        this.feedback = feedback;
+    }
 }

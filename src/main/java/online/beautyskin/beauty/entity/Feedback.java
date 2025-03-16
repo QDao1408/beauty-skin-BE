@@ -26,7 +26,6 @@ public class Feedback {
     private String image;
     private boolean isDelete = false;
     @Enumerated(value = EnumType.STRING)
-    private FeedbackEnums feedbackStatus;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -93,22 +92,7 @@ public class Feedback {
         this.image = image;
     }
 
-    public FeedbackEnums getFeedbackStatus() {
-        return feedbackStatus;
-    }
-
-    public void setFeedbackStatus(FeedbackEnums feedbackStatus) {
-        this.feedbackStatus = feedbackStatus;
-    }
-
     public Feedback() {
     }
 
-    public Feedback(String comment, LocalDate feedBackDate, long id, boolean isDelete, float rating) {
-        this.comment = comment;
-        this.feedBackDate = feedBackDate;
-        this.id = id;
-        this.isDelete = isDelete;
-        this.rating = rating;
-    }
 }

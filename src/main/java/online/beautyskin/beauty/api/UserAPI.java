@@ -2,7 +2,6 @@ package online.beautyskin.beauty.api;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import online.beautyskin.beauty.entity.User;
-import online.beautyskin.beauty.entity.request.ChangePasswordRequest;
 import online.beautyskin.beauty.entity.request.UserUpdateRequest;
 import online.beautyskin.beauty.repository.UserRepository;
 import online.beautyskin.beauty.service.UserService;
@@ -63,11 +62,7 @@ public class UserAPI {
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/changePassword/{id}")
-    @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity changePassword(@PathVariable long id,@RequestBody ChangePasswordRequest changePasswordRequest) {
-        return ResponseEntity.ok(userService.changePassword(id, changePasswordRequest));
-    }
+
 
 
 

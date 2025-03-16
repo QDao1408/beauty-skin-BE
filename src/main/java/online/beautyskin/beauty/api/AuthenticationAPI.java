@@ -47,7 +47,7 @@ public class AuthenticationAPI {
     }
 
     @PostMapping("reset-password")
-    public ResponseEntity resetPassword(ResetPasswordRequest resetPasswordRequest) {
+    public ResponseEntity resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
         authenticationService.resetPassword(resetPasswordRequest);
         return ResponseEntity.ok("Reset password successfully");
     }

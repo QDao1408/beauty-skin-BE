@@ -14,9 +14,6 @@ public class PasswordResetToken {
     @Column(nullable = false, unique = true)
     private String token;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 
     @Column(nullable = false)
     private LocalDateTime expiredTime;
@@ -41,13 +38,6 @@ public class PasswordResetToken {
         this.token = token;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public LocalDateTime getExpiredTime() {
         return expiredTime;

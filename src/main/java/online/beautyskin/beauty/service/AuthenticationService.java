@@ -147,8 +147,15 @@ public class AuthenticationService implements UserDetailsService {
 
     }
 
+    @SneakyThrows
     public void resetPassword(ResetPasswordRequest resetPasswordRequest) {
         User user = userUtils.getCurrentUser();
+        String pass = resetPasswordRequest.getPassword();
+        String confirmPass = resetPasswordRequest.getConfirmPassword();
+        if (!pass.equals(confirmPass)) {
+            throw new SQLIntegrityConstraintViolationException("Confirm pass and pass do not match");
+        }
+
         user.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));
         authenticationRepository.save(user);
     }

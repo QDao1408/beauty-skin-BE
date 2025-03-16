@@ -10,6 +10,7 @@ public class AuthenticationResponse {
     private String mail;
     private String username;
     private String password;
+    private String fullName;
     @Enumerated(EnumType.STRING)
     private RoleEnums roleEnum;
     private String token;
@@ -93,5 +94,9 @@ public class AuthenticationResponse {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

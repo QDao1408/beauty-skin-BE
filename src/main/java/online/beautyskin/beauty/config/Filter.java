@@ -44,8 +44,7 @@ List<String> PUBLIC_API = List.of(
             "/api/get",
             "/api/user/update",
 
-            "/api/user/forgot-password",
-            "/api/user/reset-password"
+            "/api/forgot-password"
 
     );
 

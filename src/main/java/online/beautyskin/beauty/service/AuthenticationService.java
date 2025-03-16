@@ -1,12 +1,17 @@
 package online.beautyskin.beauty.service;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import lombok.SneakyThrows;
+import online.beautyskin.beauty.entity.EmailDetails;
 import online.beautyskin.beauty.entity.User;
-import online.beautyskin.beauty.entity.request.AuthenticationRequest;
-import online.beautyskin.beauty.entity.request.UserRequest;
+import online.beautyskin.beauty.entity.request.*;
 import online.beautyskin.beauty.entity.respone.AuthenticationResponse;
 import online.beautyskin.beauty.enums.RoleEnums;
+import online.beautyskin.beauty.exception.NullUserException;
 import online.beautyskin.beauty.repository.AuthenticationRepository;
+import online.beautyskin.beauty.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.channels.AcceptPendingException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
@@ -34,6 +40,12 @@ public class AuthenticationService implements UserDetailsService {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private UserUtils userUtils;
 
     @SneakyThrows
     public User register(UserRequest userRequest) {
@@ -113,4 +125,65 @@ public class AuthenticationService implements UserDetailsService {
     }
 
 
+    public void forgotPassword(ForgotPasswordRequest request) {
+        User user = authenticationRepository.findByMail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found" ));
+
+        EmailDetails emailDetails = new EmailDetails();
+        emailDetails.setReceiver(user.getMail()); // email gửi tới user
+        emailDetails.setSubject("Reset Password For Account " + user.getMail());
+        emailDetails.setMsgBody("hello abc");
+        emailDetails.setButtonValue("Reset Password");
+        emailDetails.setFullName(user.getFullName());
+        emailDetails.setLink("https://beautyskinshop.online?token=" + tokenService.generateToken(user));
+
+        Runnable r = new Runnable() { // cho pass api trước r gửi mail sau
+            @Override
+            public void run() {
+                emailService.sendMailTemplate(emailDetails);
+            }
+        };
+        new Thread(r).start();
+
+    }
+
+    public void resetPassword(ResetPasswordRequest resetPasswordRequest) {
+        User user = userUtils.getCurrentUser();
+        user.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));
+        authenticationRepository.save(user);
+    }
+
+    public AuthenticationResponse loginGoogle(LoginGoogleRequest googleRequest) {
+        try {
+            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(googleRequest.getToken());
+            String email = decodedToken.getEmail();
+            User user = authenticationRepository.findByMail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found" ));
+            if(user == null) { // email chưa được dky thì dky tk mời
+                user = new User();
+                user.setFullName(decodedToken.getName());
+                user.setMail(email);
+                user.setUsername(email);
+                user.setRoleEnums(RoleEnums.USER);
+                authenticationRepository.save(user);
+            }
+
+            String token = tokenService.generateToken(user);
+
+            AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+            authenticationResponse.setMail(user.getMail());
+            authenticationResponse.setId(user.getId());
+            authenticationResponse.setFullName(user.getFullName());
+            authenticationResponse.setUsername(user.getUsername());
+            authenticationResponse.setRoleEnum(user.getRoleEnums());
+            authenticationResponse.setToken(token);
+
+            return authenticationResponse;
+
+
+        } catch (FirebaseAuthException exception) {
+            exception.printStackTrace();
+        }
+        return null;
+    }
 }

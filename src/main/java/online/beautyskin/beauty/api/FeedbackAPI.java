@@ -4,6 +4,8 @@ package online.beautyskin.beauty.api;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import online.beautyskin.beauty.entity.Feedback;
 import online.beautyskin.beauty.entity.request.FeedbackRequest;
+import online.beautyskin.beauty.enums.FeedbackEnums;
+import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.service.FeedBackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,14 @@ public class FeedbackAPI {
     public ResponseEntity createFeedback(@RequestBody FeedbackRequest feedBack){
         return ResponseEntity.ok(feedBackService.createFeedback(feedBack));
     }
+
+    @PatchMapping("/updateStatusFeedback/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity updateStatusFeedback(@RequestParam FeedbackEnums status, @PathVariable long id){
+        Feedback feedback = feedBackService.updateFeedbackStatus(status,id);
+        return ResponseEntity.ok(feedback);
+    }
+
     //remove
     @DeleteMapping("delete/{feedbackId}")
     @PreAuthorize("hasAuthority('MANAGER')")

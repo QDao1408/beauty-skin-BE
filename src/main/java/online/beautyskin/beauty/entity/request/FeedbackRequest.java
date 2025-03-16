@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Min;
 import java.time.LocalDate;
 
 public class FeedbackRequest {
-    private Long OrderId;
+    private Long OrderDetailId;
     @Min(value = 0)
     @Max(value = 5)
     private float rating;
@@ -14,12 +14,12 @@ public class FeedbackRequest {
     private String image;
     private LocalDate feedBackDate;
 
-    public Long getOrderId() {
-        return OrderId;
+    public Long getOrderDetailId() {
+        return OrderDetailId;
     }
 
-    public void setOrderId(Long orderId) {
-        OrderId = orderId;
+    public void setOrderDetailId(Long orderId) {
+        OrderDetailId = orderId;
     }
 
     public float getRating() {

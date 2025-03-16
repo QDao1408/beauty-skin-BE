@@ -2,6 +2,7 @@ package online.beautyskin.beauty.service;
 
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.FeedbackRequest;
+import online.beautyskin.beauty.enums.FeedbackEnums;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.repository.FeedBackRepository;
 import online.beautyskin.beauty.repository.OrderDetailRepository;
@@ -57,9 +58,19 @@ public class FeedBackService {
         feedback.setImage(feedbackRequest.getImage());
         feedback.setFeedBackDate(LocalDate.now());
         feedback.setProduct(product);
+        feedback.setFeedbackStatus(FeedbackEnums.PENDING);
 
         return feedBackRepository.save(feedback);
     }
+
+    //trigger
+    public Feedback updateFeedbackStatus(FeedbackEnums feedbackStatus,long id) {
+        Feedback feedback = feedBackRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Không tìm thấy Feedback!"));
+        feedback.setFeedbackStatus(feedbackStatus);
+        return feedback;
+    }
+
     //remove
     public Feedback removeFeedback(long id){
         Feedback feedback = feedBackRepository.findById(id)

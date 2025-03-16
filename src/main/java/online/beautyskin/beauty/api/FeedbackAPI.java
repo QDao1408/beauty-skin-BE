@@ -25,9 +25,9 @@ public class FeedbackAPI {
 
     //create
     @PreAuthorize("hasAuthority('USER')")
-    @PostMapping("create/{productId}")
-    public ResponseEntity createFeedback(@PathVariable long productId, @RequestBody FeedbackRequest feedBack){
-        return ResponseEntity.ok(feedBackService.createFeedback(productId,feedBack));
+    @PostMapping("create")
+    public ResponseEntity createFeedback(@RequestBody FeedbackRequest feedBack){
+        return ResponseEntity.ok(feedBackService.createFeedback(feedBack));
     }
     //remove
     @DeleteMapping("delete/{feedbackId}")
@@ -53,9 +53,9 @@ public class FeedbackAPI {
         feedbackList = feedBackService.getFeedbackByDeleteIsFalse();
         return ResponseEntity.ok(feedbackList);
     }
-    @GetMapping("getFeedbackById/{id}")
-    public ResponseEntity getFeedbackById(@PathVariable long id){
-        Feedback feedback = feedBackService.getFeedbackById(id);
+    @GetMapping("getFeedbackById/{productId}")
+    public ResponseEntity getFeedbackByProductId(@PathVariable long productId){
+        List<Feedback> feedback = feedBackService.getFeedbackByProductId(productId);
         return ResponseEntity.ok(feedback);
     }
 }

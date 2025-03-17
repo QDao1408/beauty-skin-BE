@@ -1,14 +1,14 @@
 package online.beautyskin.beauty.service;
 
-import online.beautyskin.beauty.entity.PasswordResetToken;
+import jakarta.validation.Valid;
 import online.beautyskin.beauty.entity.User;
+import online.beautyskin.beauty.entity.request.UserRequest;
 import online.beautyskin.beauty.entity.request.UserUpdateRequest;
+import online.beautyskin.beauty.enums.RoleEnums;
 import online.beautyskin.beauty.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -60,4 +60,13 @@ public class UserService {
     }
 
 
+    public User createStaff(@Valid UserRequest request) {
+        User user = new User();
+        user.setRoleEnums(RoleEnums.STAFF);
+        user.setUsername(request.getUsername());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setMail(request.getEmail());
+        user.setFullName(request.getFullName());
+        return userRepository.save(user);
+    }
 }

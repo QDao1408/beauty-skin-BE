@@ -245,4 +245,9 @@ public class ProductService {
         List<Product> products = productRepository.findByName(name);
         return products;
     }
+
+    public List<Product> getFromCateId(long id) {
+        List<Product> products = productRepository.getByCategory(categoryRepository.findById(id));
+        return products;
+    }
 }

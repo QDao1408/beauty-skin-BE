@@ -34,9 +34,9 @@ public class ProductAPI {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/getFormCate")
-    public ResponseEntity getProductFromCate(@RequestParam String category) {
-        products = productService.getFromCate(category);
+    @GetMapping("/getFormCate/{id}")
+    public ResponseEntity getProductFromCate(@PathVariable long id) {
+        products = productService.getFromCateId(id);
         return ResponseEntity.ok(products);
     }
 

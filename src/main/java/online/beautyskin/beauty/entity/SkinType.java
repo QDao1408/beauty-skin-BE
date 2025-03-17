@@ -18,22 +18,9 @@ public class SkinType {
     private String description;
     private boolean isDeleted = false;
 
-
-
-//    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-//    @JoinTable(
-//            name = "mapping_product_skinType",
-//            joinColumns = @JoinColumn(name = "type_id"),
-//            inverseJoinColumns = @JoinColumn(name = "product_id")
-//    )
-//    @JsonIgnore
-//    private List<Product> products = new ArrayList<Product>();
-
     @ManyToMany(mappedBy = "skinTypes", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
-
-
 
     @OneToMany(mappedBy = "skinType", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -46,6 +33,7 @@ public class SkinType {
         this.name = name;
         this.description = description;
     }
+
 
     public long getId() {
         return id;

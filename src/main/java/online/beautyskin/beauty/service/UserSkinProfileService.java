@@ -40,11 +40,18 @@ public class UserSkinProfileService {
         }
         SkinType skinType = skinTypeRepository.findById(skinTypeId);
         User user = userUtils.getCurrentUser();
-        UserSkinProfile profile = new UserSkinProfile();
-        profile.setLastUpdate(LocalDateTime.now());
-        profile.setUser(user);
-        profile.setSkinType(skinType);
-        return userSkinProfileRepository.save(profile);
+        UserSkinProfile profile = userSkinProfileRepository.findByUser(user);
+        if(profile != null) {
+            profile.setLastUpdate(LocalDateTime.now());
+            profile.setSkinType(skinType);
+            return userSkinProfileRepository.save(profile);
+        } else {
+            UserSkinProfile profile1 = new UserSkinProfile();
+            profile1.setLastUpdate(LocalDateTime.now());
+            profile1.setSkinType(skinType);
+            profile1.setUser(user);
+            return userSkinProfileRepository.save(profile1);
+        }
     }
 
     public List<UserSkinProfile> getAll() {

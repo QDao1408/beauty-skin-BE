@@ -18,16 +18,17 @@ public class UserSkinProfile {
     private boolean isDeleted = false;
 
     @OneToOne
-    @JoinColumn(name = "UserID", unique = true)
+    @JoinColumn(name = "UserID", unique = true, nullable = false)
     @JsonIgnore
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "TypeID")
+    @ManyToOne
+    @JoinColumn(name = "TypeID", nullable = false)
     private SkinType skinType;
 
     @OneToOne
     @JoinColumn(name = "ConcernID")
+    @JsonIgnore
     private SkinConcern skinConcern;
 
     public UserSkinProfile() {}

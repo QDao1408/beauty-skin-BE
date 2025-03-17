@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class FeedbackRequest {
     private Long OrderDetailId;
@@ -11,7 +12,7 @@ public class FeedbackRequest {
     @Max(value = 5)
     private float rating;
     private String comment;
-    private String image;
+    private List<ImageRequest> image;
     private LocalDate feedBackDate;
 
     public Long getOrderDetailId() {
@@ -46,11 +47,11 @@ public class FeedbackRequest {
         this.feedBackDate = feedBackDate;
     }
 
-    public String getImage() {
+    public List<ImageRequest> getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(List<ImageRequest> image) {
         this.image = image;
     }
 }

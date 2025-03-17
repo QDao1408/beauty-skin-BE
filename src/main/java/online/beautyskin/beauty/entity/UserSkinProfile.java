@@ -38,4 +38,28 @@ public class UserSkinProfile {
     public void setLastUpdate(LocalDateTime lastUpdate) { this.lastUpdate = lastUpdate; }
     public boolean isDeleted() { return isDeleted; }
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public SkinType getSkinType() {
+        return skinType;
+    }
+
+    public void setSkinType(SkinType skinType) {
+        this.skinType = skinType;
+    }
+
+    public SkinConcern getSkinConcern() {
+        return skinConcern;
+    }
+
+    public void setSkinConcern(SkinConcern skinConcern) {
+        this.skinConcern = skinConcern;
+    }
 }

@@ -36,7 +36,7 @@ public class User implements UserDetails {
     private String username;
 
     @Column(name = "Password")
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$#*!%&]).{10,}$")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$#*!%&]).{8,}$")
     private String password;
 
     @Column(name = "Mail", unique = true)

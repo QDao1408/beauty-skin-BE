@@ -173,8 +173,7 @@ public class OrderService {
                 product.setStock(product.getStock() - orderDetail.getQuantity());
                 productRepository.save(product);
             }
-        }
-        if (status == OrderStatusEnums.CANCELLED) {
+        } else if (status == OrderStatusEnums.CANCELLED) {
             for (OrderDetail orderDetail : order.getOrderDetails()){
                 Product product = orderDetail.getProduct();
                 product.setStock(product.getStock() + orderDetail.getQuantity());

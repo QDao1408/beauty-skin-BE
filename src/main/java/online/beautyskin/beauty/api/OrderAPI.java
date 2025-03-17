@@ -44,6 +44,7 @@ public class OrderAPI {
     }
 
     @PatchMapping("/updateStatusOrder/{id}")
+    @PreAuthorize("hasAnyAuthority('STAFF')")
     public ResponseEntity updateStatus(@RequestParam OrderStatusEnums status, @PathVariable long id){
         Order order = orderService.updateStatusOrder(status,id);
         return ResponseEntity.ok(order);

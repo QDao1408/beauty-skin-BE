@@ -23,7 +23,9 @@ public class Image {
     @JsonIgnore
     private List<Product> products = new ArrayList<Product>();
 
-
+    @ManyToOne
+    @JoinColumn(name = "feedback_id")
+    private Feedback feedback;
 
     public Image() {}
     public Image(String url) { this.url = url; }
@@ -36,6 +38,14 @@ public class Image {
 
     public List<Product> getProducts() {
         return products;
+    }
+
+    public Feedback getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(Feedback feedback) {
+        this.feedback = feedback;
     }
 
     public void setProducts(List<Product> products) {

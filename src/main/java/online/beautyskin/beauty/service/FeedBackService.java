@@ -2,6 +2,7 @@ package online.beautyskin.beauty.service;
 
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.FeedbackRequest;
+import online.beautyskin.beauty.entity.request.ImageRequest;
 import online.beautyskin.beauty.enums.FeedbackEnums;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.repository.FeedbackRepository;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -55,7 +57,18 @@ public class FeedBackService {
         feedback.setUser(user);
         feedback.setRating(feedbackRequest.getRating());
         feedback.setComment(feedbackRequest.getComment());
-        feedback.setImage(feedbackRequest.getImage());
+        //set Image
+        List<Image> images = new ArrayList<>();
+        if (feedbackRequest.getImage() != null) {
+            feedbackRequest.getImage().forEach(imageRequest -> {
+                Image image = new Image();
+                image.setUrl(imageRequest.getUrl());
+                image.setFeedback(feedback);
+                images.add(image);
+            });
+        }
+        feedback.setImages(images);
+
         feedback.setFeedBackDate(LocalDate.now());
         feedback.setProduct(orderDetail.getProduct());
 
@@ -84,7 +97,15 @@ public class FeedBackService {
 
             feedback.setRating(feedbackRequest.getRating());
             feedback.setComment(feedbackRequest.getComment());
-            feedback.setImage(feedbackRequest.getImage());
+            List<Image> images = new ArrayList<>();
+            if (feedbackRequest.getImage() != null) {
+                feedbackRequest.getImage().forEach(imageRequest -> {
+                    Image image = new Image();
+                    image.setUrl(imageRequest.getUrl());
+                    image.setFeedback(feedback);
+                    images.add(image);
+                });
+            }
             feedback.setFeedBackDate(LocalDate.now());
             return feedBackRepository.save(feedback);
 

@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -18,6 +19,7 @@ public class UserSkinProfile {
 
     @OneToOne
     @JoinColumn(name = "UserID", unique = true)
+    @JsonIgnore
     private User user;
 
     @OneToOne

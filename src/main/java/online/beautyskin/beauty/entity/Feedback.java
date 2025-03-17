@@ -11,6 +11,8 @@ import lombok.Setter;
 import online.beautyskin.beauty.enums.FeedbackEnums;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Feedback {
@@ -23,7 +25,9 @@ public class Feedback {
     private float rating;
     private String comment;
     private LocalDate feedBackDate;
-    private String image;
+
+    @OneToMany(mappedBy = "feedback", cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>();
     private boolean isDelete = false;
     @Enumerated(value = EnumType.STRING)
 
@@ -84,12 +88,12 @@ public class Feedback {
         this.rating = rating;
     }
 
-    public String getImage() {
-        return image;
+    public List<Image> getImages() {
+        return images;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     public Feedback() {

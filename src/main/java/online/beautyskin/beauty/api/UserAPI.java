@@ -1,7 +1,10 @@
 package online.beautyskin.beauty.api;
 
+import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import online.beautyskin.beauty.entity.User;
+import online.beautyskin.beauty.entity.request.UserRequest;
 import online.beautyskin.beauty.entity.request.UserUpdateRequest;
 import online.beautyskin.beauty.repository.UserRepository;
 import online.beautyskin.beauty.service.UserService;
@@ -62,7 +65,11 @@ public class UserAPI {
         return ResponseEntity.ok(user);
     }
 
-
+    @PostMapping("/create-staff")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity createStaff(@Valid @RequestBody UserRequest userRequest) {
+        return ResponseEntity.ok(userService.createStaff(userRequest));
+    }
 
 
 

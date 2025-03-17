@@ -1,7 +1,6 @@
 package online.beautyskin.beauty.service;
 
 import jakarta.validation.Valid;
-import online.beautyskin.beauty.entity.PasswordResetToken;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.UserRequest;
 import online.beautyskin.beauty.entity.request.UserUpdateRequest;
@@ -10,8 +9,6 @@ import online.beautyskin.beauty.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserService {

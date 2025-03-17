@@ -26,7 +26,12 @@ public class Feedback {
     private String comment;
     private LocalDate feedBackDate;
 
-    @OneToMany(mappedBy = "feedback", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+            name = "mapping_feedback_image",
+            joinColumns = @JoinColumn(name = "feedback_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
+    )
     private List<Image> images = new ArrayList<>();
     private boolean isDelete = false;
     @Enumerated(value = EnumType.STRING)

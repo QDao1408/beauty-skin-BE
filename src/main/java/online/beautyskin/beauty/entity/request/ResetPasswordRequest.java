@@ -4,7 +4,7 @@ package online.beautyskin.beauty.entity.request;
 import jakarta.validation.constraints.Pattern;
 
 public class ResetPasswordRequest {
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$#*!%&]).{10,}$",  message =  "password cần có chữ hoa, chữ thường, số, ký tự db")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$#*!%&]).{8,}$",  message =  "password cần có chữ hoa, chữ thường, số, ký tự db")
     String password;
 
     String confirmPassword;

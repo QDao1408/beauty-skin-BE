@@ -1,7 +1,10 @@
 package online.beautyskin.beauty.entity.request;
 
+import jakarta.validation.constraints.Pattern;
+
 public class UserRequest {
     private String username;
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$#*!%&]).{8,}$",  message =  "password cần có chữ hoa, chữ thường, số, ký tự db")
     private String password;
     private String confirmPassword;
     private String email;

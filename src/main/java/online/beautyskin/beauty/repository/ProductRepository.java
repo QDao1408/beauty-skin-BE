@@ -29,4 +29,6 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     List<Image> findByImagesIdAndIsDeletedFalse(long id);
 
     Product findByIdAndIsDeletedFalse(long id);
+
+    List<Product> getByCategory(Category category);
 }

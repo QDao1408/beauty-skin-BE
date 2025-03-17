@@ -27,10 +27,15 @@ public class UserSkinProfileAPI {
         return ResponseEntity.ok(userSkinProfileService.getById(id));
     }
 
+    @GetMapping("/get-by-user/{id}")
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public ResponseEntity getByUserId(@PathVariable long id) {
+        return ResponseEntity.ok(userSkinProfileService.getByUserId(id));
+    }
+
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity create(int skinPoint) {
         return ResponseEntity.ok(userSkinProfileService.create(skinPoint));
     }
-
 }

@@ -5,6 +5,7 @@ import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.UserSkinProfile;
 import online.beautyskin.beauty.exception.NotFoundException;
 import online.beautyskin.beauty.repository.SkinTypeRepository;
+import online.beautyskin.beauty.repository.UserRepository;
 import online.beautyskin.beauty.repository.UserSkinProfileRepository;
 import online.beautyskin.beauty.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class UserSkinProfileService {
 
     @Autowired
     private SkinTypeRepository skinTypeRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public UserSkinProfile create(int skinPoint) {
         long skinTypeId = 0;
@@ -63,4 +67,7 @@ public class UserSkinProfileService {
                 .orElseThrow(() -> new NotFoundException("Skin Profile not found"));
     }
 
+    public UserSkinProfile getByUserId(long id) {
+        return userSkinProfileRepository.findByUser(userRepository.findById(id));
+    }
 }

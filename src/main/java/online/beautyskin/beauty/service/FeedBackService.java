@@ -6,6 +6,7 @@ import online.beautyskin.beauty.entity.request.ImageRequest;
 import online.beautyskin.beauty.enums.FeedbackEnums;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.repository.FeedbackRepository;
+import online.beautyskin.beauty.repository.ImageRepository;
 import online.beautyskin.beauty.repository.OrderDetailRepository;
 import online.beautyskin.beauty.repository.ProductRepository;
 import online.beautyskin.beauty.utils.UserUtils;
@@ -29,6 +30,9 @@ public class FeedBackService {
 
     @Autowired
     OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    ImageRepository imageRepository;
     //create
     public Feedback createFeedback(FeedbackRequest feedbackRequest){
         OrderDetail orderDetail = orderDetailRepository.findById(feedbackRequest.getOrderDetailId())
@@ -59,14 +63,22 @@ public class FeedBackService {
         feedback.setComment(feedbackRequest.getComment());
         //set Image
         List<Image> images = new ArrayList<>();
+
         if (feedbackRequest.getImage() != null) {
             feedbackRequest.getImage().forEach(imageRequest -> {
-                Image image = new Image();
-                image.setUrl(imageRequest.getUrl());
-                image.setFeedback(feedback);
-                images.add(image);
+                // Kiểm tra xem ảnh đã tồn tại chưa
+                Image image = imageRepository.findByUrl(imageRequest.getUrl())
+                        .orElseGet(() -> {
+                            Image newImage = new Image();
+                            newImage.setUrl(imageRequest.getUrl());
+                            return imageRepository.save(newImage); // Lưu ảnh nếu chưa tồn tại
+                        });
+
+                images.add(image); // Thêm ảnh vào danh sách
             });
         }
+
+        // Gán danh sách ảnh vào feedback
         feedback.setImages(images);
 
         feedback.setFeedBackDate(LocalDate.now());
@@ -97,15 +109,23 @@ public class FeedBackService {
 
             feedback.setRating(feedbackRequest.getRating());
             feedback.setComment(feedbackRequest.getComment());
-            List<Image> images = new ArrayList<>();
-            if (feedbackRequest.getImage() != null) {
-                feedbackRequest.getImage().forEach(imageRequest -> {
-                    Image image = new Image();
-                    image.setUrl(imageRequest.getUrl());
-                    image.setFeedback(feedback);
-                    images.add(image);
+        List<Image> images = new ArrayList<>();
+
+        if (feedbackRequest.getImage() != null) {
+            feedbackRequest.getImage().forEach(imageRequest -> {
+                // Kiểm tra xem ảnh đã tồn tại chưa
+                Image image = imageRepository.findByUrl(imageRequest.getUrl())
+                        .orElseGet(() -> {
+                            Image newImage = new Image();
+                            newImage.setUrl(imageRequest.getUrl());
+                            return imageRepository.save(newImage); // Lưu ảnh nếu chưa tồn tại
+                        });
+                images.add(image); // Thêm ảnh vào danh sách
                 });
             }
+
+            // Gán danh sách ảnh vào feedback
+            feedback.setImages(images);
             feedback.setFeedBackDate(LocalDate.now());
             return feedBackRepository.save(feedback);
 

@@ -23,9 +23,9 @@ public class Image {
     @JsonIgnore
     private List<Product> products = new ArrayList<Product>();
 
-    @ManyToOne
-    @JoinColumn(name = "feedback_id")
-    private Feedback feedback;
+    @ManyToMany(mappedBy = "images", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnore
+    private List<Feedback> feedbacks = new ArrayList<>();
 
     public Image() {}
     public Image(String url) { this.url = url; }
@@ -40,12 +40,12 @@ public class Image {
         return products;
     }
 
-    public Feedback getFeedback() {
-        return feedback;
+    public List<Feedback> getFeedbacks() {
+        return feedbacks;
     }
 
-    public void setFeedback(Feedback feedback) {
-        this.feedback = feedback;
+    public void setFeedbacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
     }
 
     public void setProducts(List<Product> products) {

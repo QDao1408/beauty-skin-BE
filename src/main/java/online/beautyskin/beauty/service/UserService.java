@@ -64,7 +64,7 @@ public class UserService {
         User user = new User();
         user.setRoleEnums(RoleEnums.STAFF);
         user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setMail(request.getEmail());
         user.setFullName(request.getFullName());
         return userRepository.save(user);

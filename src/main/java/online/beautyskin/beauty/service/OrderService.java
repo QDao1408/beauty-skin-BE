@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static online.beautyskin.beauty.enums.OrderStatusEnums.CREATED;
 import static online.beautyskin.beauty.enums.OrderStatusEnums.IN_PROGRESS;
 import static online.beautyskin.beauty.enums.PaymentStatusEnums.PENDING;
 
@@ -166,7 +167,7 @@ public class OrderService {
     public Order updateStatusOrder(OrderStatusEnums status, long id) {
         Order order = orderRepository.findOrderById(id);
         order.setOrderStatus(status);
-        if (status == IN_PROGRESS){
+        if (status == CREATED){
             for (OrderDetail orderDetail : order.getOrderDetails()){
                 Product product = orderDetail.getProduct();
                 product.setStock(product.getStock() - orderDetail.getQuantity());

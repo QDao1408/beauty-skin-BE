@@ -90,6 +90,7 @@ public class OrderService {
         order.setTotalPrice(totalPrice);
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
+        updateStatusOrder(OrderStatusEnums.PENDING, order.getId());
         Order newOrder = orderRepository.save(order);
         return createURLPayment(newOrder);
     }
@@ -185,14 +186,14 @@ public class OrderService {
             staffTaskRepository.save(staffTask);
 
         } else if(status == OrderStatusEnums.IN_PROGRESS) {
-            StaffTask staffTask1 = staffTaskRepository.findByOrder(order);
+            StaffTask staffTask1 = staffTaskRepository.findByOrder(orderRepository.findOrderById(id));
             staffTask1.setStaff(userUtils.getCurrentUser());
             staffTask1.setLastUpdate(LocalDateTime.now());
             staffTask1.setStaffTaskEnums(StaffTaskEnums.IN_PROGRESS);
             staffTaskRepository.save(staffTask1);
 
         } else if(status == OrderStatusEnums.SHIPPED) {
-            StaffTask staffTask2 = staffTaskRepository.findByOrder(order);
+            StaffTask staffTask2 = staffTaskRepository.findByOrder(orderRepository.findOrderById(id));
             staffTask2.setLastUpdate(LocalDateTime.now());
             staffTask2.setStaffTaskEnums(StaffTaskEnums.DONE);
             staffTaskRepository.save(staffTask2);

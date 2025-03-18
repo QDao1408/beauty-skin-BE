@@ -79,9 +79,6 @@ public class OrderService {
                 orderDetail.setOrder(order);
                 details.add(orderDetail);
 
-//                product.setStock(product.getStock() - orderDetail.getQuantity());
-//                productRepository.save(product);
-
                 totalPrice += orderDetail.getTotalPrice();
             }else {
                 throw new RuntimeException("quantity is not enough");
@@ -92,6 +89,45 @@ public class OrderService {
         order.setOrderStatus(OrderStatusEnums.PENDING);
         Order newOrder = orderRepository.save(order);
         return createURLPayment(newOrder);
+    }
+
+    public Order createCOD(OrderRequest orderRequest){
+        List<OrderDetail> details = new ArrayList<>();
+        Order order = modelMapper.map(orderRequest, Order.class);
+        order.setOrderDetails(details);
+
+        User user = userUtils.getCurrentUser();
+        order.setUser(user);
+
+        UserAddress userAddress = addressRepository.findFirstByUserIdAndIsDeletedFalse(user.getId())
+                .orElseThrow(() -> new RuntimeException("No active address found for user"));
+
+        order.setUserAddress(userAddress);
+
+        double totalPrice = 0;
+        order.setOrderDate(LocalDateTime.now());
+
+        for (OrderDetailsRequest orderDetailsRequest: orderRequest.getDetails()) {
+            OrderDetail orderDetail = new OrderDetail();
+            Product product = productRepository.findById(orderDetailsRequest.getProductId());
+
+            if (product.getStock() >= orderDetailsRequest.getQuantity()) {
+                orderDetail.setProduct(product);
+                orderDetail.setQuantity(orderDetailsRequest.getQuantity());
+                orderDetail.setUnitPrice(product.getPrice());
+                orderDetail.setTotalPrice(product.getPrice() * orderDetailsRequest.getQuantity());
+                orderDetail.setOrder(order);
+                details.add(orderDetail);
+
+                totalPrice += orderDetail.getTotalPrice();
+            }else {
+                throw new RuntimeException("quantity is not enough");
+            }
+        }
+        order.setTotalPrice(totalPrice);
+        order.setPaymentStatus(PaymentStatusEnums.PENDING);
+        order.setOrderStatus(OrderStatusEnums.PENDING);
+        return orderRepository.save(order);
     }
 
     public List<Order> getAll() {

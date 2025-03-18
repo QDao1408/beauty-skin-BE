@@ -5,7 +5,6 @@ import online.beautyskin.beauty.entity.Order;
 import online.beautyskin.beauty.entity.request.OrderRequest;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
-import online.beautyskin.beauty.repository.OrderRepository;
 import online.beautyskin.beauty.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -61,4 +60,16 @@ public class OrderAPI {
         Order order = orderService.updateStatusPayment(status,id);
         return ResponseEntity.ok(order);
     }
+
+    @GetMapping("getLastedOrder")
+    public ResponseEntity getLastedOrder(){
+        return ResponseEntity.ok(orderService.getLastedOrder());
+    }
+
+    @PutMapping("cancelOrder/{orderId}")
+    public ResponseEntity cancelOrder(@RequestParam long orderId){
+        orderService.cancelOrder(orderId);
+        return ResponseEntity.ok("Order đã được hủy!!!");
+    }
+
 }

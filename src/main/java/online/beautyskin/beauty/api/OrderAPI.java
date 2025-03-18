@@ -62,11 +62,13 @@ public class OrderAPI {
     }
 
     @GetMapping("getLastedOrder")
+    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity getLastedOrder(){
         return ResponseEntity.ok(orderService.getLastedOrder());
     }
 
     @PutMapping("cancelOrder/{orderId}")
+    @PreAuthorize("hasAnyAuthority('MANAGER','USER')")
     public ResponseEntity cancelOrder(@RequestParam long orderId){
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok("Order đã được hủy!!!");

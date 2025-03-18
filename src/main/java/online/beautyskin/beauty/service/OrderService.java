@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static online.beautyskin.beauty.enums.OrderStatusEnums.CREATED;
+
 import static online.beautyskin.beauty.enums.OrderStatusEnums.IN_PROGRESS;
 import static online.beautyskin.beauty.enums.PaymentStatusEnums.PENDING;
 
@@ -87,7 +87,10 @@ public class OrderService {
         order.setTotalPrice(totalPrice);
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
+        //updateStatusOrder(order.getOrderStatus(), order.getId());
+
         Order newOrder = orderRepository.save(order);
+        createTask(order);
         return createURLPayment(newOrder);
     }
 
@@ -205,27 +208,28 @@ public class OrderService {
         return result.toString();
     }
 
+    public void createTask(Order order) {
+        StaffTask staffTask = new StaffTask();
+        staffTask.setOrder(order);
+        staffTask.setStaffTaskEnums(StaffTaskEnums.UNASSIGNED);
+        staffTask.setLastUpdate(LocalDateTime.now());
+        staffTaskRepository.save(staffTask);
+    }
+
     public Order updateStatusOrder(OrderStatusEnums status, long id) {
         Order order = orderRepository.findOrderById(id);
         order.setOrderStatus(status);
-        if (status == OrderStatusEnums.CREATED){
-            StaffTask staffTask = new StaffTask();
-            for (OrderDetail orderDetail : order.getOrderDetails()){
-                Product product = orderDetail.getProduct();
-                product.setStock(product.getStock() - orderDetail.getQuantity());
-                productRepository.save(product);
-            }
-            staffTask.setOrder(order);
-            staffTask.setStaffTaskEnums(StaffTaskEnums.UNASSIGNED);
-            staffTask.setLastUpdate(LocalDateTime.now());
-            staffTaskRepository.save(staffTask);
-
-        } else if(status == OrderStatusEnums.IN_PROGRESS) {
+        if(status == OrderStatusEnums.IN_PROGRESS) {
             StaffTask staffTask1 = staffTaskRepository.findByOrder(order);
             staffTask1.setStaff(userUtils.getCurrentUser());
             staffTask1.setLastUpdate(LocalDateTime.now());
             staffTask1.setStaffTaskEnums(StaffTaskEnums.IN_PROGRESS);
             staffTaskRepository.save(staffTask1);
+            for (OrderDetail orderDetail : order.getOrderDetails()){
+                Product product = orderDetail.getProduct();
+                product.setStock(product.getStock() - orderDetail.getQuantity());
+                productRepository.save(product);
+            }
 
         } else if(status == OrderStatusEnums.SHIPPED) {
             StaffTask staffTask2 = staffTaskRepository.findByOrder(order);

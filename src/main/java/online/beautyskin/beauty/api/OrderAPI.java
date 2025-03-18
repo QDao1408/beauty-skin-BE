@@ -29,6 +29,12 @@ public class OrderAPI {
         return ResponseEntity.ok(urlPayment);
     }
 
+    @PostMapping("/createCOD")
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public ResponseEntity createCOD(@RequestBody OrderRequest orderRequest){
+        return ResponseEntity.ok(orderService.createCOD(orderRequest));
+    }
+
     @GetMapping("/getAll")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity getAll() {

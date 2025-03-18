@@ -252,4 +252,25 @@ public class OrderService {
         order.setPaymentStatus(status);
         return orderRepository.save(order);
     }
+
+    public Order getLastedOrder() {
+        User user = userUtils.getCurrentUser();
+        List<Order> order = orderRepository.findOrderByUserId(user.getId());
+        Order lastOrder = order.get(order.size() - 1);
+        if (order == null){
+            throw new RuntimeException("RỖNG!!!");
+        }else {
+            return lastOrder;
+        }
+    }
+
+    public void cancelOrder(long orderId) {
+        Order order = orderRepository.findOrderById(orderId);
+        if (order == null){
+            throw new RuntimeException("KHONG TIM THAY ORDER!!!");
+        }else {
+            order.setOrderStatus(OrderStatusEnums.CANCELLED);
+            orderRepository.save(order);
+        }
+    }
 }

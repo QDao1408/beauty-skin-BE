@@ -32,7 +32,7 @@ public class FavoritesAPI {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
+    @GetMapping("getFavorites")
     @PreAuthorize("hasAnyAuthority('User')")
     public ResponseEntity getFavorites() {
         List<Product> favorites = favoritesService.getFavorites();

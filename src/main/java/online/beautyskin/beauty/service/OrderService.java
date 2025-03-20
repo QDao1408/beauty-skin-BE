@@ -254,7 +254,7 @@ public class OrderService {
         List<Order> order = orderRepository.findOrderByUserId(user.getId());
         Order lastOrder = order.get(order.size() - 1);
         if (order == null){
-            throw new RuntimeException("RỖNG!!!");
+            throw new RuntimeException("Người dùng chưa có đơn hàng nào");
         }else {
             return lastOrder;
         }
@@ -263,7 +263,7 @@ public class OrderService {
     public void cancelOrder(long orderId) {
         Order order = orderRepository.findOrderById(orderId);
         if (order == null){
-            throw new RuntimeException("KHONG TIM THAY ORDER!!!");
+            throw new RuntimeException("Order không tồn tại");
         }else {
             order.setOrderStatus(OrderStatusEnums.CANCELLED);
             orderRepository.save(order);

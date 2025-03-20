@@ -6,10 +6,7 @@ import online.beautyskin.beauty.entity.request.OrderRequest;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.enums.StaffTaskEnums;
-import online.beautyskin.beauty.repository.OrderRepository;
-import online.beautyskin.beauty.repository.ProductRepository;
-import online.beautyskin.beauty.repository.StaffTaskRepository;
-import online.beautyskin.beauty.repository.UserAddressRepository;
+import online.beautyskin.beauty.repository.*;
 import online.beautyskin.beauty.utils.UserUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +26,10 @@ import java.util.*;
 public class OrderService {
 
     @Autowired
-    private OrderRepository orderRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private OrderRepository orderRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -41,10 +38,21 @@ public class OrderService {
     private UserAddressRepository addressRepository;
 
     @Autowired
+    private StaffTaskRepository staffTaskRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     private UserUtils userUtils;
 
     @Autowired
-    private StaffTaskRepository staffTaskRepository;
+    private LoyaltyPointService loyaltyPointService;
+
+
+    OrderService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 
     public String create(OrderRequest orderRequest) throws Exception{
@@ -86,6 +94,10 @@ public class OrderService {
         //updateStatusOrder(order.getOrderStatus(), order.getId());
 
         Order newOrder = orderRepository.save(order);
+        // every time user create order, user total amount updated, there for rank will be updated
+        user.setTotalAmount(user.getTotalAmount() + totalPrice);
+        loyaltyPointService.updateRankForUser(user);
+        // create task for staff to assign orders
         createTask(order);
         return createURLPayment(newOrder);
     }
@@ -232,13 +244,20 @@ public class OrderService {
             staffTask2.setLastUpdate(LocalDateTime.now());
             staffTask2.setStaffTaskEnums(StaffTaskEnums.DONE);
             staffTaskRepository.save(staffTask2);
-
+            
         } else if (status == OrderStatusEnums.CANCELLED) {
             for (OrderDetail orderDetail : order.getOrderDetails()){
                 Product product = orderDetail.getProduct();
                 product.setStock(product.getStock() + orderDetail.getQuantity());
                 productRepository.save(product);
             }
+            // every time user cancel order, user's total amount will be updated, there fore user rank will be updated
+            User user = order.getUser();
+            // update total amount
+            user.setTotalAmount(user.getTotalAmount() - order.getTotalPrice());
+            // update rank
+            loyaltyPointService.updateRankForUser(user);
+            userRepository.save(user);
         }
         return orderRepository.save(order);
     }

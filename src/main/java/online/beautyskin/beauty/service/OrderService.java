@@ -25,10 +25,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-
-import static online.beautyskin.beauty.enums.OrderStatusEnums.IN_PROGRESS;
-import static online.beautyskin.beauty.enums.PaymentStatusEnums.PENDING;
-
 @Service
 public class OrderService {
 

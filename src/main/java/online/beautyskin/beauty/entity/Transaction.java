@@ -3,7 +3,6 @@ package online.beautyskin.beauty.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDateTime;
 

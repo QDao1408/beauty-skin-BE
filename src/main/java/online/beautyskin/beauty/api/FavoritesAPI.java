@@ -1,7 +1,6 @@
 package online.beautyskin.beauty.api;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import online.beautyskin.beauty.entity.Favorites;
 import online.beautyskin.beauty.entity.Product;
 import online.beautyskin.beauty.service.FavoritesService;
 import org.springframework.beans.factory.annotation.Autowired;

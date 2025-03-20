@@ -9,7 +9,6 @@ import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.*;
 import online.beautyskin.beauty.entity.respone.AuthenticationResponse;
 import online.beautyskin.beauty.enums.RoleEnums;
-import online.beautyskin.beauty.exception.NullUserException;
 import online.beautyskin.beauty.repository.AuthenticationRepository;
 import online.beautyskin.beauty.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.nio.channels.AcceptPendingException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 

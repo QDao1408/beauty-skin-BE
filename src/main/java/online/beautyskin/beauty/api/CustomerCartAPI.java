@@ -1,8 +1,6 @@
 package online.beautyskin.beauty.api;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import online.beautyskin.beauty.entity.CustomerCart;
-import online.beautyskin.beauty.entity.request.CustomerCartRequest;
 import online.beautyskin.beauty.service.CustomerCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

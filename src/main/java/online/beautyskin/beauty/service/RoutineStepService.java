@@ -1,6 +1,5 @@
 package online.beautyskin.beauty.service;
 
-import online.beautyskin.beauty.entity.Routine;
 import online.beautyskin.beauty.entity.RoutineStep;
 import online.beautyskin.beauty.entity.request.RoutineStepRequest;
 import online.beautyskin.beauty.repository.RoutineRepository;

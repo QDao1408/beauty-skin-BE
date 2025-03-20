@@ -1,6 +1,5 @@
 package online.beautyskin.beauty.entity.respone;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import online.beautyskin.beauty.enums.RoleEnums;
@@ -99,4 +98,10 @@ public class AuthenticationResponse {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    
 }

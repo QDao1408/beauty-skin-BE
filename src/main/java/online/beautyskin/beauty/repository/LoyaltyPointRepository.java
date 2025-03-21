@@ -7,5 +7,6 @@ import java.util.List;
 
 
 public interface LoyaltyPointRepository extends JpaRepository<LoyaltyPoint, Long>{
-    
+
+
 }

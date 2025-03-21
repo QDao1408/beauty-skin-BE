@@ -34,4 +34,16 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "ORDER BY year DESC, month DESC",
             nativeQuery = true)
     List<Object[]> getMonthlyRevenue();
+
+    @Query("SELECT o.user.fullName, SUM(o.totalPrice) AS totalSpent " +
+            "FROM Order o " +
+            "WHERE o.orderStatus = :orderStatus " +
+            "AND o.paymentStatus = :paymentStatus " +
+            "AND MONTH(o.orderDate) = MONTH(CURRENT_DATE) " +
+            "AND YEAR(o.orderDate) = YEAR(CURRENT_DATE) " +
+            "GROUP BY o.user.id, o.user.fullName " +
+            "ORDER BY totalSpent DESC " +
+            "LIMIT 3")
+    List<Object[]> findTop3SpendingCustomers(@Param("orderStatus") OrderStatusEnums orderStatus,
+                                             @Param("paymentStatus") PaymentStatusEnums paymentStatus);
 }

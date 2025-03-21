@@ -43,24 +43,32 @@ public class DashboardService {
         stats.put("completedOrders", completedOrders);
 
         // Số lượng customer
-        long totalCustomers = userRepository.countByRole(RoleEnums.USER);
-        stats.put("customers", totalCustomers);
+//        long totalCustomers = userRepository.countByRole(RoleEnums.USER);
+//        stats.put("customers", totalCustomers);
+
+        // top 3 khách hàng thân thiết trong 1 tháng
+        List<Object[]> topCustomers = orderRepository.findTop3SpendingCustomers(OrderStatusEnums.DELIVERED, PaymentStatusEnums.PAID);
+        List<Map<String, Object>> topCustomersList = new ArrayList<>();
+
+        for (Object[] customerData : topCustomers) {
+            Map<String, Object> customerInfo = new HashMap<>();
+            customerInfo.put("customerName", customerData[0]);
+            customerInfo.put("totalSpent", customerData[1]);
+            topCustomersList.add(customerInfo);
+        }
+        stats.put("topCustomers", topCustomersList);
 
         //top 5 sản phẩm bán chạy nhất
-        List<Object[]> topProducts = productRepository.findTop5BestSellingProduct();
-
+        List<Object[]> topProducts = productRepository.findTop5BestSellingProductsThisMonth(OrderStatusEnums.DELIVERED, PaymentStatusEnums.PAID);
         List<Map<String, Object>> topProductsList = new ArrayList<>();
-        int limit = Math.min(topProducts.size(), 5);
 
-        for (int i = 0; i < limit; i++) {
-            Object[] productData = topProducts.get(i);
+        for (Object[] productData : topProducts) {
             Map<String, Object> productInfo = new HashMap<>();
             productInfo.put("productName", productData[0]);
             productInfo.put("totalSold", productData[1]);
             topProductsList.add(productInfo);
         }
-
-        stats.put("topProducts", topProductsList);
+        stats.put("topProductsThisMonth", topProductsList);
 
         return stats;
     }

@@ -14,7 +14,7 @@ public class PromotionService {
     private PromotionRepository promotionRepository;
 
     public List<Promotion> getValidPromotions() {
-        List<Promotion> promotions = promotionRepository.findValidPromotions();
+        List<Promotion> promotions = promotionRepository.findAllByIsOutDateFalseAndIsDeletedFalse();
         return promotions;
     }
 

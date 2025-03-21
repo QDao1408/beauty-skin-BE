@@ -27,6 +27,8 @@ public class Promotion {
     @Column(name = "PromotionAmount")
     private double promoAmount;
     private boolean isDeleted = false;
+    private boolean isOutDate = endDate.isAfter(LocalDate.now());
+    private int numOfPromo;
 
     @ManyToMany
     @JoinTable(
@@ -44,6 +46,11 @@ public class Promotion {
     )
     private List<Order> orders = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "rank_id")
+    private LoyaltyPoint loyaltyPoint;
+
+
     @AssertTrue(message = "Promotion's end date must be after the start date.")
     public boolean isEndDateAfterStartDate() {
         if (startDate == null || endDate == null) {
@@ -53,16 +60,6 @@ public class Promotion {
     }
 
     public Promotion() {}
-
-    public Promotion(String name, LocalDate startDate, LocalDate endDate, String description, PromotionEnums type, double promoAmount) {
-        this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.description = description;
-        this.type = type;
-        this.promoAmount = promoAmount;
-        this.isDeleted = false;
-    }
 
 
     public long getId() {
@@ -128,4 +125,41 @@ public class Promotion {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public LoyaltyPoint getLoyaltyPoint() {
+        return loyaltyPoint;
+    }
+
+    public void setLoyaltyPoint(LoyaltyPoint loyaltyPoint) {
+        this.loyaltyPoint = loyaltyPoint;
+    }
+
+    public int getNumOfPromo() {
+        return numOfPromo;
+    }
+
+    public void setNumOfPromo(int numOfPromo) {
+        this.numOfPromo = numOfPromo;
+    }
+
+    public boolean isOutDate() {
+        return isOutDate;
+    }
+    
 }

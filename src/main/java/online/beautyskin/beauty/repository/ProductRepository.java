@@ -3,8 +3,11 @@ package online.beautyskin.beauty.repository;
 import online.beautyskin.beauty.entity.Category;
 import online.beautyskin.beauty.entity.Image;
 import online.beautyskin.beauty.entity.Product;
+import online.beautyskin.beauty.enums.OrderStatusEnums;
+import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -35,7 +38,14 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     @Query("SELECT p.name, SUM(od.quantity) AS totalSold " +
             "FROM OrderDetail od " +
             "JOIN od.product p " +
+            "JOIN od.order o " +
+            "WHERE o.orderStatus = :orderStatus " +
+            "AND o.paymentStatus = :paymentStatus " +
+            "AND MONTH(o.orderDate) = MONTH(CURRENT_DATE) " +
+            "AND YEAR(o.orderDate) = YEAR(CURRENT_DATE) " +
             "GROUP BY p.id, p.name " +
-            "ORDER BY totalSold DESC")
-    List<Object[]> findTop5BestSellingProduct();
+            "ORDER BY totalSold DESC " +
+            "LIMIT 5")
+    List<Object[]> findTop5BestSellingProductsThisMonth(@Param("orderStatus") OrderStatusEnums orderStatus,
+                                                        @Param("paymentStatus") PaymentStatusEnums paymentStatus);
 }

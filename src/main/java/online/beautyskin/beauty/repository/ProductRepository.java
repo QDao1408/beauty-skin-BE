@@ -31,4 +31,11 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     Product findByIdAndIsDeletedFalse(long id);
 
     List<Product> getByCategory(Category category);
+
+    @Query("SELECT p.name, SUM(od.quantity) AS totalSold " +
+            "FROM OrderDetail od " +
+            "JOIN od.product p " +
+            "GROUP BY p.id, p.name " +
+            "ORDER BY totalSold DESC")
+    List<Object[]> findTop5BestSellingProduct();
 }

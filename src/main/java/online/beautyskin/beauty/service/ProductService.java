@@ -153,7 +153,7 @@ public class ProductService {
         List<Promotion> promotions = new ArrayList<>();
         if(!promoId.isEmpty()) {
             for(long id : promoId) {
-                promotions.add(promotionRepository.findByIdAndIsDeletedFalse(id));
+                promotions.add(promotionRepository.findByIdAndIsDeletedFalseAndIsOutDateFalse(id));
             }
         }
         return promotions;

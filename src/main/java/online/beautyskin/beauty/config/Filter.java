@@ -43,8 +43,8 @@ List<String> PUBLIC_API = List.of(
             //USER
             "/api/get",
             "/api/user/update",
-
-            "/api/forgot-password"
+            "/api/forgot-password",
+            "/api/login-google"
 
     );
 

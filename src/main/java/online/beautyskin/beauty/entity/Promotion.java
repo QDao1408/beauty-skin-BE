@@ -27,7 +27,7 @@ public class Promotion {
     @Column(name = "PromotionAmount")
     private double promoAmount;
     private boolean isDeleted = false;
-    private boolean isOutDate = endDate.isAfter(LocalDate.now());
+    private boolean isOutDate;
     private int numOfPromo;
 
     @ManyToMany
@@ -161,5 +161,8 @@ public class Promotion {
     public boolean isOutDate() {
         return isOutDate;
     }
-    
+
+    public void setOutDate() {
+        isOutDate = endDate.isAfter(LocalDate.now());
+    }
 }

@@ -4,6 +4,7 @@ import online.beautyskin.beauty.entity.Promotion;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
@@ -13,4 +14,9 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
     Promotion findByIdAndIsDeletedFalseAndIsOutDateFalse(long id);
 
     List<Promotion> findAllByIsOutDateFalseAndIsDeletedFalse();
+
+    List<Promotion> findAllByNumOfPromoIsNotEmptyAndIsOutDateFalseAndIsDeletedFalse();
+
+
+    Optional<Promotion> findAllByIdAndNumOfPromoIsNotEmptyAndIsOutDateFalseAndIsDeletedFalse(long id);
 }

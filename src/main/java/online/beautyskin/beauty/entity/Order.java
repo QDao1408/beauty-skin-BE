@@ -29,9 +29,6 @@ public class Order {
     @Min(0)
     private double totalPrice;
 
-    @ManyToMany(mappedBy = "orders")
-    private List<Promotion> promotions = new ArrayList<>();
-
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Transaction transaction;
 
@@ -50,6 +47,9 @@ public class Order {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private OrderPromo orderPromotion;
 
 
     public List<OrderDetail> getOrderDetails() { return orderDetails; }
@@ -84,14 +84,6 @@ public class Order {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public List<Promotion> getPromotions() {
-        return promotions;
-    }
-
-    public void setPromotions(List<Promotion> promotions) {
-        this.promotions = promotions;
     }
 
     public Transaction getTransaction() {

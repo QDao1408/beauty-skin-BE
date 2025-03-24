@@ -15,8 +15,7 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
     List<Promotion> findAllByIsOutDateFalseAndIsDeletedFalse();
 
-    List<Promotion> findAllByNumOfPromoIsNotEmptyAndIsOutDateFalseAndIsDeletedFalse();
+    List<Promotion> findAllByNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(int numOfPromo);
 
-
-    Optional<Promotion> findAllByIdAndNumOfPromoIsNotEmptyAndIsOutDateFalseAndIsDeletedFalse(long id);
+    Optional<Promotion> findAllByIdAndNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(long id, int numOfPromo);
 }

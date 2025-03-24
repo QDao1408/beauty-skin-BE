@@ -39,7 +39,7 @@ public class PromotionService {
 
     public List<Promotion> getValidPromotions() {
         List<Promotion> promotions = promotionRepository
-                .findAllByNumOfPromoIsNotEmptyAndIsOutDateFalseAndIsDeletedFalse();
+                .findAllByNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(0);
         return promotions;
     }
 
@@ -64,7 +64,7 @@ public class PromotionService {
     @Scheduled(fixedRate = 60000 * 60) // run every hour
     public void updateOutDate() {
         List<Promotion> promotions = promotionRepository
-                .findAllByNumOfPromoIsNotEmptyAndIsOutDateFalseAndIsDeletedFalse();
+                .findAllByNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(0);
         for (Promotion promotion : promotions) {
             promotion.setOutDate();
         }
@@ -82,11 +82,11 @@ public class PromotionService {
     public LoyaltyPoint getLoyaltyPoint(long rank) {
         return loyaltyPointRepository.getReferenceById(rank);
     }
-
+/*
     public String applyPromoForOrder(long promoId, long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
         Promotion promo = promotionRepository
-                .findAllByIdAndNumOfPromoIsNotEmptyAndIsOutDateFalseAndIsDeletedFalse(promoId)
+                .findAllByIdAndNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(promoId, 0)
                 .orElseThrow(() -> new NotFoundException("Cannot found promotion"));
         User curUser = userUtils.getCurrentUser();
         double discountPrice = 0;
@@ -125,7 +125,7 @@ public class PromotionService {
     public String removePromoForOrder(long promoId, long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
         Promotion promo = promotionRepository
-                .findAllByIdAndNumOfPromoIsNotEmptyAndIsOutDateFalseAndIsDeletedFalse(promoId)
+                .findAllByIdAndNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(promoId, 0)
                 .orElseThrow(() -> new NotFoundException("Wrong promotion id"));
 
         OrderPromo checkOrder = orderPromoRepository.findByOrder(order)
@@ -146,5 +146,7 @@ public class PromotionService {
 
         return "Promotion remove successfully";
     }
+    */
+
 
 }

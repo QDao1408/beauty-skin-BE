@@ -2,7 +2,6 @@ package online.beautyskin.beauty.entity.request;
 
 import java.time.LocalDate;
 
-import online.beautyskin.beauty.enums.PromotionEnums;
 
 public class PromoRequest {
 
@@ -10,7 +9,6 @@ public class PromoRequest {
     private LocalDate startDate;
     private LocalDate endDate;
     private String description;
-    private PromotionEnums type;
     private double promoAmount;
     private int numOfPromo;
     private long rank;
@@ -41,12 +39,6 @@ public class PromoRequest {
     }
     public void setDescription(String description) {
         this.description = description;
-    }
-    public PromotionEnums getType() {
-        return type;
-    }
-    public void setType(PromotionEnums type) {
-        this.type = type;
     }
     public double getPromoAmount() {
         return promoAmount;

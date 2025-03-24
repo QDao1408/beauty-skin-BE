@@ -133,9 +133,6 @@ public class Promotion {
         this.orderPrice = orderPrice;
     }
 
-    public OrderPromo getOrderPromo() {
-        return orderPromo;
-    }
 
     
     

@@ -53,8 +53,16 @@ public class PromotionAPI {
     }
 
     @PutMapping("/{promoId}/apply-promotion/{orderId}")
+    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity applyPromoForOrder(@PathVariable long promoId, @PathVariable long orderId) {
         String result = promotionService.applyPromoForOrder(promoId, orderId);        
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/{promoId}/remove-promotion/{orderId}")
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public ResponseEntity removePromoForOrder(@PathVariable long promoId, @PathVariable long orderId) {
+        String result = promotionService.removePromoForOrder(promoId, orderId);
         return ResponseEntity.ok(result);
     }
 

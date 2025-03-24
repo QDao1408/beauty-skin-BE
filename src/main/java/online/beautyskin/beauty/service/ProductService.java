@@ -82,9 +82,6 @@ public class ProductService {
         List<Image> images = addImage(productRequest.getImages());
         product.setImages(images);
 
-        List<Promotion> promotions = addPromo(productRequest.getPromotions());
-        product.setPromotions(promotions);
-
         product.setDeleted(false);
         return productRepository.save(product);
     }
@@ -197,9 +194,6 @@ public class ProductService {
 
         List<Image> images = addImage(productRequest.getImages());
         product.setImages(images);
-
-        List<Promotion> promotions = addPromo(productRequest.getPromotions());
-        product.setPromotions(promotions);
 
         product.setDeleted(false);
 

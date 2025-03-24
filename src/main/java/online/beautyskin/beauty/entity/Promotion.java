@@ -2,10 +2,8 @@ package online.beautyskin.beauty.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
-import online.beautyskin.beauty.enums.PromotionEnums;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,34 +20,19 @@ public class Promotion {
     private LocalDate endDate;
     @Column(name = "Description")
     private String description;
-    @Column(name = "PromotionType")
-    private PromotionEnums type;
     @Column(name = "PromotionAmount")
     private double promoAmount;
     private boolean isDeleted = false;
     private boolean isOutDate;
+    private double orderPrice;
     private int numOfPromo;
-
-    @ManyToMany
-    @JoinTable(
-            name = "mapping_product_promo",
-            joinColumns = @JoinColumn(name = "promo_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> products = new ArrayList<Product>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "mapping_order_promo",
-            joinColumns = @JoinColumn(name = "promo_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id")
-    )
-    private List<Order> orders = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "rank_id")
     private LoyaltyPoint loyaltyPoint;
 
+    @OneToMany(mappedBy = "promotion")
+    private List<OrderPromo> orderPromotions;
 
     @AssertTrue(message = "Promotion's end date must be after the start date.")
     public boolean isEndDateAfterStartDate() {
@@ -98,14 +81,6 @@ public class Promotion {
         this.description = description;
     }
 
-    public PromotionEnums getType() {
-        return type;
-    }
-
-    public void setType(PromotionEnums type) {
-        this.type = type;
-    }
-
     public double getPromoAmount() {
         return promoAmount;
     }
@@ -124,22 +99,6 @@ public class Promotion {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 
     public LoyaltyPoint getLoyaltyPoint() {
@@ -163,6 +122,21 @@ public class Promotion {
     }
 
     public void setOutDate() {
-        isOutDate = endDate.isAfter(LocalDate.now());
+        this.isOutDate = endDate.isAfter(LocalDate.now());
     }
+
+    public double getOrderPrice() {
+        return orderPrice;
+    }
+
+    public void setOrderPrice(double orderPrice) {
+        this.orderPrice = orderPrice;
+    }
+
+    public OrderPromo getOrderPromo() {
+        return orderPromo;
+    }
+
+    
+    
 }

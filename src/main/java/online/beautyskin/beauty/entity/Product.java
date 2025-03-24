@@ -73,9 +73,6 @@ public class Product {
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
 
-    @ManyToMany(mappedBy = "products")
-    private List<Promotion> promotions = new ArrayList<>();
-
 //    @ManyToMany(mappedBy = "products", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 //    private List<SkinType> skinTypes = new ArrayList<>();
 
@@ -205,14 +202,6 @@ public class Product {
 
     public void setOrderDetails(List<OrderDetail> orderDetails) {
         this.orderDetails = orderDetails;
-    }
-
-    public List<Promotion> getPromotions() {
-        return promotions;
-    }
-
-    public void setPromotions(List<Promotion> promotions) {
-        this.promotions = promotions;
     }
 
     public List<SkinType> getSkinTypes() {

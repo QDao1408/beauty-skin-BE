@@ -48,8 +48,9 @@ public class Order {
     @JsonIgnore
     private User user;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-    private OrderPromo orderPromotion;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Promotion promotion;
 
 
     public List<OrderDetail> getOrderDetails() { return orderDetails; }
@@ -117,4 +118,12 @@ public class Order {
     public void setUser(User user) {
         this.user = user;
     }
+    public Promotion getPromotion() {
+        return promotion;
+    }
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
+    }
+
+    
 }

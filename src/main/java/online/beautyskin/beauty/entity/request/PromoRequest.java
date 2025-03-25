@@ -1,17 +1,23 @@
 package online.beautyskin.beauty.entity.request;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 public class PromoRequest {
 
     private String name;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private OffsetDateTime startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private OffsetDateTime endDate;
     private String description;
     private double promoAmount;
     private int numOfPromo;
     private long rank;
+    private double orderPrice;
 
     public PromoRequest() {
     }
@@ -22,18 +28,7 @@ public class PromoRequest {
     public void setName(String name) {
         this.name = name;
     }
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
+    
     public String getDescription() {
         return description;
     }
@@ -60,6 +55,31 @@ public class PromoRequest {
     public void setRank(long rank) {
         this.rank = rank;
     }
+
+    public OffsetDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(OffsetDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public OffsetDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(OffsetDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public double getOrderPrice() {
+        return orderPrice;
+    }
+
+    public void setOrderPrice(double orderPrice) {
+        this.orderPrice = orderPrice;
+    }
+    
 
     
 }

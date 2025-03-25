@@ -15,6 +15,7 @@ public class LoyaltyPoint {
     private long amountLevel; // 5tr, 10tr, 20tr, 30tr
 
     @OneToOne(mappedBy = "loyaltyPoint")
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "loyaltyPoint", cascade = CascadeType.ALL, orphanRemoval = true)

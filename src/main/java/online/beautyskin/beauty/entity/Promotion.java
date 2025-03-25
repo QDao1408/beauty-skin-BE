@@ -4,7 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.scheduling.annotation.Scheduled;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Promotion {
@@ -15,9 +22,10 @@ public class Promotion {
     @Column(name = "Name")
     private String name;
     @Column(name = "StartDate")
-    private LocalDate startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private OffsetDateTime startDate;
     @Column(name = "EndDate")
-    private LocalDate endDate;
+    private OffsetDateTime endDate;
     @Column(name = "Description")
     private String description;
     @Column(name = "PromotionAmount")
@@ -27,12 +35,15 @@ public class Promotion {
     private double orderPrice;
     private int numOfPromo;
 
-    @ManyToOne
+    
+    @ManyToOne(fetch = FetchType.LAZY) // Ensure Lazy Fetch
     @JoinColumn(name = "rank_id")
+    @JsonIgnore 
     private LoyaltyPoint loyaltyPoint;
 
-    @OneToMany(mappedBy = "promotion")
-    private List<OrderPromo> orderPromotions;
+    @OneToMany(mappedBy = "promotion", orphanRemoval = true)
+    @JsonIgnore
+    private List<Order> orders = new ArrayList<>();
 
     @AssertTrue(message = "Promotion's end date must be after the start date.")
     public boolean isEndDateAfterStartDate() {
@@ -57,22 +68,6 @@ public class Promotion {
         this.name = name;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -87,10 +82,6 @@ public class Promotion {
 
     public void setPromoAmount(double promoAmount) {
         this.promoAmount = promoAmount;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public boolean isDeleted() {
@@ -122,7 +113,7 @@ public class Promotion {
     }
 
     public void setOutDate() {
-        this.isOutDate = endDate.isAfter(LocalDate.now());
+        this.isOutDate = endDate.isBefore(OffsetDateTime.now());
     }
 
     public double getOrderPrice() {
@@ -133,6 +124,31 @@ public class Promotion {
         this.orderPrice = orderPrice;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public OffsetDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(OffsetDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public OffsetDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(OffsetDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    
 
     
     

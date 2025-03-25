@@ -13,6 +13,9 @@ import java.util.List;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class PromotionAPI {
     @Autowired
     private PromotionService promotionService;
+
+
 
     List<Promotion> promotions;
 
@@ -52,18 +57,10 @@ public class PromotionAPI {
         return ResponseEntity.ok(upd);
     }
 
-    @PutMapping("/{promoId}/apply-promotion/{orderId}")
+    @GetMapping("/get-by-user")
     @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity applyPromoForOrder(@PathVariable long promoId, @PathVariable long orderId) {
-        String result = promotionService.applyPromoForOrder(promoId, orderId);        
-        return ResponseEntity.ok(result);
+    public ResponseEntity getByUserRank() {
+        return ResponseEntity.ok(promotionService.getByUserRank());
     }
-
-    @PutMapping("/{promoId}/remove-promotion/{orderId}")
-    @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity removePromoForOrder(@PathVariable long promoId, @PathVariable long orderId) {
-        String result = promotionService.removePromoForOrder(promoId, orderId);
-        return ResponseEntity.ok(result);
-    }
-
+    
 }

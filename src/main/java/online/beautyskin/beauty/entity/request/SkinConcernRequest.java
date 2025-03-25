@@ -1,6 +1,5 @@
 package online.beautyskin.beauty.entity.request;
 
-import jakarta.persistence.Column;
 
 public class SkinConcernRequest {
     private String name;

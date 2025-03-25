@@ -2,11 +2,16 @@ package online.beautyskin.beauty.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
-import online.beautyskin.beauty.enums.PromotionEnums;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.scheduling.annotation.Scheduled;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Promotion {
@@ -17,31 +22,27 @@ public class Promotion {
     @Column(name = "Name")
     private String name;
     @Column(name = "StartDate")
-    private LocalDate startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private OffsetDateTime startDate;
     @Column(name = "EndDate")
-    private LocalDate endDate;
+    private OffsetDateTime endDate;
     @Column(name = "Description")
     private String description;
-    @Column(name = "PromotionType")
-    private PromotionEnums type;
     @Column(name = "PromotionAmount")
     private double promoAmount;
     private boolean isDeleted = false;
+    private boolean isOutDate;
+    private double orderPrice;
+    private int numOfPromo;
 
-    @ManyToMany
-    @JoinTable(
-            name = "mapping_product_promo",
-            joinColumns = @JoinColumn(name = "promo_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> products = new ArrayList<Product>();
+    
+    @ManyToOne(fetch = FetchType.LAZY) // Ensure Lazy Fetch
+    @JoinColumn(name = "rank_id")
+    @JsonIgnore 
+    private LoyaltyPoint loyaltyPoint;
 
-    @ManyToMany
-    @JoinTable(
-            name = "mapping_order_promo",
-            joinColumns = @JoinColumn(name = "promo_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id")
-    )
+    @OneToMany(mappedBy = "promotion", orphanRemoval = true)
+    @JsonIgnore
     private List<Order> orders = new ArrayList<>();
 
     @AssertTrue(message = "Promotion's end date must be after the start date.")
@@ -53,16 +54,6 @@ public class Promotion {
     }
 
     public Promotion() {}
-
-    public Promotion(String name, LocalDate startDate, LocalDate endDate, String description, PromotionEnums type, double promoAmount) {
-        this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.description = description;
-        this.type = type;
-        this.promoAmount = promoAmount;
-        this.isDeleted = false;
-    }
 
 
     public long getId() {
@@ -77,36 +68,12 @@ public class Promotion {
         this.name = name;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public PromotionEnums getType() {
-        return type;
-    }
-
-    public void setType(PromotionEnums type) {
-        this.type = type;
     }
 
     public double getPromoAmount() {
@@ -117,10 +84,6 @@ public class Promotion {
         this.promoAmount = promoAmount;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public boolean isDeleted() {
         return isDeleted;
     }
@@ -128,4 +91,65 @@ public class Promotion {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
+
+    public LoyaltyPoint getLoyaltyPoint() {
+        return loyaltyPoint;
+    }
+
+    public void setLoyaltyPoint(LoyaltyPoint loyaltyPoint) {
+        this.loyaltyPoint = loyaltyPoint;
+    }
+
+    public int getNumOfPromo() {
+        return numOfPromo;
+    }
+
+    public void setNumOfPromo(int numOfPromo) {
+        this.numOfPromo = numOfPromo;
+    }
+
+    public boolean isOutDate() {
+        return isOutDate;
+    }
+
+    public void setOutDate() {
+        this.isOutDate = endDate.isBefore(OffsetDateTime.now());
+    }
+
+    public double getOrderPrice() {
+        return orderPrice;
+    }
+
+    public void setOrderPrice(double orderPrice) {
+        this.orderPrice = orderPrice;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public OffsetDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(OffsetDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public OffsetDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(OffsetDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    
+
+    
+    
 }

@@ -1,9 +1,5 @@
 package online.beautyskin.beauty.entity.request;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Min;
-import online.beautyskin.beauty.entity.Routine;
-
 public class RoutineStepRequest {
 
     private String description;

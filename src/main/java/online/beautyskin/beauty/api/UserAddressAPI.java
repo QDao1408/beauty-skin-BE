@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import online.beautyskin.beauty.entity.UserAddress;
 import online.beautyskin.beauty.entity.request.UserAddressRequest;
-import online.beautyskin.beauty.repository.UserAddressRepository;
 import online.beautyskin.beauty.service.UserAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

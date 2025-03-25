@@ -2,8 +2,6 @@ package online.beautyskin.beauty.service;
 
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.FeedbackRequest;
-import online.beautyskin.beauty.entity.request.ImageRequest;
-import online.beautyskin.beauty.enums.FeedbackEnums;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.repository.FeedbackRepository;
 import online.beautyskin.beauty.repository.ImageRepository;

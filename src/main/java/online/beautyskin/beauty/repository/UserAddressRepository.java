@@ -1,10 +1,7 @@
 package online.beautyskin.beauty.repository;
 
 import online.beautyskin.beauty.entity.UserAddress;
-import online.beautyskin.beauty.entity.respone.UserAddressResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;

@@ -46,7 +46,7 @@ public class LoyaltyPointService {
             rankId = 2;
         } else if(point > GOLD_POINT && point <= DIAMOND_POINT) {
             rankId = 3;
-        } else {
+        } else if(point > DIAMOND_POINT){
             rankId = 4;
         }
         return rankId;

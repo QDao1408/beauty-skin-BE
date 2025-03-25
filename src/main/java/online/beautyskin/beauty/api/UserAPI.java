@@ -70,6 +70,10 @@ public class UserAPI {
         return ResponseEntity.ok(userService.createStaff(userRequest));
     }
 
-
+    @GetMapping("/get/{id}")
+    public ResponseEntity getById(@PathVariable long id) {
+        User user = userService.findById(id);
+        return ResponseEntity.ok(user);
+    }
 
 }

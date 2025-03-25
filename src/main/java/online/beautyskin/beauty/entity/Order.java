@@ -37,6 +37,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "address_id", nullable = false)
+    @JsonIgnore
     private UserAddress userAddress;
 
     @OneToOne
@@ -50,6 +51,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private Promotion promotion;
 
 

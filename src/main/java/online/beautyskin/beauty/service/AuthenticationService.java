@@ -8,8 +8,12 @@ import online.beautyskin.beauty.entity.EmailDetails;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.*;
 import online.beautyskin.beauty.entity.respone.AuthenticationResponse;
+import online.beautyskin.beauty.entity.respone.UserListResponse;
+import online.beautyskin.beauty.enums.OrderStatusEnums;
+import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.enums.RoleEnums;
 import online.beautyskin.beauty.repository.AuthenticationRepository;
+import online.beautyskin.beauty.repository.OrderRepository;
 import online.beautyskin.beauty.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,6 +50,8 @@ public class AuthenticationService implements UserDetailsService {
 
     @Autowired
     private UserUtils userUtils;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @SneakyThrows
     public User register(UserRequest userRequest) {
@@ -116,8 +123,23 @@ public class AuthenticationService implements UserDetailsService {
                                 "User not found with username or email: " + usernameOrEmail)));
     }
 
-    public List<User> getAllUsers() {
-        return authenticationRepository.findByIsDeletedFalse();
+    public List<UserListResponse> getAllUsers() {
+        List<User> users = authenticationRepository.findByIsDeletedFalse();
+        List<UserListResponse> userListResponses = new ArrayList<>();
+
+        for (User user : users) {
+            if (user!=null) {
+                UserListResponse userListResponse = new UserListResponse();
+                userListResponse.setId(user.getId());
+                userListResponse.setFullName(user.getFullName());
+                userListResponse.setMail(user.getMail());
+                userListResponse.setPhone(user.getPhone());
+                userListResponse.setActive(user.isActive());
+                userListResponse.setTotalExpenditures(orderRepository.getTotalSpentByCustomer(user.getId(), OrderStatusEnums.DELIVERED, PaymentStatusEnums.PAID));
+                userListResponses.add(userListResponse);
+            }
+        }
+        return userListResponses;
     }
 
     public void forgotPassword(ForgotPasswordRequest request) {

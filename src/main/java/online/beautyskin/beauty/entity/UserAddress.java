@@ -17,6 +17,7 @@ public class UserAddress {
 
     @ManyToOne
     @JoinColumn(name = "UserID",nullable = false)
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "userAddress")

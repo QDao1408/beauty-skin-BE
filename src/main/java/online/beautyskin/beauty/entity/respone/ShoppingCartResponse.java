@@ -2,7 +2,6 @@ package online.beautyskin.beauty.entity.respone;
 
 import online.beautyskin.beauty.entity.CartDetails;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class ShoppingCartResponse {

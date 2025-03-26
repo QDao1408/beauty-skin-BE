@@ -1,14 +1,10 @@
 package online.beautyskin.beauty.service;
 
-import online.beautyskin.beauty.entity.Promotion;
 import online.beautyskin.beauty.entity.Routine;
 import online.beautyskin.beauty.entity.RoutineStep;
-import online.beautyskin.beauty.entity.SkinConcern;
 import online.beautyskin.beauty.entity.request.RoutineRequest;
-import online.beautyskin.beauty.entity.request.SkinConcernRequest;
 import online.beautyskin.beauty.repository.RoutineRepository;
 import online.beautyskin.beauty.repository.RoutineStepRepository;
-import online.beautyskin.beauty.repository.SkinConcernRepository;
 import online.beautyskin.beauty.repository.SkinTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

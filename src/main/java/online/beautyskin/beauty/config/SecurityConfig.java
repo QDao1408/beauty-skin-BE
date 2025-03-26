@@ -1,7 +1,6 @@
 package online.beautyskin.beauty.config;
 
 import online.beautyskin.beauty.service.AuthenticationService;
-import online.beautyskin.beauty.config.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

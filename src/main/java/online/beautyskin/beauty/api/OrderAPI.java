@@ -23,15 +23,15 @@ public class OrderAPI {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity createOrder(@RequestBody OrderRequest orderRequest) throws Exception{
-        String urlPayment = orderService.create(orderRequest);
+    public ResponseEntity createOrder(@RequestBody OrderRequest orderRequest, @RequestParam(required = false) String promoId) throws Exception{
+        String urlPayment = orderService.create(orderRequest, promoId);
         return ResponseEntity.ok(urlPayment);
     }
 
     @PostMapping("/createCOD")
     @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity createCOD(@RequestBody OrderRequest orderRequest){
-        return ResponseEntity.ok(orderService.createCOD(orderRequest));
+    public ResponseEntity createCOD(@RequestBody OrderRequest orderRequest, @RequestParam(required = false) String promoId){
+        return ResponseEntity.ok(orderService.createCOD(orderRequest, promoId));
     }
 
     @GetMapping("/getAll")

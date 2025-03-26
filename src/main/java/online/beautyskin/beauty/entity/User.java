@@ -279,6 +279,6 @@ public class User implements UserDetails {
     public void setFavorites(Favorites favorites) {
         this.favorites = favorites;
     }
-
+    
 
 }

@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Min;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +29,6 @@ public class Order {
     @Min(0)
     private double totalPrice;
 
-    @ManyToMany(mappedBy = "orders")
-    private List<Promotion> promotions = new ArrayList<>();
-
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Transaction transaction;
 
@@ -41,6 +37,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "address_id", nullable = false)
+    @JsonIgnore
     private UserAddress userAddress;
 
     @OneToOne
@@ -51,6 +48,11 @@ public class Order {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    @JsonIgnore
+    private Promotion promotion;
 
 
     public List<OrderDetail> getOrderDetails() { return orderDetails; }
@@ -87,14 +89,6 @@ public class Order {
         this.id = id;
     }
 
-    public List<Promotion> getPromotions() {
-        return promotions;
-    }
-
-    public void setPromotions(List<Promotion> promotions) {
-        this.promotions = promotions;
-    }
-
     public Transaction getTransaction() {
         return transaction;
     }
@@ -126,4 +120,12 @@ public class Order {
     public void setUser(User user) {
         this.user = user;
     }
+    public Promotion getPromotion() {
+        return promotion;
+    }
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
+    }
+
+    
 }

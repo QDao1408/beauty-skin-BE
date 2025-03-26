@@ -16,6 +16,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByMail(String mail);
 
-    @Query("select count(a) from User  a where a.roleEnums=:roleEnums")
-    long countByRole(RoleEnums roleEnums);
 }

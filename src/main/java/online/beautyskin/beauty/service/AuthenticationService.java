@@ -12,11 +12,11 @@ import online.beautyskin.beauty.entity.respone.UserListResponse;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.enums.RoleEnums;
-import online.beautyskin.beauty.exception.NullUserException;
 import online.beautyskin.beauty.repository.AuthenticationRepository;
 import online.beautyskin.beauty.repository.OrderRepository;
 import online.beautyskin.beauty.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,15 +24,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.nio.channels.AcceptPendingException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class AuthenticationService implements UserDetailsService {
-
 
     @Autowired
     private AuthenticationRepository authenticationRepository;
@@ -58,7 +57,7 @@ public class AuthenticationService implements UserDetailsService {
     public User register(UserRequest userRequest) {
         User user = new User();
 
-        if(userRequest.getConfirmPassword().equals(userRequest.getPassword())) {
+        if (userRequest.getConfirmPassword().equals(userRequest.getPassword())) {
 
             passwordEncoder.encode(userRequest.getPassword());
 
@@ -81,21 +80,18 @@ public class AuthenticationService implements UserDetailsService {
         return u;
     }
 
-    public AuthenticationResponse login(AuthenticationRequest authenticationRequest){
+    public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
         User user = findByUsernameOrEmail(authenticationRequest.getUsername());
-        if(authenticationRepository.existsByIdAndIsDeletedFalse(user.getId())) {
+        if (authenticationRepository.existsByIdAndIsDeletedFalse(user.getId())) {
 
             try {
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(
                                 user.getUsername(), // Always use username for authentication
-                                authenticationRequest.getPassword()
-                        )
-                );
+                                authenticationRequest.getPassword()));
             } catch (Exception e) {
                 throw new NullPointerException("tài khoản hoặc mật khẩu không đúng");
             }
-
 
             String token = tokenService.generateToken(user);
             AuthenticationResponse authenticationResponse = new AuthenticationResponse();
@@ -113,7 +109,6 @@ public class AuthenticationService implements UserDetailsService {
             throw new NullPointerException("tài khoản không tồn tại");
         }
 
-
     }
 
     @Override
@@ -124,7 +119,8 @@ public class AuthenticationService implements UserDetailsService {
     private User findByUsernameOrEmail(String usernameOrEmail) {
         return authenticationRepository.findByUsername(usernameOrEmail)
                 .orElseGet(() -> authenticationRepository.findByMail(usernameOrEmail)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail)));
+                        .orElseThrow(() -> new UsernameNotFoundException(
+                                "User not found with username or email: " + usernameOrEmail)));
     }
 
     public List<UserListResponse> getAllUsers() {
@@ -146,10 +142,9 @@ public class AuthenticationService implements UserDetailsService {
         return userListResponses;
     }
 
-
     public void forgotPassword(ForgotPasswordRequest request) {
         User user = authenticationRepository.findByMail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found" ));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         EmailDetails emailDetails = new EmailDetails();
         emailDetails.setReceiver(user.getMail()); // email gửi tới user
@@ -187,8 +182,8 @@ public class AuthenticationService implements UserDetailsService {
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(googleRequest.getToken());
             String email = decodedToken.getEmail();
             User user = authenticationRepository.findByMail(email)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found" ));
-            if(user == null) { // email chưa được dky thì dky tk mời
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            if (user == null) { // email chưa được dky thì dky tk mời
                 user = new User();
                 user.setFullName(decodedToken.getName());
                 user.setMail(email);
@@ -209,10 +204,10 @@ public class AuthenticationService implements UserDetailsService {
 
             return authenticationResponse;
 
-
         } catch (FirebaseAuthException exception) {
             exception.printStackTrace();
         }
         return null;
     }
+
 }

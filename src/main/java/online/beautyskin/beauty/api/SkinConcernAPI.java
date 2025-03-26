@@ -2,7 +2,6 @@ package online.beautyskin.beauty.api;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import online.beautyskin.beauty.entity.SkinConcern;
 import online.beautyskin.beauty.entity.request.SkinConcernRequest;
 import online.beautyskin.beauty.service.SkinConcernService;
 import org.springframework.beans.factory.annotation.Autowired;

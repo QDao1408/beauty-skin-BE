@@ -1,6 +1,5 @@
 package online.beautyskin.beauty.entity.request;
 
-import java.util.List;
 
 public class RoutineRequest {
     private String name;

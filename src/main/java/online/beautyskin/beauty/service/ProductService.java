@@ -82,9 +82,6 @@ public class ProductService {
         List<Image> images = addImage(productRequest.getImages());
         product.setImages(images);
 
-        List<Promotion> promotions = addPromo(productRequest.getPromotions());
-        product.setPromotions(promotions);
-
         product.setDeleted(false);
         return productRepository.save(product);
     }
@@ -153,7 +150,7 @@ public class ProductService {
         List<Promotion> promotions = new ArrayList<>();
         if(!promoId.isEmpty()) {
             for(long id : promoId) {
-                promotions.add(promotionRepository.findByIdAndIsDeletedFalse(id));
+                promotions.add(promotionRepository.findByIdAndIsDeletedFalseAndIsOutDateFalse(id));
             }
         }
         return promotions;
@@ -197,9 +194,6 @@ public class ProductService {
 
         List<Image> images = addImage(productRequest.getImages());
         product.setImages(images);
-
-        List<Promotion> promotions = addPromo(productRequest.getPromotions());
-        product.setPromotions(promotions);
 
         product.setDeleted(false);
 

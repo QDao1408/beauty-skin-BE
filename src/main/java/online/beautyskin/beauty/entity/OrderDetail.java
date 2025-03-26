@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class OrderDetail {

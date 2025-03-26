@@ -1,6 +1,5 @@
 package online.beautyskin.beauty.api;
 
-import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import online.beautyskin.beauty.entity.User;
@@ -71,6 +70,10 @@ public class UserAPI {
         return ResponseEntity.ok(userService.createStaff(userRequest));
     }
 
-
+    @GetMapping("/get/{id}")
+    public ResponseEntity getById(@PathVariable long id) {
+        User user = userService.findById(id);
+        return ResponseEntity.ok(user);
+    }
 
 }

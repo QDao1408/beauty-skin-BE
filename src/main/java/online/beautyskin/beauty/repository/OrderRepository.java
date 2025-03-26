@@ -46,4 +46,17 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "LIMIT 3")
     List<Object[]> findTop3SpendingCustomers(@Param("orderStatus") OrderStatusEnums orderStatus,
                                              @Param("paymentStatus") PaymentStatusEnums paymentStatus);
+
+    @Query("SELECT COUNT(DISTINCT o.user.id) FROM Order o " +
+            "WHERE o.orderStatus = :status AND o.paymentStatus = :paymentStatus")
+    long countCustomersWithDeliveredAndPaidOrders(@Param("status") OrderStatusEnums status,
+                                                  @Param("paymentStatus") PaymentStatusEnums paymentStatus);
+
+    @Query("SELECT COALESCE(SUM(o.totalPrice), 0) FROM Order o " +
+            "WHERE o.user.id = :customerId " +
+            "AND o.orderStatus = :status " +
+            "AND o.paymentStatus = :paymentStatus")
+    double getTotalSpentByCustomer(@Param("customerId") Long customerId,
+                                   @Param("status") OrderStatusEnums status,
+                                   @Param("paymentStatus") PaymentStatusEnums paymentStatus);
 }

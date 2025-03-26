@@ -22,9 +22,6 @@ public class DashboardService {
     ProductRepository productRepository;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     OrderRepository orderRepository;
 
     public Map<String, Object> getDashboardStats(){
@@ -42,9 +39,9 @@ public class DashboardService {
         long completedOrders = orderRepository.countByStatus(OrderStatusEnums.DELIVERED);
         stats.put("completedOrders", completedOrders);
 
-        // Số lượng customer
-//        long totalCustomers = userRepository.countByRole(RoleEnums.USER);
-//        stats.put("customers", totalCustomers);
+//         Số lượng customer
+        long totalCustomers = orderRepository.countCustomersWithDeliveredAndPaidOrders(OrderStatusEnums.DELIVERED, PaymentStatusEnums.PAID);
+        stats.put("customersWithOrders", totalCustomers);
 
         // top 3 khách hàng thân thiết trong 1 tháng
         List<Object[]> topCustomers = orderRepository.findTop3SpendingCustomers(OrderStatusEnums.DELIVERED, PaymentStatusEnums.PAID);

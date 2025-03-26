@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.*;
 import online.beautyskin.beauty.entity.respone.AuthenticationResponse;
+import online.beautyskin.beauty.entity.respone.UserListResponse;
 import online.beautyskin.beauty.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class AuthenticationAPI {
     @GetMapping("/get")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity get() {
-        List<User> users = authenticationService.getAllUsers();
+        List<UserListResponse> users = authenticationService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 

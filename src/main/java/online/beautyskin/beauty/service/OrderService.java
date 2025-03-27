@@ -126,8 +126,17 @@ public class OrderService {
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
         // updateStatusOrder(order.getOrderStatus(), order.getId());
-        transactionService.createTransactionForCreateOrder(order, TransactionEnums.VNPAY);
         Order newOrder = orderRepository.save(order);
+        Transaction transaction = new Transaction();
+        String des = "User " + order.getUser().getId()
+                + " pay for order " + order.getId();
+        transaction.setTransactionDate(LocalDateTime.now());
+        transaction.setEnums(TransactionEnums.VNPAY);
+        transaction.setOrders(order);
+        transaction.setAmount(order.getTotalPrice());
+        transaction.setDescription(des);
+        transaction.setIncome(true);
+        transactionRepository.save(transaction);
         // every time user create order, user total amount updated, there for rank will
         // be updated
         user.setTotalAmount(user.getTotalAmount() + totalPrice);
@@ -194,7 +203,19 @@ public class OrderService {
         order.setPaymentMethod(cod);
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
-        return orderRepository.save(order);
+        orderRepository.save(order);
+
+        Transaction transaction = new Transaction();
+        String des = "User " + order.getUser().getId()
+                + " pay for order " + order.getId();
+        transaction.setTransactionDate(LocalDateTime.now());
+        transaction.setEnums(TransactionEnums.COD);
+        transaction.setOrders(order);
+        transaction.setAmount(order.getTotalPrice());
+        transaction.setDescription(des);
+        transaction.setIncome(true);
+        transactionRepository.save(transaction);
+        return order;
     }
 
     public List<Order> getAll() {

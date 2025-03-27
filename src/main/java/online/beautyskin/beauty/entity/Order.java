@@ -42,8 +42,8 @@ public class Order {
     @JsonIgnore
     private UserAddress userAddress;
 
-    @OneToOne
-    @JoinColumn(name = "payment_id")
+    @ManyToOne
+    @JoinColumn(name = "payment_id", nullable = false)
     private PaymentMethod paymentMethod;
 
     @ManyToOne

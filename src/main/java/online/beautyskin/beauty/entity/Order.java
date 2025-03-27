@@ -3,6 +3,7 @@ package online.beautyskin.beauty.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import javassist.tools.framedump;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 
@@ -29,8 +30,9 @@ public class Order {
     @Min(0)
     private double totalPrice;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-    private Transaction transaction;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails = new ArrayList<>();
@@ -40,8 +42,8 @@ public class Order {
     @JsonIgnore
     private UserAddress userAddress;
 
-    @OneToOne
-    @JoinColumn(name = "payment_id")
+    @ManyToOne
+    @JoinColumn(name = "payment_id", nullable = false)
     private PaymentMethod paymentMethod;
 
     @ManyToOne
@@ -50,7 +52,7 @@ public class Order {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "promotion_id")
     @JsonIgnore
     private Promotion promotion;
 
@@ -88,15 +90,7 @@ public class Order {
     public void setId(long id) {
         this.id = id;
     }
-
-    public Transaction getTransaction() {
-        return transaction;
-    }
-
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
-    }
-
+    
     public UserAddress getUserAddress() {
         return userAddress;
     }
@@ -125,6 +119,12 @@ public class Order {
     }
     public void setPromotion(Promotion promotion) {
         this.promotion = promotion;
+    }
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     

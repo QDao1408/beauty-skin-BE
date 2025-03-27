@@ -10,6 +10,7 @@ import online.beautyskin.beauty.enums.TransactionEnums;
 import online.beautyskin.beauty.exception.NotFoundException;
 import online.beautyskin.beauty.repository.*;
 import online.beautyskin.beauty.utils.UserUtils;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,9 @@ public class OrderService {
 
     @Autowired
     private PaymentMethodRepository paymentMethodRepository;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @Autowired
     private TransactionRepository transactionRepository;
@@ -122,7 +126,7 @@ public class OrderService {
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
         // updateStatusOrder(order.getOrderStatus(), order.getId());
-
+        transactionService.createTransactionForCreateOrder(order, TransactionEnums.VNPAY);
         Order newOrder = orderRepository.save(order);
         // every time user create order, user total amount updated, there for rank will
         // be updated
@@ -312,6 +316,14 @@ public class OrderService {
             // update rank
             loyaltyPointService.updateRankForUser(user);
             userRepository.save(user);
+            // update promotion
+            Promotion promotion = order.getPromotion();
+            if(promotion != null) {
+                promotion.setNumOfPromo(promotion.getNumOfPromo() + 1);
+                promotionRepository.save(promotion);
+            }
+            // create refund transaction
+            transactionService.createRefundTransaction(order);
         } else if(status == OrderStatusEnums.DELIVERED) {
             StaffTask staffTask3 = staffTaskRepository.findByOrder(order);
             staffTask3.setLastUpdate(LocalDateTime.now());
@@ -359,8 +371,5 @@ public class OrderService {
         return amount;
     }
 
-    public void createTransaction(TransactionEnums enums) {
-        
-        
-    }
+    
 }

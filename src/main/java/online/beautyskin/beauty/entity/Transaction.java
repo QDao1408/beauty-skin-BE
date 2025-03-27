@@ -28,8 +28,6 @@ public class Transaction {
 
     private String description;
 
-    private boolean isChecked = false;
-
     private boolean isIncome;
 
     
@@ -75,14 +73,6 @@ public class Transaction {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public boolean isChecked() {
-        return isChecked;
-    }
-
-    public void setChecked(boolean isChecked) {
-        this.isChecked = isChecked;
     }
 
     public boolean isIncome() {

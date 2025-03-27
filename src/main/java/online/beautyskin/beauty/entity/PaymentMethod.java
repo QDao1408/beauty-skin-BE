@@ -1,5 +1,11 @@
 package online.beautyskin.beauty.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -11,8 +17,9 @@ public class PaymentMethod {
     private String name;
     private boolean isDeleted;
 
-    @OneToOne(mappedBy = "paymentMethod", cascade = CascadeType.ALL)
-    private Order order;
+    @OneToMany(mappedBy = "paymentMethod")
+    @JsonIgnore
+    private List<Order> orders;
 
     public PaymentMethod() {
 
@@ -41,4 +48,14 @@ public class PaymentMethod {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    
 }

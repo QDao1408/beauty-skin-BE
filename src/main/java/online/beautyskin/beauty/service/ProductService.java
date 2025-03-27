@@ -92,6 +92,8 @@ public class ProductService {
             for(long id : typeId) {
                 types.add(skinTypeRepository.findByIdAndIsDeletedFalse(id));
             }
+        } else {
+            return null;
         }
         return types;
     }
@@ -102,6 +104,8 @@ public class ProductService {
             for(long id : concernId) {
                 concerns.add(skinConcernRepository.findByIdAndIsDeletedFalse(id));
             }
+        } else {
+            return null;
         }
         return concerns;
     }
@@ -112,6 +116,8 @@ public class ProductService {
             for(long id : tagId) {
                 tags.add(tagRepository.findByIdAndIsDeletedFalse(id));
             }
+        } else {
+            return null;
         }
         return tags;
     }
@@ -122,6 +128,8 @@ public class ProductService {
             for(long id : stepId) {
                 steps.add(routineStepRepository.findByIdAndIsDeletedFalse(id));
             }
+        } else {
+            return null;
         }
         return steps;
     }
@@ -132,6 +140,8 @@ public class ProductService {
             for(long id : formId) {
                 forms.add(formRepository.findByIdAndIsDeletedFalse(id));
             }
+        } else {
+            return null;
         }
         return forms;
     }
@@ -142,6 +152,8 @@ public class ProductService {
             for(long id : imageId) {
                 images.add(imageRepository.findByIdAndIsDeletedFalse(id));
             }
+        } else {
+            return null;
         }
         return images;
     }
@@ -152,6 +164,8 @@ public class ProductService {
             for(long id : promoId) {
                 promotions.add(promotionRepository.findByIdAndIsDeletedFalseAndIsOutDateFalse(id));
             }
+        } else {
+            return null;
         }
         return promotions;
     }

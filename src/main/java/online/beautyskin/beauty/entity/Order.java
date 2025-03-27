@@ -50,7 +50,7 @@ public class Order {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "promotion_id")
     @JsonIgnore
     private Promotion promotion;
 

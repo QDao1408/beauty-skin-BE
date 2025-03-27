@@ -45,6 +45,9 @@ public class OrderService {
     private PromotionRepository promotionRepository;
 
     @Autowired
+    private PaymentMethodRepository paymentMethodRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -64,6 +67,8 @@ public class OrderService {
 
         User user = userUtils.getCurrentUser();
         order.setUser(user);
+
+        PaymentMethod vnpay = paymentMethodRepository.findById(1);
 
         UserAddress userAddress = addressRepository.findFirstByUserIdAndIsDeletedFalse(user.getId())
                 .orElseThrow(() -> new RuntimeException("No active address found for user"));
@@ -104,10 +109,12 @@ public class OrderService {
                 double discount = getDiscountByPromotion(order, promotion);
                 totalPrice = order.getTotalPrice() - discount;
                 order.setTotalPrice(totalPrice);
+                order.setPromotion(promotion);
                 promotion.setNumOfPromo(promotion.getNumOfPromo() - 1);
                 promotionRepository.save(promotion);
             }
         }
+        order.setPaymentMethod(vnpay);
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
         // updateStatusOrder(order.getOrderStatus(), order.getId());
@@ -130,6 +137,8 @@ public class OrderService {
         User user = userUtils.getCurrentUser();
         order.setUser(user);
 
+        PaymentMethod cod = paymentMethodRepository.findById(2);
+
         UserAddress userAddress = addressRepository.findFirstByUserIdAndIsDeletedFalse(user.getId())
                 .orElseThrow(() -> new RuntimeException("No active address found for user"));
 
@@ -169,10 +178,12 @@ public class OrderService {
                 double discount = getDiscountByPromotion(order, promotion);
                 totalPrice = order.getTotalPrice() - discount;
                 order.setTotalPrice(totalPrice);
+                order.setPromotion(promotion);
                 promotion.setNumOfPromo(promotion.getNumOfPromo() - 1);
                 promotionRepository.save(promotion);
             }
         }
+        order.setPaymentMethod(cod);
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
         return orderRepository.save(order);
@@ -281,7 +292,7 @@ public class OrderService {
         } else if (status == OrderStatusEnums.SHIPPED) {
             StaffTask staffTask2 = staffTaskRepository.findByOrder(order);
             staffTask2.setLastUpdate(LocalDateTime.now());
-            staffTask2.setStaffTaskEnums(StaffTaskEnums.DONE);
+            staffTask2.setStaffTaskEnums(StaffTaskEnums.SHIPPED);
             staffTaskRepository.save(staffTask2);
         } else if (status == OrderStatusEnums.CANCELLED) {
             for (OrderDetail orderDetail : order.getOrderDetails()) {
@@ -297,6 +308,11 @@ public class OrderService {
             // update rank
             loyaltyPointService.updateRankForUser(user);
             userRepository.save(user);
+        } else if(status == OrderStatusEnums.DELIVERED) {
+            StaffTask staffTask3 = staffTaskRepository.findByOrder(order);
+            staffTask3.setLastUpdate(LocalDateTime.now());
+            staffTask3.setStaffTaskEnums(StaffTaskEnums.DELIVERED);
+            staffTaskRepository.save(staffTask3);
         }
         return orderRepository.save(order);
     }

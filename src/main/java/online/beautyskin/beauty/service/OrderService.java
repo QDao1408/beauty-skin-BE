@@ -352,6 +352,8 @@ public class OrderService {
             staffTask3.setLastUpdate(LocalDateTime.now());
             staffTask3.setStaffTaskEnums(StaffTaskEnums.DELIVERED);
             staffTaskRepository.save(staffTask3);
+        } else if(status == OrderStatusEnums.REFUNDED) {
+            
         }
         return orderRepository.save(order);
     }

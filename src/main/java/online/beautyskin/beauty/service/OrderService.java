@@ -215,6 +215,8 @@ public class OrderService {
         transaction.setDescription(des);
         transaction.setIncome(true);
         transactionRepository.save(transaction);
+         // create task for staff to assign orders
+         createTask(order);
         return order;
     }
 

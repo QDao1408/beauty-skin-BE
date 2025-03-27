@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,15 @@ public class LoyaltyPointService {
 
     public List<User> getUserByRank(long id) {
         //LoyaltyPoint loyaltyPoint = loyaltyPointRepository.getReferenceById(id);
-        List<User> users = userRepository.findByLoyaltyPointId(id);
+        List<User> users = userRepository.findByLoyaltyPointsIdAndIsDeletedFalse(id);
         return users;
     }
 
     public void updateRankForUser(User user) {
         LoyaltyPoint rank = loyaltyPointRepository.getReferenceById(calculateRank(user.getTotalAmount()));
-        user.setLoyaltyPoint(rank);
+        List<LoyaltyPoint> ranks = new ArrayList<>();
+        ranks.add(rank);
+        user.setLoyaltyPoints(ranks);
     }
 
     public Long calculateRank(double point) {

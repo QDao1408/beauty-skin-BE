@@ -6,6 +6,7 @@ import online.beautyskin.beauty.entity.request.OrderRequest;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.enums.StaffTaskEnums;
+import online.beautyskin.beauty.enums.TransactionEnums;
 import online.beautyskin.beauty.exception.NotFoundException;
 import online.beautyskin.beauty.repository.*;
 import online.beautyskin.beauty.utils.UserUtils;
@@ -46,6 +47,9 @@ public class OrderService {
 
     @Autowired
     private PaymentMethodRepository paymentMethodRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -353,5 +357,10 @@ public class OrderService {
             amount = discount;
         }
         return amount;
+    }
+
+    public void createTransaction(TransactionEnums enums) {
+        
+        
     }
 }

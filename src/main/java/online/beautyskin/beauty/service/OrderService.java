@@ -6,9 +6,11 @@ import online.beautyskin.beauty.entity.request.OrderRequest;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.enums.StaffTaskEnums;
+import online.beautyskin.beauty.enums.TransactionEnums;
 import online.beautyskin.beauty.exception.NotFoundException;
 import online.beautyskin.beauty.repository.*;
 import online.beautyskin.beauty.utils.UserUtils;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,15 @@ public class OrderService {
     private PromotionRepository promotionRepository;
 
     @Autowired
+    private PaymentMethodRepository paymentMethodRepository;
+
+    @Autowired
+    private TransactionService transactionService;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -65,6 +76,8 @@ public class OrderService {
         User user = userUtils.getCurrentUser();
         order.setUser(user);
 
+        PaymentMethod vnpay = paymentMethodRepository.findById(1);
+
         UserAddress userAddress = addressRepository.findFirstByUserIdAndIsDeletedFalse(user.getId())
                 .orElseThrow(() -> new RuntimeException("No active address found for user"));
 
@@ -104,15 +117,26 @@ public class OrderService {
                 double discount = getDiscountByPromotion(order, promotion);
                 totalPrice = order.getTotalPrice() - discount;
                 order.setTotalPrice(totalPrice);
+                order.setPromotion(promotion);
                 promotion.setNumOfPromo(promotion.getNumOfPromo() - 1);
                 promotionRepository.save(promotion);
             }
         }
+        order.setPaymentMethod(vnpay);
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
         // updateStatusOrder(order.getOrderStatus(), order.getId());
-
         Order newOrder = orderRepository.save(order);
+        Transaction transaction = new Transaction();
+        String des = "User " + order.getUser().getId()
+                + " pay for order " + order.getId();
+        transaction.setTransactionDate(LocalDateTime.now());
+        transaction.setEnums(TransactionEnums.VNPAY);
+        transaction.setOrders(order);
+        transaction.setAmount(order.getTotalPrice());
+        transaction.setDescription(des);
+        transaction.setIncome(true);
+        transactionRepository.save(transaction);
         // every time user create order, user total amount updated, there for rank will
         // be updated
         user.setTotalAmount(user.getTotalAmount() + totalPrice);
@@ -130,6 +154,8 @@ public class OrderService {
         User user = userUtils.getCurrentUser();
         order.setUser(user);
 
+        PaymentMethod cod = paymentMethodRepository.findById(2);
+
         UserAddress userAddress = addressRepository.findFirstByUserIdAndIsDeletedFalse(user.getId())
                 .orElseThrow(() -> new RuntimeException("No active address found for user"));
 
@@ -169,13 +195,27 @@ public class OrderService {
                 double discount = getDiscountByPromotion(order, promotion);
                 totalPrice = order.getTotalPrice() - discount;
                 order.setTotalPrice(totalPrice);
+                order.setPromotion(promotion);
                 promotion.setNumOfPromo(promotion.getNumOfPromo() - 1);
                 promotionRepository.save(promotion);
             }
         }
+        order.setPaymentMethod(cod);
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
-        return orderRepository.save(order);
+        orderRepository.save(order);
+
+        Transaction transaction = new Transaction();
+        String des = "User " + order.getUser().getId()
+                + " pay for order " + order.getId();
+        transaction.setTransactionDate(LocalDateTime.now());
+        transaction.setEnums(TransactionEnums.COD);
+        transaction.setOrders(order);
+        transaction.setAmount(order.getTotalPrice());
+        transaction.setDescription(des);
+        transaction.setIncome(true);
+        transactionRepository.save(transaction);
+        return order;
     }
 
     public List<Order> getAll() {
@@ -281,7 +321,7 @@ public class OrderService {
         } else if (status == OrderStatusEnums.SHIPPED) {
             StaffTask staffTask2 = staffTaskRepository.findByOrder(order);
             staffTask2.setLastUpdate(LocalDateTime.now());
-            staffTask2.setStaffTaskEnums(StaffTaskEnums.DONE);
+            staffTask2.setStaffTaskEnums(StaffTaskEnums.SHIPPED);
             staffTaskRepository.save(staffTask2);
         } else if (status == OrderStatusEnums.CANCELLED) {
             for (OrderDetail orderDetail : order.getOrderDetails()) {
@@ -297,6 +337,19 @@ public class OrderService {
             // update rank
             loyaltyPointService.updateRankForUser(user);
             userRepository.save(user);
+            // update promotion
+            Promotion promotion = order.getPromotion();
+            if(promotion != null) {
+                promotion.setNumOfPromo(promotion.getNumOfPromo() + 1);
+                promotionRepository.save(promotion);
+            }
+            // create refund transaction
+            transactionService.createRefundTransaction(order);
+        } else if(status == OrderStatusEnums.DELIVERED) {
+            StaffTask staffTask3 = staffTaskRepository.findByOrder(order);
+            staffTask3.setLastUpdate(LocalDateTime.now());
+            staffTask3.setStaffTaskEnums(StaffTaskEnums.DELIVERED);
+            staffTaskRepository.save(staffTask3);
         }
         return orderRepository.save(order);
     }
@@ -338,4 +391,6 @@ public class OrderService {
         }
         return amount;
     }
+
+    
 }

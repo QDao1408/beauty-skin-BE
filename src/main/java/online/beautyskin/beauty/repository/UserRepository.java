@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByMail(String mail);
 
 
-    List<User> findByLoyaltyPointId(long id);
+    List<User> findByLoyaltyPointsIdAndIsDeletedFalse(long id);
 
 
     @Query("select count(a) from User  a where a.roleEnums=:roleEnums")

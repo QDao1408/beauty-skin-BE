@@ -23,6 +23,7 @@ public class Transaction {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @Column(name = "transaction_type")
     @Enumerated(EnumType.STRING)
     private TransactionEnums enums;
 

@@ -75,7 +75,7 @@ public class PromotionService {
     }
 
     public List<Promotion> getByUserRank() {
-        LoyaltyPoint loyaltyPoint = userUtils.getCurrentUser().getLoyaltyPoint();
+        LoyaltyPoint loyaltyPoint = userUtils.getCurrentUser().getLoyaltyPoints().getFirst();
         return promotionRepository.findAllByLoyaltyPoint(loyaltyPoint);
     }
 

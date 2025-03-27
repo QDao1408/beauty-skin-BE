@@ -14,9 +14,13 @@ public class LoyaltyPoint {
     private String rankName; // dong, bac, vang, kim cuong
     private long amountLevel; // 5tr, 10tr, 20tr, 30tr
 
-    @OneToOne(mappedBy = "loyaltyPoint")
-    @JsonIgnore
-    private User user;
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "mapping_user_rank",
+            joinColumns = @JoinColumn(name = "rank_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "loyaltyPoint", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -44,14 +48,6 @@ public class LoyaltyPoint {
         this.amountLevel = amountLevel;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public List<Promotion> getPromotions() {
         return promotions;
     }
@@ -68,6 +64,14 @@ public class LoyaltyPoint {
     public void removePromotion(Promotion promotion) {
         this.promotions.remove(promotion);
         promotion.setLoyaltyPoint(null);
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
     
 }

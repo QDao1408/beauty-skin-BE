@@ -74,9 +74,9 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Feedback> feedbacks = new ArrayList<>();
 
-    @OneToOne()
-    @JoinColumn(name = "user_rank")
-    private LoyaltyPoint loyaltyPoint;
+    @ManyToMany(mappedBy = "users", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnore
+    private List<LoyaltyPoint> loyaltyPoints = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
@@ -256,13 +256,7 @@ public class User implements UserDetails {
         this.totalAmount = totalAmount;
     }
 
-    public LoyaltyPoint getLoyaltyPoint() {
-        return loyaltyPoint;
-    }
-
-    public void setLoyaltyPoint(LoyaltyPoint loyaltyPoint) {
-        this.loyaltyPoint = loyaltyPoint;
-    }
+    
 
     public List<Order> getOrders() {
         return orders;
@@ -279,6 +273,24 @@ public class User implements UserDetails {
     public void setFavorites(Favorites favorites) {
         this.favorites = favorites;
     }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public List<LoyaltyPoint> getLoyaltyPoints() {
+        return loyaltyPoints;
+    }
+
+    public void setLoyaltyPoints(List<LoyaltyPoint> loyaltyPoints) {
+        this.loyaltyPoints = loyaltyPoints;
+    }
+
+    
     
 
 }

@@ -25,4 +25,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select count(a) from User  a where a.roleEnums=:roleEnums")
     long countByRole(RoleEnums roleEnums);
 
+    @Query("SELECT u FROM User u WHERE u.roleEnums = :roleEnums")
+    List<User> findAllStaff(@Param("roleEnums") RoleEnums roleEnums);
+
 }

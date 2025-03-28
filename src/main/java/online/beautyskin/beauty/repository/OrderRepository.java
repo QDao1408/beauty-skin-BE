@@ -59,4 +59,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     double getTotalSpentByCustomer(@Param("customerId") Long customerId,
                                    @Param("status") OrderStatusEnums status,
                                    @Param("paymentStatus") PaymentStatusEnums paymentStatus);
+
+
 }

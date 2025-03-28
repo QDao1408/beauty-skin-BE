@@ -3,7 +3,6 @@ package online.beautyskin.beauty.repository;
 import online.beautyskin.beauty.entity.Order;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
-import online.beautyskin.beauty.enums.RoleEnums;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,6 +11,7 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByUserId(long id);
+
 
     Order findOrderById(long id);
 

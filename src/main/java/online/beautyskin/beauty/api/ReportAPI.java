@@ -32,7 +32,7 @@ public class ReportAPI {
         return ResponseEntity.ok(report);
     }
     
-    @PatchMapping("/approve/{orderId}")
+    @PatchMapping("/approve/{reportId}")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity approveReport(@PathVariable long reportId) {
         Report report = reportService.approveReport(reportId);

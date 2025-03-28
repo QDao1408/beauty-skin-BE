@@ -44,6 +44,21 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
             "AND MONTH(o.orderDate) = MONTH(CURRENT_DATE) " +
             "AND YEAR(o.orderDate) = YEAR(CURRENT_DATE) " +
             "GROUP BY p.id, p.name " +
+            "ORDER BY totalSold DESC")
+    List<Object[]> findTop5BestSellingProduct();
+
+    @Query("SELECT COALESCE(AVG(r.rating), 0) " +
+            "FROM Feedback r " +
+            "WHERE r.product.id = :productId")
+    Double findAverageRatingByProductId(@Param("productId") Long productId);
+
+    @Query("SELECT COALESCE(SUM(od.quantity), 0) " +
+            "FROM OrderDetail od " +
+            "JOIN od.order o " +
+            "WHERE od.product.id = :productId " +
+            "AND o.orderStatus = 'DELIVERED' " +
+            "AND o.paymentStatus = 'PAID'")
+    Long findTotalSoldByProductId(@Param("productId") Long productId);
             "ORDER BY totalSold DESC " +
             "LIMIT 5")
     List<Object[]> findTop5BestSellingProductsThisMonth(@Param("orderStatus") OrderStatusEnums orderStatus,

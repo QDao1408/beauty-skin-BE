@@ -62,7 +62,6 @@ public class ProductService {
                 productResponse.setPrice(product.getPrice());
                 productResponse.setIngredient(product.getIngredient());
                 productResponse.setCategory(product.getCategory());
-                productResponse.setPromotions(product.getPromotions());
                 productResponse.setSkinTypes(product.getSkinTypes());
                 productResponse.setSkinConcerns(product.getSkinConcerns());
                 productResponse.setTags(product.getTags());

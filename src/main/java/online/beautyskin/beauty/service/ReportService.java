@@ -93,4 +93,12 @@ public class ReportService {
         return report;
     }
 
+    public List<Report> getAll() {
+        return reportRepository.findAll();
+    }
+
+    public List<Report> getByOrderId(long orderId) {
+        return reportRepository.findByOrder(orderRepository.findOrderById(orderId));
+    }
+
 }

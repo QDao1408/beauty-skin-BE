@@ -3,6 +3,10 @@ package online.beautyskin.beauty.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import online.beautyskin.beauty.entity.EmailDetails;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -21,12 +25,19 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendMailTemplate(EmailDetails emailDetails) {
-        try{
+    public String getLocalTime() {
+        LocalDateTime myDateObj = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        return myDateObj.format(myFormatObj);
+    }
+
+    public void sendResetPasswordMail(EmailDetails emailDetails) {
+        try {
             Context context = new Context();
             context.setVariable("name", emailDetails.getFullName());
             context.setVariable("button", emailDetails.getButtonValue());
             context.setVariable("link", emailDetails.getLink());
+            context.setVariable("date", getLocalTime());
 
             String text = templateEngine.process("emailtemplate", context);
 
@@ -41,14 +52,10 @@ public class EmailService {
             mimeMessageHelper.setSubject(emailDetails.getSubject());
             mailSender.send(mimeMessage);
 
-
-        } catch(MessagingException e) {
+        } catch (MessagingException e) {
             e.printStackTrace();
         }
     }
-
-
-
 
 
 }

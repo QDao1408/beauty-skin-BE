@@ -1,5 +1,7 @@
 package online.beautyskin.beauty.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -39,5 +44,19 @@ public class ReportAPI {
         return ResponseEntity.ok(report);
     }
 
+    @GetMapping("/get-all")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity getMethodName() {
+        List<Report> reports = reportService.getAll();
+        return ResponseEntity.ok(reports);
+    }
+    
+    @GetMapping("/get/{orderId}")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity getByOrderId(@PathVariable long orderId) {
+        List<Report> reports = reportService.getByOrderId(orderId);
+        return ResponseEntity.ok(reports);
+    }
+    
 
 }

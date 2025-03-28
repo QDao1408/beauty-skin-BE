@@ -46,7 +46,10 @@ public class DashboardService {
         long totalCustomers = userRepository.countByRole(RoleEnums.USER);
         stats.put("customers", totalCustomers);
 
-        //top 5 sản phẩm bán chạy nhất
+        //top 3 khách hàng chi tiên nhiều nhất
+
+
+        //top 5 sản phẩm bán chạy nhất (lấy luôn cả categoryname)
         List<Object[]> topProducts = productRepository.findTop5BestSellingProduct();
 
         List<Map<String, Object>> topProductsList = new ArrayList<>();

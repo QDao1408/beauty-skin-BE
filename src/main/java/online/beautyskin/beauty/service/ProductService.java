@@ -3,6 +3,7 @@ package online.beautyskin.beauty.service;
 import lombok.extern.slf4j.Slf4j;
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.ProductRequest;
+import online.beautyskin.beauty.entity.respone.ProductResponse;
 import online.beautyskin.beauty.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,8 +42,40 @@ public class ProductService {
     @Autowired
     private PromotionRepository promotionRepository;
 
-    public List<Product> getAllProducts() {
-        return productRepository.findByIsDeletedFalse();
+    public List<ProductResponse> getAllProducts() {
+        List<Product> products = productRepository.findByIsDeletedFalse();
+        List<ProductResponse> productResponses = new ArrayList<>();
+        if (products.isEmpty()) {
+            throw new RuntimeException("Product list is empty");
+        }else {
+            for (Product product : products) {
+                ProductResponse productResponse = new ProductResponse();
+                productResponse.setId(product.getId());
+                productResponse.setName(product.getName());
+                productResponse.setDescription(product.getDescription());
+                productResponse.setStock(product.getStock());
+                productResponse.setCreateDateTime(product.getCreateDateTime());
+                productResponse.setLastUpdateDateTime(product.getLastUpdateDateTime());
+                productResponse.setExpiredDateTime(product.getExpiredDateTime());
+                productResponse.setStatus(product.getStatus());
+                productResponse.setInstruction(product.getInstruction());
+                productResponse.setPrice(product.getPrice());
+                productResponse.setIngredient(product.getIngredient());
+                productResponse.setCategory(product.getCategory());
+                productResponse.setPromotions(product.getPromotions());
+                productResponse.setSkinTypes(product.getSkinTypes());
+                productResponse.setSkinConcerns(product.getSkinConcerns());
+                productResponse.setTags(product.getTags());
+                productResponse.setForms(product.getForms());
+                productResponse.setRoutineSteps(product.getRoutineSteps());
+                productResponse.setImages(product.getImages());
+                productResponse.setFavoritedByUsers(product.getFavoritedByUsers());
+                productResponse.setAverageRating(productRepository.findAverageRatingByProductId(product.getId()));
+                productResponse.setProductSold(productRepository.findTotalSoldByProductId(product.getId()));
+                productResponses.add(productResponse);
+            }
+        }
+        return productResponses;
     }
 
 

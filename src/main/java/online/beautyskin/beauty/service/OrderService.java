@@ -346,8 +346,6 @@ public class OrderService {
             staffTask3.setLastUpdate(LocalDateTime.now());
             staffTask3.setStaffTaskEnums(StaffTaskEnums.DELIVERED);
             staffTaskRepository.save(staffTask3);
-        } else if(status == OrderStatusEnums.DELIVERED) {
-            
             if (order.getPaymentMethod().getId() == 2) {
                 // Record transaction when cod order is delivered
                 Transaction transaction = new Transaction();
@@ -361,6 +359,18 @@ public class OrderService {
                 transaction.setIncome(true);
                 transactionRepository.save(transaction);
             }
+        } else if(status == OrderStatusEnums.REFUNDED) {
+            // create transaction for refund
+            Transaction transaction = new Transaction();
+                String des = "Refund order " + order.getId()
+                        + " for user " + order.getUser().getId();
+                transaction.setTransactionDate(LocalDateTime.now());
+                transaction.setEnums(TransactionEnums.REFUND);
+                transaction.setOrders(order);
+                transaction.setAmount(order.getTotalPrice());
+                transaction.setDescription(des);
+                transaction.setIncome(false);
+                transactionRepository.save(transaction);
         }
         return orderRepository.save(order);
     }

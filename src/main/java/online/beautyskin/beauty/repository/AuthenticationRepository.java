@@ -19,7 +19,6 @@ public interface AuthenticationRepository extends JpaRepository<User, Long> {
 
     boolean existsByIdAndIsDeletedFalse(Long id);
 
-    Optional<User> findByUsernameAndIsDeletedFalse(String username);
 
 
 }

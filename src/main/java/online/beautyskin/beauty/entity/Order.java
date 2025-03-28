@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Min;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,27 +29,29 @@ public class Order {
     @Min(0)
     private double totalPrice;
 
-    @ManyToMany(mappedBy = "orders")
-    private List<Promotion> promotions = new ArrayList<>();
-
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-    private Transaction transaction;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "address_id", nullable = false)
+    @JsonIgnore
     private UserAddress userAddress;
 
-    @OneToOne
-    @JoinColumn(name = "payment_id")
+    @ManyToOne
+    @JoinColumn(name = "payment_id", nullable = false)
     private PaymentMethod paymentMethod;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "promotion_id")
+    private Promotion promotion;
 
 
     public List<OrderDetail> getOrderDetails() { return orderDetails; }
@@ -86,23 +87,7 @@ public class Order {
     public void setId(long id) {
         this.id = id;
     }
-
-    public List<Promotion> getPromotions() {
-        return promotions;
-    }
-
-    public void setPromotions(List<Promotion> promotions) {
-        this.promotions = promotions;
-    }
-
-    public Transaction getTransaction() {
-        return transaction;
-    }
-
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
-    }
-
+    
     public UserAddress getUserAddress() {
         return userAddress;
     }
@@ -126,4 +111,21 @@ public class Order {
     public void setUser(User user) {
         this.user = user;
     }
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+    public Promotion getPromotion() {
+        return promotion;
+    }
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
+    }
+
+    
+    
+
+    
 }

@@ -2,6 +2,7 @@ package online.beautyskin.beauty.api;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import online.beautyskin.beauty.entity.Promotion;
+import online.beautyskin.beauty.entity.request.PromoRequest;
 import online.beautyskin.beauty.service.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 @RestController
 @RequestMapping("/api/promotion")
@@ -17,14 +25,10 @@ public class PromotionAPI {
     @Autowired
     private PromotionService promotionService;
 
+
+
     List<Promotion> promotions;
 
-    @GetMapping("/getAll")
-    @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity getAll() {
-        promotions = promotionService.getAllPromotions();
-        return ResponseEntity.ok(promotions);
-    }
 
     @GetMapping("/getValid")
     public ResponseEntity getValid() {
@@ -34,7 +38,7 @@ public class PromotionAPI {
 
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity create(@RequestBody Promotion promotion) {
+    public ResponseEntity create(@RequestBody PromoRequest promotion) {
         Promotion promo1 = promotionService.createPromotion(promotion);
         return ResponseEntity.ok(promo1);
     }
@@ -53,6 +57,10 @@ public class PromotionAPI {
         return ResponseEntity.ok(upd);
     }
 
-
-
+    @GetMapping("/get-by-user")
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public ResponseEntity getByUserRank() {
+        return ResponseEntity.ok(promotionService.getByUserRank());
+    }
+    
 }

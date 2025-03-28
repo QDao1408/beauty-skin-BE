@@ -21,7 +21,7 @@ public class StaffTask {
 
     private LocalDateTime lastUpdate;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value =  EnumType.STRING)
     private StaffTaskEnums staffTaskEnums;
 
     public StaffTask() {

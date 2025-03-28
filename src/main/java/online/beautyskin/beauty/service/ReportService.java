@@ -54,9 +54,9 @@ public class ReportService {
         report.setRefund(order.getTotalPrice());
         report.setCustomer(userUtils.getCurrentUser());
         report.setApproved(false);
-        
+        report.setManager(userRepository.findById(1));
         reportRepository.save(report);
-        orderService.updateStatusOrder(OrderStatusEnums.REFUND_REQUEST, order.getId());
+        orderService.updateStatusOrder(OrderStatusEnums.REFUND_REQ, order.getId());
         return report;
     }
 

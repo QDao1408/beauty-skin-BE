@@ -346,7 +346,6 @@ public class OrderService {
             staffTask3.setLastUpdate(LocalDateTime.now());
             staffTask3.setStaffTaskEnums(StaffTaskEnums.DELIVERED);
             staffTaskRepository.save(staffTask3);
-        } else if(status == OrderStatusEnums.DELIVERED) {
             if (order.getPaymentMethod().getId() == 2) {
                 // Record transaction when cod order is delivered
                 Transaction transaction = new Transaction();

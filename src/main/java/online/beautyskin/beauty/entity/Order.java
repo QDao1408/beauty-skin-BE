@@ -3,7 +3,6 @@ package online.beautyskin.beauty.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import javassist.tools.framedump;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 
@@ -48,12 +47,10 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "promotion_id")
-    @JsonIgnore
     private Promotion promotion;
 
 
@@ -114,18 +111,21 @@ public class Order {
     public void setUser(User user) {
         this.user = user;
     }
-    public Promotion getPromotion() {
-        return promotion;
-    }
-    public void setPromotion(Promotion promotion) {
-        this.promotion = promotion;
-    }
     public List<Transaction> getTransactions() {
         return transactions;
     }
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
+    public Promotion getPromotion() {
+        return promotion;
+    }
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
+    }
+
+    
+    
 
     
 }

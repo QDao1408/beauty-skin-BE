@@ -1,5 +1,6 @@
 package online.beautyskin.beauty.service;
 
+import online.beautyskin.beauty.api.OrderAPI;
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.OrderDetailsRequest;
 import online.beautyskin.beauty.entity.request.OrderRequest;
@@ -27,6 +28,8 @@ import java.util.*;
 
 @Service
 public class OrderService {
+
+    private final OrderAPI orderAPI;
 
     @Autowired
     private UserRepository userRepository;
@@ -64,8 +67,9 @@ public class OrderService {
     @Autowired
     private LoyaltyPointService loyaltyPointService;
 
-    OrderService(UserRepository userRepository) {
+    OrderService(UserRepository userRepository, OrderAPI orderAPI) {
         this.userRepository = userRepository;
+        this.orderAPI = orderAPI;
     }
 
     public String create(OrderRequest orderRequest, String promoId) throws Exception {
@@ -205,18 +209,8 @@ public class OrderService {
         order.setOrderStatus(OrderStatusEnums.PENDING);
         orderRepository.save(order);
 
-        Transaction transaction = new Transaction();
-        String des = "User " + order.getUser().getId()
-                + " pay for order " + order.getId();
-        transaction.setTransactionDate(LocalDateTime.now());
-        transaction.setEnums(TransactionEnums.COD);
-        transaction.setOrders(order);
-        transaction.setAmount(order.getTotalPrice());
-        transaction.setDescription(des);
-        transaction.setIncome(true);
-        transactionRepository.save(transaction);
-         // create task for staff to assign orders
-         createTask(order);
+        // create task for staff to assign orders
+        createTask(order);
         return order;
     }
 
@@ -341,19 +335,32 @@ public class OrderService {
             userRepository.save(user);
             // update promotion
             Promotion promotion = order.getPromotion();
-            if(promotion != null) {
+            if (promotion != null) {
                 promotion.setNumOfPromo(promotion.getNumOfPromo() + 1);
                 promotionRepository.save(promotion);
             }
             // create refund transaction
             transactionService.createRefundTransaction(order);
-        } else if(status == OrderStatusEnums.DELIVERED) {
+        } else if (status == OrderStatusEnums.DELIVERED) {
             StaffTask staffTask3 = staffTaskRepository.findByOrder(order);
             staffTask3.setLastUpdate(LocalDateTime.now());
             staffTask3.setStaffTaskEnums(StaffTaskEnums.DELIVERED);
             staffTaskRepository.save(staffTask3);
-        } else if(status == OrderStatusEnums.REFUNDED) {
+        } else if(status == OrderStatusEnums.DELIVERED) {
             
+            if (order.getPaymentMethod().getId() == 2) {
+                // Record transaction when cod order is delivered
+                Transaction transaction = new Transaction();
+                String des = "User " + order.getUser().getId()
+                        + " pay for order " + order.getId();
+                transaction.setTransactionDate(LocalDateTime.now());
+                transaction.setEnums(TransactionEnums.COD);
+                transaction.setOrders(order);
+                transaction.setAmount(order.getTotalPrice());
+                transaction.setDescription(des);
+                transaction.setIncome(true);
+                transactionRepository.save(transaction);
+            }
         }
         return orderRepository.save(order);
     }
@@ -396,5 +403,4 @@ public class OrderService {
         return amount;
     }
 
-    
 }

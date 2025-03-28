@@ -21,7 +21,6 @@ public class ProductResponse {
     private double price;
     private String ingredient;
     private Category category;
-    private List<Promotion> promotions = new ArrayList<>();
     private List<SkinType> skinTypes = new ArrayList<>();
     private List<SkinConcern> skinConcerns = new ArrayList<>();
     private List<Tag> tags = new ArrayList<>();
@@ -86,10 +85,6 @@ public class ProductResponse {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public void setPromotions(List<Promotion> promotions) {
-        this.promotions = promotions;
     }
 
     public void setSkinTypes(List<SkinType> skinTypes) {
@@ -174,10 +169,6 @@ public class ProductResponse {
 
     public Category getCategory() {
         return category;
-    }
-
-    public List<Promotion> getPromotions() {
-        return promotions;
     }
 
     public List<SkinType> getSkinTypes() {

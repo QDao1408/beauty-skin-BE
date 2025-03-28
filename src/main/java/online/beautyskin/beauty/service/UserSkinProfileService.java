@@ -32,15 +32,15 @@ public class UserSkinProfileService {
     public UserSkinProfile create(int skinPoint) {
         long skinTypeId = 0;
         if(skinPoint <= 11) {
-            skinTypeId = 2;
-        } else if(skinPoint > 11 && skinPoint <= 20) {
-            skinTypeId = 5;
-        } else if(skinPoint > 20 && skinPoint <= 26) {
-            skinTypeId = 1;
-        } else if(skinPoint > 26 && skinPoint <= 35) {
-            skinTypeId = 4;
-        } else {
             skinTypeId = 3;
+        } else if(skinPoint > 11 && skinPoint <= 20) {
+            skinTypeId = 6;
+        } else if(skinPoint > 20 && skinPoint <= 26) {
+            skinTypeId = 2;
+        } else if(skinPoint > 26 && skinPoint <= 35) {
+            skinTypeId = 5;
+        } else {
+            skinTypeId = 4;
         }
         SkinType skinType = skinTypeRepository.findById(skinTypeId);
         User user = userUtils.getCurrentUser();

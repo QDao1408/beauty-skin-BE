@@ -186,7 +186,7 @@ public class AuthenticationService implements UserDetailsService {
         Runnable r = new Runnable() { // cho pass api trước r gửi mail sau
             @Override
             public void run() {
-                emailService.sendMailTemplate(emailDetails);
+                emailService.sendResetPasswordMail(emailDetails);
             }
         };
         new Thread(r).start();

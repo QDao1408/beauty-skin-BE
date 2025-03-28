@@ -1,10 +1,8 @@
 package online.beautyskin.beauty.service;
 
 import online.beautyskin.beauty.entity.SkinConcern;
-import online.beautyskin.beauty.entity.SkinType;
 import online.beautyskin.beauty.entity.request.SkinConcernRequest;
 import online.beautyskin.beauty.repository.SkinConcernRepository;
-import online.beautyskin.beauty.repository.SkinTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

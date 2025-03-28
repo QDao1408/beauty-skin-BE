@@ -6,11 +6,11 @@ import online.beautyskin.beauty.entity.request.OrderRequest;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.enums.StaffTaskEnums;
-import online.beautyskin.beauty.repository.OrderRepository;
-import online.beautyskin.beauty.repository.ProductRepository;
-import online.beautyskin.beauty.repository.StaffTaskRepository;
-import online.beautyskin.beauty.repository.UserAddressRepository;
+import online.beautyskin.beauty.enums.TransactionEnums;
+import online.beautyskin.beauty.exception.NotFoundException;
+import online.beautyskin.beauty.repository.*;
 import online.beautyskin.beauty.utils.UserUtils;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,18 +25,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-
-import static online.beautyskin.beauty.enums.OrderStatusEnums.IN_PROGRESS;
-import static online.beautyskin.beauty.enums.PaymentStatusEnums.PENDING;
-
 @Service
 public class OrderService {
 
     @Autowired
-    private OrderRepository orderRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private OrderRepository orderRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -45,19 +41,42 @@ public class OrderService {
     private UserAddressRepository addressRepository;
 
     @Autowired
+    private StaffTaskRepository staffTaskRepository;
+
+    @Autowired
+    private PromotionRepository promotionRepository;
+
+    @Autowired
+    private PaymentMethodRepository paymentMethodRepository;
+
+    @Autowired
+    private TransactionService transactionService;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     private UserUtils userUtils;
 
     @Autowired
-    private StaffTaskRepository staffTaskRepository;
+    private LoyaltyPointService loyaltyPointService;
 
+    OrderService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-    public String create(OrderRequest orderRequest) throws Exception{
+    public String create(OrderRequest orderRequest, String promoId) throws Exception {
         List<OrderDetail> details = new ArrayList<>();
         Order order = modelMapper.map(orderRequest, Order.class);
         order.setOrderDetails(details);
 
         User user = userUtils.getCurrentUser();
         order.setUser(user);
+
+        PaymentMethod vnpay = paymentMethodRepository.findById(1);
 
         UserAddress userAddress = addressRepository.findFirstByUserIdAndIsDeletedFalse(user.getId())
                 .orElseThrow(() -> new RuntimeException("No active address found for user"));
@@ -67,7 +86,7 @@ public class OrderService {
         double totalPrice = 0;
         order.setOrderDate(LocalDateTime.now());
 
-        for (OrderDetailsRequest orderDetailsRequest: orderRequest.getDetails()) {
+        for (OrderDetailsRequest orderDetailsRequest : orderRequest.getDetails()) {
             OrderDetail orderDetail = new OrderDetail();
             Product product = productRepository.findById(orderDetailsRequest.getProductId());
 
@@ -80,27 +99,62 @@ public class OrderService {
                 details.add(orderDetail);
 
                 totalPrice += orderDetail.getTotalPrice();
-            }else {
+                // update the stock after order is create
+                product.setStock(product.getStock() - orderDetail.getQuantity());
+                productRepository.save(product);
+            } else {
                 throw new RuntimeException("quantity is not enough");
             }
         }
         order.setTotalPrice(totalPrice);
+        if (promoId != null) {
+            long id = Long.parseLong(promoId);
+
+            Promotion promotion = promotionRepository
+                    .findAllByIdAndNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(id, 0)
+                    .orElseThrow(() -> new NotFoundException("this promotion is unavailable"));
+            if (order.getTotalPrice() >= promotion.getOrderPrice()) {
+                double discount = getDiscountByPromotion(order, promotion);
+                totalPrice = order.getTotalPrice() - discount;
+                order.setTotalPrice(totalPrice);
+                order.setPromotion(promotion);
+                promotion.setNumOfPromo(promotion.getNumOfPromo() - 1);
+                promotionRepository.save(promotion);
+            }
+        }
+        order.setPaymentMethod(vnpay);
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
-        //updateStatusOrder(order.getOrderStatus(), order.getId());
-
+        // updateStatusOrder(order.getOrderStatus(), order.getId());
         Order newOrder = orderRepository.save(order);
+        Transaction transaction = new Transaction();
+        String des = "User " + order.getUser().getId()
+                + " pay for order " + order.getId();
+        transaction.setTransactionDate(LocalDateTime.now());
+        transaction.setEnums(TransactionEnums.VNPAY);
+        transaction.setOrders(order);
+        transaction.setAmount(order.getTotalPrice());
+        transaction.setDescription(des);
+        transaction.setIncome(true);
+        transactionRepository.save(transaction);
+        // every time user create order, user total amount updated, there for rank will
+        // be updated
+        user.setTotalAmount(user.getTotalAmount() + totalPrice);
+        loyaltyPointService.updateRankForUser(user);
+        // create task for staff to assign orders
         createTask(order);
         return createURLPayment(newOrder);
     }
 
-    public Order createCOD(OrderRequest orderRequest){
+    public Order createCOD(OrderRequest orderRequest, String promoId) {
         List<OrderDetail> details = new ArrayList<>();
         Order order = modelMapper.map(orderRequest, Order.class);
         order.setOrderDetails(details);
 
         User user = userUtils.getCurrentUser();
         order.setUser(user);
+
+        PaymentMethod cod = paymentMethodRepository.findById(2);
 
         UserAddress userAddress = addressRepository.findFirstByUserIdAndIsDeletedFalse(user.getId())
                 .orElseThrow(() -> new RuntimeException("No active address found for user"));
@@ -110,7 +164,7 @@ public class OrderService {
         double totalPrice = 0;
         order.setOrderDate(LocalDateTime.now());
 
-        for (OrderDetailsRequest orderDetailsRequest: orderRequest.getDetails()) {
+        for (OrderDetailsRequest orderDetailsRequest : orderRequest.getDetails()) {
             OrderDetail orderDetail = new OrderDetail();
             Product product = productRepository.findById(orderDetailsRequest.getProductId());
 
@@ -123,14 +177,47 @@ public class OrderService {
                 details.add(orderDetail);
 
                 totalPrice += orderDetail.getTotalPrice();
-            }else {
+                // update the stock after order is create
+                product.setStock(product.getStock() - orderDetail.getQuantity());
+                productRepository.save(product);
+            } else {
                 throw new RuntimeException("quantity is not enough");
             }
         }
         order.setTotalPrice(totalPrice);
+        if (promoId != null) {
+            long id = Long.parseLong(promoId);
+
+            Promotion promotion = promotionRepository
+                    .findAllByIdAndNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(id, 0)
+                    .orElseThrow(() -> new NotFoundException("this promotion is unavailable"));
+            if (order.getTotalPrice() >= promotion.getOrderPrice()) {
+                double discount = getDiscountByPromotion(order, promotion);
+                totalPrice = order.getTotalPrice() - discount;
+                order.setTotalPrice(totalPrice);
+                order.setPromotion(promotion);
+                promotion.setNumOfPromo(promotion.getNumOfPromo() - 1);
+                promotionRepository.save(promotion);
+            }
+        }
+        order.setPaymentMethod(cod);
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
-        return orderRepository.save(order);
+        orderRepository.save(order);
+
+        Transaction transaction = new Transaction();
+        String des = "User " + order.getUser().getId()
+                + " pay for order " + order.getId();
+        transaction.setTransactionDate(LocalDateTime.now());
+        transaction.setEnums(TransactionEnums.COD);
+        transaction.setOrders(order);
+        transaction.setAmount(order.getTotalPrice());
+        transaction.setDescription(des);
+        transaction.setIncome(true);
+        transactionRepository.save(transaction);
+         // create task for staff to assign orders
+         createTask(order);
+        return order;
     }
 
     public List<Order> getAll() {
@@ -142,7 +229,7 @@ public class OrderService {
         return orderRepository.findAllByUserId((user.getId()));
     }
 
-    public String createURLPayment(Order order)throws Exception{
+    public String createURLPayment(Order order) throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         LocalDateTime createDate = LocalDateTime.now();
         String formattedCreateDate = createDate.format(formatter);
@@ -151,8 +238,9 @@ public class OrderService {
         String tmnCode = "8FDRRU1S";
         String secretKey = "2LS6HWZV3VANKGVZW4IFO7L0J8A3406K";
         String vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-//        String returnURL = "http://beautyskinshop.online/checkout/payment-result/?orderId="+order.getId();
-        String returnURL = "http://beautyskinshop.online/checkout/payment-result/?orderId="+order.getId();
+        // String returnURL =
+        // "http://beautyskinshop.online/checkout/payment-result/?orderId="+order.getId();
+        String returnURL = "http://beautyskinshop.online/checkout/payment-result/?orderId=" + order.getId();
 
         String currCode = "VND";
         Map<String, String> vnpParams = new TreeMap<>();
@@ -195,7 +283,8 @@ public class OrderService {
         return urlBuilder.toString();
     }
 
-    private String generateHMAC(String secretKey, String signData) throws NoSuchAlgorithmException, InvalidKeyException {
+    private String generateHMAC(String secretKey, String signData)
+            throws NoSuchAlgorithmException, InvalidKeyException {
         Mac hmacSha512 = Mac.getInstance("HmacSHA512");
         SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA512");
         hmacSha512.init(keySpec);
@@ -219,30 +308,50 @@ public class OrderService {
     public Order updateStatusOrder(OrderStatusEnums status, long id) {
         Order order = orderRepository.findOrderById(id);
         order.setOrderStatus(status);
-        if(status == OrderStatusEnums.IN_PROGRESS) {
+        if (status == OrderStatusEnums.IN_PROGRESS) {
             StaffTask staffTask1 = staffTaskRepository.findByOrder(order);
             staffTask1.setStaff(userUtils.getCurrentUser());
             staffTask1.setLastUpdate(LocalDateTime.now());
             staffTask1.setStaffTaskEnums(StaffTaskEnums.IN_PROGRESS);
             staffTaskRepository.save(staffTask1);
-            for (OrderDetail orderDetail : order.getOrderDetails()){
+            for (OrderDetail orderDetail : order.getOrderDetails()) {
                 Product product = orderDetail.getProduct();
                 product.setStock(product.getStock() - orderDetail.getQuantity());
                 productRepository.save(product);
             }
 
-        } else if(status == OrderStatusEnums.SHIPPED) {
+        } else if (status == OrderStatusEnums.SHIPPED) {
             StaffTask staffTask2 = staffTaskRepository.findByOrder(order);
             staffTask2.setLastUpdate(LocalDateTime.now());
-            staffTask2.setStaffTaskEnums(StaffTaskEnums.DONE);
+            staffTask2.setStaffTaskEnums(StaffTaskEnums.SHIPPED);
             staffTaskRepository.save(staffTask2);
-
         } else if (status == OrderStatusEnums.CANCELLED) {
-            for (OrderDetail orderDetail : order.getOrderDetails()){
+            for (OrderDetail orderDetail : order.getOrderDetails()) {
                 Product product = orderDetail.getProduct();
                 product.setStock(product.getStock() + orderDetail.getQuantity());
                 productRepository.save(product);
             }
+            // every time user cancel order, user's total amount will be updated, there fore
+            // user rank will be updated
+            User user = order.getUser();
+            // update total amount
+            user.setTotalAmount(user.getTotalAmount() - order.getTotalPrice());
+            // update rank
+            loyaltyPointService.updateRankForUser(user);
+            userRepository.save(user);
+            // update promotion
+            Promotion promotion = order.getPromotion();
+            if(promotion != null) {
+                promotion.setNumOfPromo(promotion.getNumOfPromo() + 1);
+                promotionRepository.save(promotion);
+            }
+            // create refund transaction
+            transactionService.createRefundTransaction(order);
+        } else if(status == OrderStatusEnums.DELIVERED) {
+            StaffTask staffTask3 = staffTaskRepository.findByOrder(order);
+            staffTask3.setLastUpdate(LocalDateTime.now());
+            staffTask3.setStaffTaskEnums(StaffTaskEnums.DELIVERED);
+            staffTaskRepository.save(staffTask3);
         }
         return orderRepository.save(order);
     }
@@ -257,20 +366,32 @@ public class OrderService {
         User user = userUtils.getCurrentUser();
         List<Order> order = orderRepository.findOrderByUserId(user.getId());
         Order lastOrder = order.get(order.size() - 1);
-        if (order == null){
-            throw new RuntimeException("RỖNG!!!");
-        }else {
+        if (order == null) {
+            throw new RuntimeException("Người dùng chưa có đơn hàng nào");
+        } else {
             return lastOrder;
         }
     }
 
     public void cancelOrder(long orderId) {
         Order order = orderRepository.findOrderById(orderId);
-        if (order == null){
-            throw new RuntimeException("KHONG TIM THAY ORDER!!!");
-        }else {
+        if (order == null) {
+            throw new RuntimeException("Order không tồn tại");
+        } else {
             order.setOrderStatus(OrderStatusEnums.CANCELLED);
             orderRepository.save(order);
         }
     }
+
+    public double getDiscountByPromotion(Order order, Promotion promo) {
+        double amount = 0;
+        double discount = promo.getPromoAmount();
+        if (discount < 1) {
+            amount = order.getTotalPrice() * discount;
+        } else {
+            amount = discount;
+        }
+        return amount;
+    }
+
 }

@@ -1,14 +1,12 @@
 package online.beautyskin.beauty.api;
 
 import jakarta.validation.Valid;
-import online.beautyskin.beauty.entity.Category;
 import online.beautyskin.beauty.entity.PaymentMethod;
 import online.beautyskin.beauty.service.PaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

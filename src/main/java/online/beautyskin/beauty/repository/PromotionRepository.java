@@ -1,18 +1,24 @@
 package online.beautyskin.beauty.repository;
 
+import online.beautyskin.beauty.entity.LoyaltyPoint;
 import online.beautyskin.beauty.entity.Promotion;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
-    @Query("SELECT p FROM Promotion p WHERE p.startDate <= CURRENT_DATE AND p.endDate >= CURRENT_DATE")
-    List<Promotion> findValidPromotions();
 
     List<Promotion> findAllByIsDeletedFalse();
 
-    Promotion findByIdAndIsDeletedFalse(long id);
+    Promotion findByIdAndIsDeletedFalseAndIsOutDateFalse(long id);
+
+    List<Promotion> findAllByIsOutDateFalseAndIsDeletedFalse();
+
+    List<Promotion> findAllByNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(int numOfPromo);
+
+    Optional<Promotion> findAllByIdAndNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(long id, int numOfPromo);
+
+    List<Promotion> findAllByLoyaltyPoint(LoyaltyPoint loyaltyPoint);
 }

@@ -1,9 +1,7 @@
 package online.beautyskin.beauty.api;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import online.beautyskin.beauty.entity.Image;
 import online.beautyskin.beauty.entity.request.ImageRequest;
-import online.beautyskin.beauty.repository.ImageRepository;
 import online.beautyskin.beauty.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

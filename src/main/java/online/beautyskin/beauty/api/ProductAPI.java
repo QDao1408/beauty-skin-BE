@@ -37,13 +37,13 @@ public class ProductAPI {
 
     @GetMapping("/getFormCate/{id}")
     public ResponseEntity getProductFromCate(@PathVariable long id) {
-        products = productService.getFromCateId(id);
+        List<ProductResponse> products = productService.getFromCateId(id);
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/getBySkinTypes/{id}")
     public ResponseEntity getProductFromSkinType(@PathVariable long id) {
-        products = productService.getBySkinType(id);
+        List<ProductResponse> products = productService.getBySkinType(id);
         return ResponseEntity.ok(products);
     }
 

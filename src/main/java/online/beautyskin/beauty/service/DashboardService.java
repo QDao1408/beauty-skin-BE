@@ -43,6 +43,11 @@ public class DashboardService {
         long totalCustomers = orderRepository.countCustomersWithDeliveredAndPaidOrders(OrderStatusEnums.DELIVERED, PaymentStatusEnums.PAID);
         stats.put("customersWithOrders", totalCustomers);
 
+        //top 3 khách hàng chi tiên nhiều nhất
+
+
+        //top 5 sản phẩm bán chạy nhất (lấy luôn cả categoryname)
+        List<Object[]> topProducts = productRepository.findTop5BestSellingProduct();
         // top 3 khách hàng thân thiết trong 1 tháng
         List<Object[]> topCustomers = orderRepository.findTop3SpendingCustomers(OrderStatusEnums.DELIVERED, PaymentStatusEnums.PAID);
         List<Map<String, Object>> topCustomersList = new ArrayList<>();

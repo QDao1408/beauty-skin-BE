@@ -1,5 +1,7 @@
 package online.beautyskin.beauty.entity.respone;
 
+import online.beautyskin.beauty.enums.RoleEnums;
+
 public class UserListResponse {
     private Long id;
     private String fullName;
@@ -7,6 +9,7 @@ public class UserListResponse {
     private String phone;
     private Boolean isActive;
     private double totalExpenditures;
+    private RoleEnums role;
 
     public Long getId() {
         return id;
@@ -54,6 +57,14 @@ public class UserListResponse {
 
     public void setTotalExpenditures(double totalExpenditures) {
         this.totalExpenditures = totalExpenditures;
+    }
+
+    public RoleEnums getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEnums role) {
+        this.role = role;
     }
 
     public UserListResponse(Long id, String fullName, String mail, String phone, Boolean isActive, double totalExpenditures) {

@@ -8,12 +8,15 @@ import online.beautyskin.beauty.entity.EmailDetails;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.*;
 import online.beautyskin.beauty.entity.respone.AuthenticationResponse;
+import online.beautyskin.beauty.entity.respone.StaffResponse;
 import online.beautyskin.beauty.entity.respone.UserListResponse;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.enums.RoleEnums;
 import online.beautyskin.beauty.repository.AuthenticationRepository;
 import online.beautyskin.beauty.repository.OrderRepository;
+import online.beautyskin.beauty.repository.StaffTaskRepository;
+import online.beautyskin.beauty.repository.UserRepository;
 import online.beautyskin.beauty.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,8 +53,14 @@ public class AuthenticationService implements UserDetailsService {
 
     @Autowired
     private UserUtils userUtils;
+
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private StaffTaskRepository staffTaskRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @SneakyThrows
     public User register(UserRequest userRequest) {
@@ -141,6 +150,25 @@ public class AuthenticationService implements UserDetailsService {
             }
         }
         return userListResponses;
+    }
+
+    public List<StaffResponse> getAllStaff() {
+        List<User> staff = userRepository.findAllStaff(RoleEnums.STAFF);
+        List<StaffResponse> staffResponses = new ArrayList<>();
+        for (User user : staff) {
+            if (user!=null) {
+                StaffResponse staffResponse = new StaffResponse();
+                staffResponse.setId(user.getId());
+                staffResponse.setFullName(user.getFullName());
+                staffResponse.setMail(user.getMail());
+                staffResponse.setPhone(user.getPhone());
+                staffResponse.setActive(user.isActive());
+                staffResponse.setRole(user.getRoleEnums());
+                staffResponse.setCompletedOrders(staffTaskRepository.countCompletedOrdersByStaff(user.getId()));
+                staffResponses.add(staffResponse);
+            }
+        }
+        return staffResponses;
     }
 
     public void forgotPassword(ForgotPasswordRequest request) {

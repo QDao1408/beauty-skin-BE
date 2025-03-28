@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.*;
 import online.beautyskin.beauty.entity.respone.AuthenticationResponse;
+import online.beautyskin.beauty.entity.respone.StaffResponse;
 import online.beautyskin.beauty.entity.respone.UserListResponse;
 import online.beautyskin.beauty.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,13 @@ public class AuthenticationAPI {
     public ResponseEntity get() {
         List<UserListResponse> users = authenticationService.getAllUsers();
         return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/getStaff")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity getStaff() {
+        List<StaffResponse> staffResponses = authenticationService.getAllStaff();
+        return ResponseEntity.ok(staffResponses);
     }
 
     @PostMapping("forgot-password")

@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.BeanDefinitionDsl.Role;
 import org.springframework.stereotype.Service;
-
 import online.beautyskin.beauty.entity.Image;
 import online.beautyskin.beauty.entity.Order;
 import online.beautyskin.beauty.entity.Report;
@@ -20,6 +19,7 @@ import online.beautyskin.beauty.exception.NotFoundException;
 import online.beautyskin.beauty.repository.ImageRepository;
 import online.beautyskin.beauty.repository.OrderRepository;
 import online.beautyskin.beauty.repository.ReportRepository;
+import online.beautyskin.beauty.repository.UserRepository;
 import online.beautyskin.beauty.utils.UserUtils;
 
 @Service
@@ -40,6 +40,9 @@ public class ReportService {
     @Autowired
     private UserUtils userUtils;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public Report create(ReportRequest request) {
         Report report = new Report();
         Order order = orderRepository.findOrderById(request.getOrderId());
@@ -51,6 +54,7 @@ public class ReportService {
         report.setRefund(order.getTotalPrice());
         report.setCustomer(userUtils.getCurrentUser());
         report.setApproved(false);
+        
         reportRepository.save(report);
         orderService.updateStatusOrder(OrderStatusEnums.REFUND_REQUEST, order.getId());
         return report;

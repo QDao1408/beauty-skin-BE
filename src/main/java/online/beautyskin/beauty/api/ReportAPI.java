@@ -35,7 +35,8 @@ public class ReportAPI {
     @PatchMapping("/approve/{orderId}")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity approveReport(@PathVariable long reportId) {
-        Report report = reportService.approveReport
+        Report report = reportService.approveReport(reportId);
+        return ResponseEntity.ok(report);
     }
 
 

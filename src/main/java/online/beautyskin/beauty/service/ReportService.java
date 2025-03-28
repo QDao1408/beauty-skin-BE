@@ -5,13 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.BeanDefinitionDsl.Role;
 import org.springframework.stereotype.Service;
 
 import online.beautyskin.beauty.entity.Image;
 import online.beautyskin.beauty.entity.Order;
 import online.beautyskin.beauty.entity.Report;
+import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.ImageRequest;
 import online.beautyskin.beauty.entity.request.ReportRequest;
+import online.beautyskin.beauty.enums.OrderStatusEnums;
+import online.beautyskin.beauty.enums.RoleEnums;
+import online.beautyskin.beauty.exception.NotFoundException;
 import online.beautyskin.beauty.repository.ImageRepository;
 import online.beautyskin.beauty.repository.OrderRepository;
 import online.beautyskin.beauty.repository.ReportRepository;
@@ -28,7 +33,10 @@ public class ReportService {
 
     @Autowired
     private ImageRepository imageRepository;
-    
+
+    @Autowired
+    private OrderService orderService;
+
     @Autowired
     private UserUtils userUtils;
 
@@ -44,6 +52,7 @@ public class ReportService {
         report.setCustomer(userUtils.getCurrentUser());
         report.setApproved(false);
         reportRepository.save(report);
+        orderService.updateStatusOrder(OrderStatusEnums.REFUND_REQUEST, order.getId());
         return report;
     }
 
@@ -63,6 +72,21 @@ public class ReportService {
             });
         }
         return images;
+    }
+
+    public Report approveReport(long reportId) {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new NotFoundException("Cannot found report"));
+
+        User manager = userUtils.getCurrentUser();
+        if(manager.getRoleEnums() == RoleEnums.MANAGER) {
+            report.setManager(manager);
+            report.setApproved(true);
+            orderService.updateStatusOrder(OrderStatusEnums.REFUNDED, report.getOrder().getId());
+        } else {
+            throw new NotFoundException("You don't have authority to access this feature");
+        }
+        return report;
     }
 
 }

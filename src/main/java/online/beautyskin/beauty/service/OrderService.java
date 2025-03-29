@@ -205,9 +205,20 @@ public class OrderService {
             }
         }
         order.setPaymentMethod(cod);
-        order.setPaymentStatus(PaymentStatusEnums.PENDING);
+        order.setPaymentStatus(PaymentStatusEnums.PAID);
         order.setOrderStatus(OrderStatusEnums.PENDING);
         orderRepository.save(order);
+        // save into transaction
+        Transaction transaction = new Transaction();
+        String des = "User " + order.getUser().getId()
+                + " pay for order " + order.getId();
+        transaction.setTransactionDate(LocalDateTime.now());
+        transaction.setEnums(TransactionEnums.COD);
+        transaction.setOrders(order);
+        transaction.setAmount(order.getTotalPrice());
+        transaction.setDescription(des);
+        transaction.setIncome(true);
+        transactionRepository.save(transaction);
 
         // create task for staff to assign orders
         createTask(order);
@@ -346,31 +357,19 @@ public class OrderService {
             staffTask3.setLastUpdate(LocalDateTime.now());
             staffTask3.setStaffTaskEnums(StaffTaskEnums.DELIVERED);
             staffTaskRepository.save(staffTask3);
-            if (order.getPaymentMethod().getId() == 2) {
-                // Record transaction when cod order is delivered
-                Transaction transaction = new Transaction();
-                String des = "User " + order.getUser().getId()
-                        + " pay for order " + order.getId();
-                transaction.setTransactionDate(LocalDateTime.now());
-                transaction.setEnums(TransactionEnums.COD);
-                transaction.setOrders(order);
-                transaction.setAmount(order.getTotalPrice());
-                transaction.setDescription(des);
-                transaction.setIncome(true);
-                transactionRepository.save(transaction);
-            }
-        } else if(status == OrderStatusEnums.REFUNDED) {
+        } else if (status == OrderStatusEnums.REFUNDED) {
             // create transaction for refund
             Transaction transaction = new Transaction();
-                String des = "Refund order " + order.getId()
-                        + " for user " + order.getUser().getId();
-                transaction.setTransactionDate(LocalDateTime.now());
-                transaction.setEnums(TransactionEnums.REFUND);
-                transaction.setOrders(order);
-                transaction.setAmount(order.getTotalPrice());
-                transaction.setDescription(des);
-                transaction.setIncome(false);
-                transactionRepository.save(transaction);
+            String des = "Refund order " + order.getId()
+                    + " for user " + order.getUser().getId();
+            transaction.setTransactionDate(LocalDateTime.now());
+            transaction.setEnums(TransactionEnums.REFUND);
+            transaction.setOrders(order);
+            transaction.setAmount(order.getTotalPrice());
+            transaction.setDescription(des);
+            transaction.setIncome(false);
+            transactionRepository.save(transaction);
+            order.setOrderStatus(OrderStatusEnums.DELIVERED);
         }
         return orderRepository.save(order);
     }

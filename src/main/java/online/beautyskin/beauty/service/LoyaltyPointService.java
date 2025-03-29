@@ -31,16 +31,15 @@ public class LoyaltyPointService {
     }
 
     public List<User> getUserByRank(long id) {
-        //LoyaltyPoint loyaltyPoint = loyaltyPointRepository.getReferenceById(id);
-        List<User> users = userRepository.findByLoyaltyPointsIdAndIsDeletedFalse(id);
-        return users;
+        LoyaltyPoint loyaltyPoint = loyaltyPointRepository.getReferenceById(id);
+        return userRepository.findByLoyaltyPointAndIsDeletedFalse(loyaltyPoint);
     }
 
     public void updateRankForUser(User user) {
-        LoyaltyPoint rank = loyaltyPointRepository.getReferenceById(calculateRank(user.getTotalAmount()));
-        List<LoyaltyPoint> ranks = new ArrayList<>();
-        ranks.add(rank);
-        user.setLoyaltyPoints(ranks);
+        long rankId = calculateRank(user.getTotalAmount());
+        LoyaltyPoint rank = loyaltyPointRepository.getReferenceById(rankId);
+        user.setLoyaltyPoint(rank);
+        userRepository.save(user);
     }
 
     public Long calculateRank(double point) {

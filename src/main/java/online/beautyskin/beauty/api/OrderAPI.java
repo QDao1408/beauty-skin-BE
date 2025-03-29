@@ -48,16 +48,16 @@ public class OrderAPI {
         return ResponseEntity.ok(orders);
     }
 
-    @PatchMapping("/updateStatusOrder/{id}")
+    @PatchMapping("/updateStatusOrder/{orderId}")
     @PreAuthorize("hasAnyAuthority('STAFF')")
-    public ResponseEntity updateStatus(@RequestParam OrderStatusEnums status, @PathVariable long id){
-        Order order = orderService.updateStatusOrder(status,id);
+    public ResponseEntity updateStatus(@RequestParam OrderStatusEnums status, @PathVariable long orderId){
+        Order order = orderService.updateStatusOrder(status,orderId);
         return ResponseEntity.ok(order);
     }
 
-    @PatchMapping("/updateStatusPayment/{id}")
-    public ResponseEntity updateStatusPayment(@RequestParam PaymentStatusEnums status, @PathVariable long id){
-        Order order = orderService.updateStatusPayment(status,id);
+    @PatchMapping("/updateStatusPayment/{orderId}")
+    public ResponseEntity updateStatusPayment(@RequestParam PaymentStatusEnums status, @PathVariable long orderId){
+        Order order = orderService.updateStatusPayment(status,orderId);
         return ResponseEntity.ok(order);
     }
 

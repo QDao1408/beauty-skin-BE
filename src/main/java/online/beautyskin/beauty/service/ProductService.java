@@ -78,8 +78,15 @@ public class ProductService {
     }
 
 
-    public Product getProductById(long id) {
-        return productRepository.findByIdAndIsDeletedFalse(id);
+    public ProductResponse getProductById(long id) {
+        Product product = productRepository.findByIdAndIsDeletedFalse(id);
+        if (product == null) {
+            throw new RuntimeException("Product not found");
+        }else{
+            ProductResponse productResponse = new ProductResponse();
+            mappingProductToProductResponse(product, productResponse);
+            return productResponse;
+        }
     }
 
     public Product createProduct(ProductRequest productRequest) {
@@ -258,37 +265,18 @@ public class ProductService {
 
     public List<ProductResponse> getBySkinType(long skinTypeId) {
         List<Product> products = productRepository.findBySkinTypesIdAndIsDeletedFalse(skinTypeId);
-        List<ProductResponse> productResponses = new ArrayList<>();
         if (products.isEmpty()) {
             throw new RuntimeException("Product list is empty");
         }else {
+            List<ProductResponse> productResponses = new ArrayList<>();
             for (Product product : products) {
                 ProductResponse productResponse = new ProductResponse();
-                productResponse.setId(product.getId());
-                productResponse.setName(product.getName());
-                productResponse.setDescription(product.getDescription());
-                productResponse.setStock(product.getStock());
-                productResponse.setCreateDateTime(product.getCreateDateTime());
-                productResponse.setLastUpdateDateTime(product.getLastUpdateDateTime());
-                productResponse.setExpiredDateTime(product.getExpiredDateTime());
-                productResponse.setStatus(product.getStatus());
-                productResponse.setInstruction(product.getInstruction());
-                productResponse.setPrice(product.getPrice());
-                productResponse.setIngredient(product.getIngredient());
-                productResponse.setCategory(product.getCategory());
-                productResponse.setSkinTypes(product.getSkinTypes());
-                productResponse.setSkinConcerns(product.getSkinConcerns());
-                productResponse.setTags(product.getTags());
-                productResponse.setForms(product.getForms());
-                productResponse.setRoutineSteps(product.getRoutineSteps());
-                productResponse.setImages(product.getImages());
-                productResponse.setFavoritedByUsers(product.getFavoritedByUsers());
-                productResponse.setAverageRating(productRepository.findAverageRatingByProductId(product.getId()));
-                productResponse.setProductSold(productRepository.findTotalSoldByProductId(product.getId()));
+                mappingProductToProductResponse(product, productResponse);
                 productResponses.add(productResponse);
             }
+            return productResponses;
         }
-        return productResponses;
+
     }
 
     public List<Product> getBySkinConcern(long concernId) {
@@ -318,36 +306,42 @@ public class ProductService {
 
     public List<ProductResponse> getFromCateId(long id) {
         List<Product> products = productRepository.getByCategory(categoryRepository.findById(id));
-        List<ProductResponse> productResponses = new ArrayList<>();
+
         if (products.isEmpty()) {
             throw new RuntimeException("Product list is empty");
         }else {
+            List<ProductResponse> productResponses = new ArrayList<>();
             for (Product product : products) {
                 ProductResponse productResponse = new ProductResponse();
-                productResponse.setId(product.getId());
-                productResponse.setName(product.getName());
-                productResponse.setDescription(product.getDescription());
-                productResponse.setStock(product.getStock());
-                productResponse.setCreateDateTime(product.getCreateDateTime());
-                productResponse.setLastUpdateDateTime(product.getLastUpdateDateTime());
-                productResponse.setExpiredDateTime(product.getExpiredDateTime());
-                productResponse.setStatus(product.getStatus());
-                productResponse.setInstruction(product.getInstruction());
-                productResponse.setPrice(product.getPrice());
-                productResponse.setIngredient(product.getIngredient());
-                productResponse.setCategory(product.getCategory());
-                productResponse.setSkinTypes(product.getSkinTypes());
-                productResponse.setSkinConcerns(product.getSkinConcerns());
-                productResponse.setTags(product.getTags());
-                productResponse.setForms(product.getForms());
-                productResponse.setRoutineSteps(product.getRoutineSteps());
-                productResponse.setImages(product.getImages());
-                productResponse.setFavoritedByUsers(product.getFavoritedByUsers());
-                productResponse.setAverageRating(productRepository.findAverageRatingByProductId(product.getId()));
-                productResponse.setProductSold(productRepository.findTotalSoldByProductId(product.getId()));
+                mappingProductToProductResponse(product, productResponse);
                 productResponses.add(productResponse);
             }
+            return productResponses;
         }
-        return productResponses;
+    }
+
+    public ProductResponse mappingProductToProductResponse(Product product, ProductResponse productResponse) {
+        productResponse.setId(product.getId());
+        productResponse.setName(product.getName());
+        productResponse.setDescription(product.getDescription());
+        productResponse.setStock(product.getStock());
+        productResponse.setCreateDateTime(product.getCreateDateTime());
+        productResponse.setLastUpdateDateTime(product.getLastUpdateDateTime());
+        productResponse.setExpiredDateTime(product.getExpiredDateTime());
+        productResponse.setStatus(product.getStatus());
+        productResponse.setInstruction(product.getInstruction());
+        productResponse.setPrice(product.getPrice());
+        productResponse.setIngredient(product.getIngredient());
+        productResponse.setCategory(product.getCategory());
+        productResponse.setSkinTypes(product.getSkinTypes());
+        productResponse.setSkinConcerns(product.getSkinConcerns());
+        productResponse.setTags(product.getTags());
+        productResponse.setForms(product.getForms());
+        productResponse.setRoutineSteps(product.getRoutineSteps());
+        productResponse.setImages(product.getImages());
+        productResponse.setFavoritedByUsers(product.getFavoritedByUsers());
+        productResponse.setAverageRating(productRepository.findAverageRatingByProductId(product.getId()));
+        productResponse.setProductSold(productRepository.findTotalSoldByProductId(product.getId()));
+        return productResponse;
     }
 }

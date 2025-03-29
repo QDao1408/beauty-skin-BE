@@ -73,8 +73,8 @@ public class ProductAPI {
 
     @GetMapping("/getById/{id}")
     public ResponseEntity getProductById(@PathVariable long id) {
-        Product product = productService.getProductById(id);
-        return ResponseEntity.ok(product);
+        ProductResponse productResponse = productService.getProductById(id);
+        return ResponseEntity.ok(productResponse);
     }
 
     @PostMapping("/create")

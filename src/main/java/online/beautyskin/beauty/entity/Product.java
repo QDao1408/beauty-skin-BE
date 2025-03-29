@@ -58,18 +58,16 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<Feedback> feedbacks = new ArrayList<>();
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonIgnore
     private CartDetails cartDetails;
 
     @OneToMany(mappedBy = "product")
-    @JsonIgnore
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
 

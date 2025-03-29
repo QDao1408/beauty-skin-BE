@@ -42,6 +42,7 @@ public class Promotion {
     private LoyaltyPoint loyaltyPoint;
 
     @OneToMany(mappedBy = "promotion", orphanRemoval = true)
+    @JsonIgnore
     private List<Order> orders = new ArrayList<>();
 
     @AssertTrue(message = "Promotion's end date must be after the start date.")

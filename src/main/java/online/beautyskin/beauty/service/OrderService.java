@@ -385,6 +385,7 @@ public class OrderService {
             order.setPaymentStatus(PaymentStatusEnums.PAID);
             // save into transaction
             transactionService.createTransactionForCreateOrder(order, TransactionEnums.COD);
+            loyaltyPointService.updateRankForUser(order.getUser());
         }
         return orderRepository.save(order);
     }

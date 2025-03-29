@@ -14,12 +14,16 @@ public class LoyaltyPoint {
     private String rankName; // dong, bac, vang, kim cuong
     private long amountLevel; // 5tr, 10tr, 20tr, 30tr
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(
-            name = "mapping_user_rank",
-            joinColumns = @JoinColumn(name = "rank_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+//    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+//    @JoinTable(
+//            name = "mapping_user_rank",
+//            joinColumns = @JoinColumn(name = "rank_id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id")
+//    )
+//    private List<User> users = new ArrayList<>();
+
+    @OneToMany(mappedBy = "loyaltyPoint")
+    @JsonIgnore
     private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "loyaltyPoint", cascade = CascadeType.ALL, orphanRemoval = true)

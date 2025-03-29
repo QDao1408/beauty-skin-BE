@@ -74,9 +74,9 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Feedback> feedbacks = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "users", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JsonIgnore
-    private List<LoyaltyPoint> loyaltyPoints = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "rank_id")
+    private LoyaltyPoint loyaltyPoint;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
@@ -282,15 +282,11 @@ public class User implements UserDetails {
         this.isActive = isActive;
     }
 
-    public List<LoyaltyPoint> getLoyaltyPoints() {
-        return loyaltyPoints;
+    public LoyaltyPoint getLoyaltyPoint() {
+        return loyaltyPoint;
     }
 
-    public void setLoyaltyPoints(List<LoyaltyPoint> loyaltyPoints) {
-        this.loyaltyPoints = loyaltyPoints;
+    public void setLoyaltyPoint(LoyaltyPoint loyaltyPoint) {
+        this.loyaltyPoint = loyaltyPoint;
     }
-
-    
-    
-
 }

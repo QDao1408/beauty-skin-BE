@@ -84,4 +84,19 @@ public class DashboardService {
 
         return revenueStats;
     }
+
+    public List<Map<String, Object>> getMonthlyRevenueByYear(int year) {
+        List<Object[]> revenueData = orderRepository.getMonthlyRevenueByYear(year);
+        List<Map<String, Object>> revenueStats = new ArrayList<>();
+
+        for (Object[] row : revenueData) {
+            Map<String, Object> revenueInfo = new HashMap<>();
+            revenueInfo.put("month", ((Number) row[0]).intValue()); // Tháng
+            revenueInfo.put("totalRevenue", ((Number) row[1]).doubleValue()); // Doanh thu
+
+            revenueStats.add(revenueInfo);
+        }
+
+        return revenueStats;
+    }
 }

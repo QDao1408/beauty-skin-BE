@@ -79,7 +79,6 @@ public class User implements UserDetails {
     private LoyaltyPoint loyaltyPoint;
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnore
     List<Order> orders = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

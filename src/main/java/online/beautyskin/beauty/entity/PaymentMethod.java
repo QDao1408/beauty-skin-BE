@@ -18,7 +18,6 @@ public class PaymentMethod {
     private boolean isDeleted;
 
     @OneToMany(mappedBy = "paymentMethod")
-    @JsonIgnore
     private List<Order> orders;
 
     public PaymentMethod() {

@@ -56,7 +56,7 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
             "FROM OrderDetail od " +
             "JOIN od.order o " +
             "WHERE od.product.id = :productId " +
-            "AND o.orderStatus = 'DELIVERED' " +
+            "AND o.orderStatus = 'CONFIRMED' " +
             "AND o.paymentStatus = 'PAID'")
     Long findTotalSoldByProductId(@Param("productId") Long productId);
 

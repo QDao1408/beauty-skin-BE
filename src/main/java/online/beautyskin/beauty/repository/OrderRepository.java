@@ -27,7 +27,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                         "EXTRACT(YEAR FROM o.order_date) AS year, " +
                         "SUM(o.total_price) AS totalRevenue " +
                         "FROM orders o " +
-                        "WHERE o.order_status = 'DELIVERED' " +
+                        "WHERE o.order_status = 'CONFIRMED' " +
                         "AND o.payment_status = 'PAID' " +
                         "GROUP BY year, month " +
                         "ORDER BY year DESC, month DESC", nativeQuery = true)

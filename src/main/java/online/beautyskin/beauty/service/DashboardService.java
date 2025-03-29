@@ -32,19 +32,19 @@ public class DashboardService {
         stats.put("products", totalProducts);
 
         // Tổng doanh thu
-        double totalRevenue = orderRepository.getTotalRevenue(OrderStatusEnums.DELIVERED, PaymentStatusEnums.PAID);
+        double totalRevenue = orderRepository.getTotalRevenue(OrderStatusEnums.CONFIRMED, PaymentStatusEnums.PAID);
         stats.put("revenue", totalRevenue);
 
         // Số lượng Order đã hoàn thành
-        long completedOrders = orderRepository.countByStatus(OrderStatusEnums.DELIVERED);
+        long completedOrders = orderRepository.countByStatus(OrderStatusEnums.CONFIRMED);
         stats.put("completedOrders", completedOrders);
 
 //         Số lượng customer
-        long totalCustomers = orderRepository.countCustomersWithDeliveredAndPaidOrders(OrderStatusEnums.DELIVERED, PaymentStatusEnums.PAID);
+        long totalCustomers = orderRepository.countCustomersWithDeliveredAndPaidOrders(OrderStatusEnums.CONFIRMED, PaymentStatusEnums.PAID);
         stats.put("customersWithOrders", totalCustomers);
 
         // top 3 khách hàng thân thiết trong 1 tháng
-        List<Object[]> topCustomers = orderRepository.findTop3SpendingCustomers(OrderStatusEnums.DELIVERED, PaymentStatusEnums.PAID);
+        List<Object[]> topCustomers = orderRepository.findTop3SpendingCustomers(OrderStatusEnums.CONFIRMED, PaymentStatusEnums.PAID);
         List<Map<String, Object>> topCustomersList = new ArrayList<>();
 
         for (Object[] customerData : topCustomers) {
@@ -56,7 +56,7 @@ public class DashboardService {
         stats.put("topCustomers", topCustomersList);
 
         //top 5 sản phẩm bán chạy nhất
-        List<Object[]> topProducts = productRepository.findTop5BestSellingProductsThisMonth(OrderStatusEnums.DELIVERED, PaymentStatusEnums.PAID);
+        List<Object[]> topProducts = productRepository.findTop5BestSellingProductsThisMonth(OrderStatusEnums.CONFIRMED, PaymentStatusEnums.PAID);
         List<Map<String, Object>> topProductsList = new ArrayList<>();
 
         for (Object[] productData : topProducts) {

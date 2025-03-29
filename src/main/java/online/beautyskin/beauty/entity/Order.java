@@ -43,14 +43,17 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "payment_id", nullable = false)
+    @JsonIgnore
     private PaymentMethod paymentMethod;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "promotion_id")
+    @JsonIgnore
     private Promotion promotion;
 
 

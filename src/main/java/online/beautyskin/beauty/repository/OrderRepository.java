@@ -60,4 +60,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
         List<Order> findByOrderStatus(OrderStatusEnums orderStatus);
 
+        @Query(value = "SELECT EXTRACT(MONTH FROM o.order_date) AS month, " +
+                "SUM(o.total_price) AS totalRevenue " +
+                "FROM orders o " +
+                "WHERE o.order_status = 'CONFIRMED' " +
+                "AND o.payment_status = 'PAID' " +
+                "AND EXTRACT(YEAR FROM o.order_date) = :year " +
+                "GROUP BY month " +
+                "ORDER BY month ASC", nativeQuery = true)
+        List<Object[]> getMonthlyRevenueByYear(@Param("year") int year);
 }

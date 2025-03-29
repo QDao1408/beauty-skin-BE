@@ -17,7 +17,6 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<Product> products = new ArrayList<Product>();
 
     public List<Product> getProducts() {

@@ -51,7 +51,6 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "promotion_id")
-    
     private Promotion promotion;
 
 

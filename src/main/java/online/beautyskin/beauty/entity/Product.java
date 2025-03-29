@@ -68,6 +68,7 @@ public class Product {
     private CartDetails cartDetails;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
 

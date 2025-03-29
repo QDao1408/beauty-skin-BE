@@ -37,7 +37,8 @@ public class LoyaltyPointService {
     }
 
     public void updateRankForUser(User user) {
-        LoyaltyPoint rank = loyaltyPointRepository.getReferenceById(calculateRank(user.getTotalAmount()));
+        long rankId = calculateRank(user.getTotalAmount());
+        LoyaltyPoint rank = loyaltyPointRepository.getReferenceById(rankId);
         List<LoyaltyPoint> ranks = new ArrayList<>();
         ranks.add(rank);
         user.setLoyaltyPoints(ranks);

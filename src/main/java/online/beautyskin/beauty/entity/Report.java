@@ -28,7 +28,6 @@ public class Report {
 
     @OneToOne
     @JoinColumn(name = "order_id")
-    @JsonIgnore
     private Order order;
 
     private LocalDateTime reportDate;

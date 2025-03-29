@@ -41,6 +41,7 @@ public class LoyaltyPointService {
         List<LoyaltyPoint> ranks = new ArrayList<>();
         ranks.add(rank);
         user.setLoyaltyPoints(ranks);
+        userRepository.save(user);
     }
 
     public Long calculateRank(double point) {

@@ -37,10 +37,12 @@ public class Report {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
+    @JsonIgnore
     private User customer;
 
     @ManyToOne
     @JoinColumn(name = "manager_id")
+    @JsonIgnore
     private User manager;
 
     @ManyToMany

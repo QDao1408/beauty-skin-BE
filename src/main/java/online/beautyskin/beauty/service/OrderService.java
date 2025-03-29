@@ -14,6 +14,7 @@ import online.beautyskin.beauty.utils.UserUtils;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
@@ -205,21 +206,9 @@ public class OrderService {
             }
         }
         order.setPaymentMethod(cod);
-        order.setPaymentStatus(PaymentStatusEnums.PAID);
+        order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
         orderRepository.save(order);
-        // save into transaction
-        Transaction transaction = new Transaction();
-        String des = "User " + order.getUser().getId()
-                + " pay for order " + order.getId();
-        transaction.setTransactionDate(LocalDateTime.now());
-        transaction.setEnums(TransactionEnums.COD);
-        transaction.setOrders(order);
-        transaction.setAmount(order.getTotalPrice());
-        transaction.setDescription(des);
-        transaction.setIncome(true);
-        transactionRepository.save(transaction);
-
         // create task for staff to assign orders
         createTask(order);
         return order;
@@ -313,63 +302,21 @@ public class OrderService {
     public Order updateStatusOrder(OrderStatusEnums status, long id) {
         Order order = orderRepository.findOrderById(id);
         order.setOrderStatus(status);
-        if (status == OrderStatusEnums.IN_PROGRESS) {
-            StaffTask staffTask1 = staffTaskRepository.findByOrder(order);
-            staffTask1.setStaff(userUtils.getCurrentUser());
-            staffTask1.setLastUpdate(LocalDateTime.now());
-            staffTask1.setStaffTaskEnums(StaffTaskEnums.IN_PROGRESS);
-            staffTaskRepository.save(staffTask1);
-            for (OrderDetail orderDetail : order.getOrderDetails()) {
-                Product product = orderDetail.getProduct();
-                product.setStock(product.getStock() - orderDetail.getQuantity());
-                productRepository.save(product);
-            }
-
-        } else if (status == OrderStatusEnums.SHIPPED) {
-            StaffTask staffTask2 = staffTaskRepository.findByOrder(order);
-            staffTask2.setLastUpdate(LocalDateTime.now());
-            staffTask2.setStaffTaskEnums(StaffTaskEnums.SHIPPED);
-            staffTaskRepository.save(staffTask2);
-        } else if (status == OrderStatusEnums.CANCELLED) {
-            for (OrderDetail orderDetail : order.getOrderDetails()) {
-                Product product = orderDetail.getProduct();
-                product.setStock(product.getStock() + orderDetail.getQuantity());
-                productRepository.save(product);
-            }
-            // every time user cancel order, user's total amount will be updated, there fore
-            // user rank will be updated
-            User user = order.getUser();
-            // update total amount
-            user.setTotalAmount(user.getTotalAmount() - order.getTotalPrice());
-            // update rank
-            loyaltyPointService.updateRankForUser(user);
-            userRepository.save(user);
-            // update promotion
-            Promotion promotion = order.getPromotion();
-            if (promotion != null) {
-                promotion.setNumOfPromo(promotion.getNumOfPromo() + 1);
-                promotionRepository.save(promotion);
-            }
-            // create refund transaction
-            transactionService.createRefundTransaction(order);
-        } else if (status == OrderStatusEnums.DELIVERED) {
-            StaffTask staffTask3 = staffTaskRepository.findByOrder(order);
-            staffTask3.setLastUpdate(LocalDateTime.now());
-            staffTask3.setStaffTaskEnums(StaffTaskEnums.DELIVERED);
-            staffTaskRepository.save(staffTask3);
-        } else if (status == OrderStatusEnums.REFUNDED) {
-            // create transaction for refund
-            Transaction transaction = new Transaction();
-            String des = "Refund order " + order.getId()
-                    + " for user " + order.getUser().getId();
-            transaction.setTransactionDate(LocalDateTime.now());
-            transaction.setEnums(TransactionEnums.REFUND);
-            transaction.setOrders(order);
-            transaction.setAmount(order.getTotalPrice());
-            transaction.setDescription(des);
-            transaction.setIncome(false);
-            transactionRepository.save(transaction);
-            order.setOrderStatus(OrderStatusEnums.DELIVERED);
+        if (status == OrderStatusEnums.IN_PROGRESS) {// xử lí đơn hàng
+            updateOrderInProgress(id);
+        } else if (status == OrderStatusEnums.SHIPPING) {// đơn hàng đang được giao
+            updateOrderShipped(id);
+        } else if (status == OrderStatusEnums.CANCELLED) {// user phải hủy đơn hàng trc khi đơn hàng dc xử lí
+            updateOrderCancelled(id);
+        } else if (status == OrderStatusEnums.DELIVERED) {// đơn hàng đã đc giao tới user
+            updateOrderDelivered(id);
+        } else if (status == OrderStatusEnums.CONFIRMED) {// user xác nhận đơn hàng, sau đó kh dc refund
+            updateOrderConfirmed(id);
+        } else if (status == OrderStatusEnums.REFUND_REQ) {// user gửi yêu cấu refund sp, chờ manager duyệt
+            updateOrderRefundRequest(id);
+        } else if (status == OrderStatusEnums.REFUNDED) {// đơn được duyệt, trả tiền cho user, manager chỉnh stock lại =
+                                                         // tay
+            updateOrderRefunded(id);
         }
         return orderRepository.save(order);
     }
@@ -412,4 +359,108 @@ public class OrderService {
         return amount;
     }
 
+    public Order updateOrderInProgress(long orderId) {
+        Order order = orderRepository.findOrderById(orderId);
+        // update staff task
+        StaffTask staffTask1 = staffTaskRepository.findByOrder(order);
+        staffTask1.setStaff(userUtils.getCurrentUser());
+        staffTask1.setLastUpdate(LocalDateTime.now());
+        staffTask1.setStaffTaskEnums(StaffTaskEnums.IN_PROGRESS);
+        staffTaskRepository.save(staffTask1);
+        return order;
+    }
+
+    public Order updateOrderShipped(long orderId) {
+        Order order = orderRepository.findOrderById(orderId);
+        order.setOrderStatus(OrderStatusEnums.SHIPPING);
+        long COD = 2l; // COD id is 2
+        // update staff task
+        StaffTask staffTask2 = staffTaskRepository.findByOrder(order);
+        staffTask2.setLastUpdate(LocalDateTime.now());
+        staffTask2.setStaffTaskEnums(StaffTaskEnums.SHIPPING);
+        staffTaskRepository.save(staffTask2);
+        // create transaction if payment method is COD
+        if (order.getPaymentMethod().getId() == COD) {
+            // shipper will pay the order and collect back form customer when delivered
+            order.setPaymentStatus(PaymentStatusEnums.PAID);
+            // save into transaction
+            transactionService.createTransactionForCreateOrder(order, TransactionEnums.COD);
+        }
+        return orderRepository.save(order);
+    }
+
+    public Order updateOrderDelivered(long orderId) {
+        Order order = orderRepository.findOrderById(orderId);
+        order.setOrderStatus(OrderStatusEnums.DELIVERED);
+        // update staff task
+        StaffTask staffTask3 = staffTaskRepository.findByOrder(order);
+        staffTask3.setLastUpdate(LocalDateTime.now());
+        staffTask3.setStaffTaskEnums(StaffTaskEnums.DELIVERED);
+        staffTaskRepository.save(staffTask3);
+        return orderRepository.save(order);
+    }
+
+    public Order updateOrderCancelled(long orderId) {
+        Order order = orderRepository.findOrderById(orderId);
+        if (order.getOrderStatus() != OrderStatusEnums.PENDING) {
+            throw new NotFoundException("Đơn hàng đang được xử lí, bạn không thể hủy đơn hàng");
+        } else {
+            for (OrderDetail orderDetail : order.getOrderDetails()) {
+                Product product = orderDetail.getProduct();
+                product.setStock(product.getStock() + orderDetail.getQuantity());
+                productRepository.save(product);
+            }
+            // every time user cancel order, user's total amount will be updated, there fore
+            // user rank will be updated
+            User user = order.getUser();
+            // update total amount
+            user.setTotalAmount(user.getTotalAmount() - order.getTotalPrice());
+            // update rank
+            loyaltyPointService.updateRankForUser(user);
+            userRepository.save(user);
+            // update promotion
+            Promotion promotion = order.getPromotion();
+            if (promotion != null) {
+                promotion.setNumOfPromo(promotion.getNumOfPromo() + 1);
+                promotionRepository.save(promotion);
+            }
+            // create refund transaction
+            transactionService.createRefundTransaction(order);
+        }
+        return orderRepository.save(order);
+    }
+
+    public Order updateOrderRefundRequest(long orderId) {
+        Order order = orderRepository.findOrderById(orderId);
+        order.setOrderStatus(OrderStatusEnums.REFUND_REQ);
+        return orderRepository.save(order);
+    }
+
+    public Order updateOrderRefunded(long orderId) {
+        Order order = orderRepository.findOrderById(orderId);
+        order.setOrderStatus(OrderStatusEnums.REFUNDED);
+        transactionService.createRefundTransaction(order);
+        return orderRepository.save(order);
+    }
+
+    private Order updateOrderConfirmed(long orderId) {
+        Order order = orderRepository.findOrderById(orderId);
+        order.setOrderStatus(OrderStatusEnums.CONFIRMED);
+        return orderRepository.save(order);
+    }
+
+    @Scheduled(fixedRate = 60000 * 60) // repeat every hour
+    public void updateUnconfirmedOrder() {
+        List<Order> orders = orderRepository.findByOrderStatus(OrderStatusEnums.DELIVERED);
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Order order : orders) {
+            LocalDateTime orderTime = order.getOrderDate();
+            // 3 ngày kể từ ngày nhận hàng, đơn hàng sẽ tư update thành confirmed
+            if (orderTime.isBefore(now.minusDays(3)) || orderTime.isEqual(now.minusDays(3))) {
+                order.setOrderStatus(OrderStatusEnums.CONFIRMED);
+                orderRepository.save(order);
+            }
+        }
+    }
 }

@@ -39,7 +39,7 @@ public class FeedBackService {
 
         Order order = orderDetail.getOrder();
         // Kiểm tra trạng thái đơn hàng
-        if (!OrderStatusEnums.DELIVERED.equals(order.getOrderStatus())) {
+        if (!OrderStatusEnums.CONFIRMED.equals(order.getOrderStatus())) {
             throw new RuntimeException("Order chưa được giao, không thể đánh giá!");
         }
 

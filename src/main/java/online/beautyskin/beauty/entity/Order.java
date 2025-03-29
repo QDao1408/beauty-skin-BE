@@ -47,12 +47,10 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "promotion_id")
-    @JsonIgnore
     private Promotion promotion;
 
 

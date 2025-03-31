@@ -363,6 +363,12 @@ public class OrderService {
             throw new RuntimeException("Order không tồn tại");
         } else {
             order.setOrderStatus(OrderStatusEnums.CANCELLED);
+            List<OrderDetail> orderDetails = order.getOrderDetails();
+            for (OrderDetail orderDetail : orderDetails) {
+                Product product = orderDetail.getProduct();
+                product.setStock(product.getStock() + orderDetail.getQuantity());
+                productRepository.save(product);
+            }
             orderRepository.save(order);
         }
     }

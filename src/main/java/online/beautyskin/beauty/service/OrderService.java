@@ -134,20 +134,6 @@ public class OrderService {
         order.setOrderStatus(OrderStatusEnums.PENDING);
         // updateStatusOrder(order.getOrderStatus(), order.getId());
         Order newOrder = orderRepository.save(order);
-        Transaction transaction = new Transaction();
-        String des = "User " + order.getUser().getId()
-                + " pay for order " + order.getId();
-        transaction.setTransactionDate(LocalDateTime.now());
-        transaction.setEnums(TransactionEnums.VNPAY);
-        transaction.setOrders(order);
-        transaction.setAmount(order.getTotalPrice());
-        transaction.setDescription(des);
-        transaction.setIncome(true);
-        transactionRepository.save(transaction);
-        // every time user create order, user total amount updated, there for rank will
-        // be updated
-        user.setTotalAmount(user.getTotalAmount() + totalPrice);
-        loyaltyPointService.updateRankForUser(user);
         // create task for staff to assign orders
         createTask(order);
         return createURLPayment(newOrder);
@@ -326,6 +312,18 @@ public class OrderService {
     public Order updateStatusPayment(PaymentStatusEnums status, long id) {
         Order order = orderRepository.findOrderById(id);
         order.setPaymentStatus(status);
+        if (status == PaymentStatusEnums.PAID){
+            Transaction transaction = new Transaction();
+            String des = "User " + order.getUser().getId()
+                    + " pay for order " + order.getId();
+            transaction.setTransactionDate(LocalDateTime.now());
+            transaction.setEnums(TransactionEnums.VNPAY);
+            transaction.setOrders(order);
+            transaction.setAmount(order.getTotalPrice());
+            transaction.setDescription(des);
+            transaction.setIncome(true);
+            transactionRepository.save(transaction);
+        }
 
         if (status == PaymentStatusEnums.CANCELLED) {
             List<OrderDetail> orderDetails = order.getOrderDetails();
@@ -431,14 +429,6 @@ public class OrderService {
                 product.setStock(product.getStock() + orderDetail.getQuantity());
                 productRepository.save(product);
             }
-            // every time user cancel order, user's total amount will be updated, there fore
-            // user rank will be updated
-            User user = order.getUser();
-            // update total amount
-            user.setTotalAmount(user.getTotalAmount() - order.getTotalPrice());
-            // update rank
-            loyaltyPointService.updateRankForUser(user);
-            userRepository.save(user);
             // update promotion
             Promotion promotion = order.getPromotion();
             if (promotion != null) {
@@ -470,6 +460,11 @@ public class OrderService {
     private Order updateOrderConfirmed(long orderId) {
         Order order = orderRepository.findOrderById(orderId);
         order.setOrderStatus(OrderStatusEnums.CONFIRMED);
+
+        User user = order.getUser();
+        user.setTotalAmount(user.getTotalAmount() + order.getTotalPrice());
+        loyaltyPointService.updateRankForUser(user);
+
         return orderRepository.save(order);
     }
 

@@ -210,9 +210,11 @@ public class AuthenticationService implements UserDetailsService {
         try {
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(googleRequest.getToken());
             String email = decodedToken.getEmail();
-            User user = authenticationRepository.findByMail(email)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-            if (user == null) { // email chưa được dky thì dky tk mời
+
+            // Check if the user exists in the database
+            User user = authenticationRepository.findByMail(email).orElse(null);
+
+            if (user == null) { // If user is not found, create a new user
                 user = new User();
                 user.setFullName(decodedToken.getName());
                 user.setMail(email);
@@ -238,5 +240,6 @@ public class AuthenticationService implements UserDetailsService {
         }
         return null;
     }
+
 
 }

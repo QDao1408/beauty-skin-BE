@@ -50,14 +50,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         long countCustomersWithDeliveredAndPaidOrders(@Param("status") OrderStatusEnums status,
                         @Param("paymentStatus") PaymentStatusEnums paymentStatus);
 
-        @Query("SELECT COALESCE(SUM(o.totalPrice), 0) FROM Order o " +
-                        "WHERE o.user.id = :customerId " +
-                        "AND o.orderStatus = :status " +
-                        "AND o.paymentStatus = :paymentStatus")
-        double getTotalSpentByCustomer(@Param("customerId") Long customerId,
-                        @Param("status") OrderStatusEnums status,
-                        @Param("paymentStatus") PaymentStatusEnums paymentStatus);
-
         List<Order> findByOrderStatus(OrderStatusEnums orderStatus);
 
         @Query(value = "SELECT EXTRACT(MONTH FROM o.order_date) AS month, " +

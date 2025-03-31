@@ -145,7 +145,7 @@ public class AuthenticationService implements UserDetailsService {
                 userListResponse.setPhone(user.getPhone());
                 userListResponse.setActive(user.isActive());
                 userListResponse.setRole(user.getRoleEnums());
-                userListResponse.setTotalExpenditures(orderRepository.getTotalSpentByCustomer(user.getId(), OrderStatusEnums.CONFIRMED, PaymentStatusEnums.PAID));
+                userListResponse.setTotalExpenditures(user.getTotalAmount());
                 userListResponses.add(userListResponse);
             }
         }

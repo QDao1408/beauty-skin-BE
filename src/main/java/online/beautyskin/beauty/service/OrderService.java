@@ -67,6 +67,8 @@ public class OrderService {
 
     @Autowired
     private LoyaltyPointService loyaltyPointService;
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     OrderService(UserRepository userRepository, OrderAPI orderAPI) {
         this.userRepository = userRepository;
@@ -324,6 +326,25 @@ public class OrderService {
     public Order updateStatusPayment(PaymentStatusEnums status, long id) {
         Order order = orderRepository.findOrderById(id);
         order.setPaymentStatus(status);
+
+        if (status == PaymentStatusEnums.CANCELLED) {
+            List<OrderDetail> orderDetails = order.getOrderDetails();
+            for (OrderDetail orderDetail : orderDetails) {
+                Product product = orderDetail.getProduct();
+                product.setStock(product.getStock() + orderDetail.getQuantity());
+                productRepository.save(product); // Lưu lại số lượng stock mới
+            }
+
+            StaffTask staffTask = staffTaskRepository.findByOrder(order);
+            if (staffTask != null) {
+                staffTaskRepository.delete(staffTask);
+            }
+            orderRepository.delete(order);
+            for (OrderDetail orderDetail : orderDetails) {
+                orderDetailRepository.delete(orderDetail);
+            }
+            return null;
+        }
         return orderRepository.save(order);
     }
 

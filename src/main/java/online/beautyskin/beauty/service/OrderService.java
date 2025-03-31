@@ -401,11 +401,10 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    // bug cancel chưa cộng
     public Order updateOrderCancelled(long orderId) {
         Order order = orderRepository.findOrderById(orderId);
         if (order.getOrderStatus() != OrderStatusEnums.PENDING) {
-            throw new NotFoundException("Đơn hàng đang được xử lí, bạn không thể hủy đơn hàng");
-        } else {
             for (OrderDetail orderDetail : order.getOrderDetails()) {
                 Product product = orderDetail.getProduct();
                 product.setStock(product.getStock() + orderDetail.getQuantity());
@@ -427,8 +426,11 @@ public class OrderService {
             }
             // create refund transaction
             transactionService.createRefundTransaction(order);
+            return orderRepository.save(order);
+        } else {
+            throw new NotFoundException("Đơn hàng đang được xử lí, bạn không thể hủy đơn hàng");
         }
-        return orderRepository.save(order);
+
     }
 
     public Order updateOrderRefundRequest(long orderId) {

@@ -477,8 +477,7 @@ public class OrderService {
             LocalDateTime orderTime = order.getOrderDate();
             // 3 ngày kể từ ngày nhận hàng, đơn hàng sẽ tư update thành confirmed
             if (orderTime.isBefore(now.minusDays(3)) || orderTime.isEqual(now.minusDays(3))) {
-                order.setOrderStatus(OrderStatusEnums.CONFIRMED);
-                orderRepository.save(order);
+                updateOrderConfirmed(order.getId());
             }
         }
     }

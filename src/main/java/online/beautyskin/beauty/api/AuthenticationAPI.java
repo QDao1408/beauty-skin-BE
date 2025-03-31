@@ -61,7 +61,7 @@ public class AuthenticationAPI {
         return ResponseEntity.ok("Reset password successfully");
     }
 
-    @PostMapping("login-google")
+    @PostMapping("/login-google")
     public ResponseEntity loginGoogle(@RequestBody LoginGoogleRequest googleRequest) {
         AuthenticationResponse authenticationResponse = authenticationService.loginGoogle(googleRequest);
         return ResponseEntity.ok(authenticationResponse);

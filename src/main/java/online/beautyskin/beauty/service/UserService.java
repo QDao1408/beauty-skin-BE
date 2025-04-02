@@ -6,6 +6,7 @@ import online.beautyskin.beauty.entity.request.UserRequest;
 import online.beautyskin.beauty.entity.request.UserUpdateRequest;
 import online.beautyskin.beauty.enums.RoleEnums;
 import online.beautyskin.beauty.repository.UserRepository;
+import online.beautyskin.beauty.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserUtils userUtils;
 
 
     public User update(UserUpdateRequest user, long id) {
@@ -68,5 +71,10 @@ public class UserService {
         user.setMail(request.getEmail());
         user.setFullName(request.getFullName());
         return userRepository.save(user);
+    }
+
+    public double getTotalAmount() {
+        User user = userUtils.getCurrentUser();
+        return user.getTotalAmount();
     }
 }

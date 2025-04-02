@@ -14,9 +14,11 @@ import online.beautyskin.beauty.utils.UserUtils;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URLEncoder;
@@ -202,8 +204,13 @@ public class OrderService {
         return order;
     }
 
+//    public List<Order> getAll() {
+//        List<Order> orders = orderRepository.findAll();
+//        return orders;
+//    }
     public List<Order> getAll() {
-        return orderRepository.findAll();
+        Pageable pageable = PageRequest.of(0, 40);  // Trang đầu (0), giới hạn 40 đơn hàng
+        return orderRepository.findTop40LatestOrders(pageable);
     }
 
     public List<Order> getOrderByUser() {

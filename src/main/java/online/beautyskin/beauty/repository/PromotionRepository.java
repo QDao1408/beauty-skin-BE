@@ -20,5 +20,5 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
     Optional<Promotion> findAllByIdAndNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(long id, int numOfPromo);
 
-    List<Promotion> findAllByLoyaltyPoint(LoyaltyPoint loyaltyPoint);
+    List<Promotion> findAllByLoyaltyPointId(long id);
 }

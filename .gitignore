@@ -33,5 +33,5 @@ build/
 .vscode/
 
 # KHI NÀO XONG HẾT UNCOMMENT CÁI NÀY!
-#.env
-#firebase-admin.json
+.env
+firebase-admin.json

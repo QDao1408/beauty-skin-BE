@@ -4,6 +4,10 @@ import online.beautyskin.beauty.api.OrderAPI;
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.OrderDetailsRequest;
 import online.beautyskin.beauty.entity.request.OrderRequest;
+import online.beautyskin.beauty.entity.respone.OrderDetailResponse;
+import online.beautyskin.beauty.entity.respone.OrderProductResponse;
+import online.beautyskin.beauty.entity.respone.OrderResponse;
+import online.beautyskin.beauty.entity.respone.OrderUserResponse;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.enums.StaffTaskEnums;
@@ -204,7 +208,7 @@ public class OrderService {
         return order;
     }
 
-//    public List<Order> getAll() {
+    //    public List<Order> getAll() {
 //        List<Order> orders = orderRepository.findAll();
 //        return orders;
 //    }
@@ -213,9 +217,73 @@ public class OrderService {
         return orderRepository.findTop40LatestOrders(pageable);
     }
 
-    public List<Order> getOrderByUser() {
+    public List<OrderResponse> getAll2() {
+        List<Order> orders = orderRepository.findAll();
+        List<OrderResponse> responses = new ArrayList<>();
+        for(Order order : orders) {
+            responses.add(mappingOrderResponse(order));
+        }
+        return responses;
+    }
+
+    public OrderUserResponse mappingOrderUserResponse(User user) {
+        OrderUserResponse orderUserResponse = new OrderUserResponse();
+        orderUserResponse.setFullName(user.getFullName());
+        orderUserResponse.setId(user.getId());
+        orderUserResponse.setMail(user.getMail());
+        orderUserResponse.setPhone(user.getPhone());
+        return orderUserResponse;
+    }
+
+    public OrderProductResponse mappingOrderProductResponse(Product product) {
+        OrderProductResponse orderProductResponse = new OrderProductResponse();
+        orderProductResponse.setCategory(product.getCategory());
+        orderProductResponse.setId(product.getId());
+        orderProductResponse.setImage(product.getImages().getFirst());
+        orderProductResponse.setName(product.getName());
+        orderProductResponse.setPrice(product.getPrice());
+        orderProductResponse.setPromotion(product.getPromotion());
+        return orderProductResponse;
+    }
+
+    public List<OrderDetailResponse> mappingOrderDetailResponse(List<OrderDetail> orderDetails) {
+        List<OrderDetailResponse> responses = new ArrayList<>();
+        OrderDetailResponse response = new OrderDetailResponse();
+        for(OrderDetail orderDetail : orderDetails) {
+            response.setId(orderDetail.getOrderDetailId());
+            response.setOrderProductResponse(mappingOrderProductResponse(orderDetail.getProduct()));
+            response.setQuantity(orderDetail.getQuantity());
+            response.setTotalPrice(orderDetail.getTotalPrice());
+            response.setUnitPrice(orderDetail.getUnitPrice());
+            responses.add(response);
+        }
+        return responses;
+    }
+
+    public OrderResponse mappingOrderResponse(Order order) {
+        OrderResponse response = new OrderResponse();
+        response.setId(order.getId());
+        response.setOrderDate(order.getOrderDate());
+        response.setOrderDetails(mappingOrderDetailResponse(order.getOrderDetails()));
+        response.setOrderStatus(order.getOrderStatus());
+        response.setPaymentMethod(order.getPaymentMethod());
+        response.setPromotion(order.getPromotion());
+        response.setTotalPrice(order.getTotalPrice());
+        response.setUserResponse(mappingOrderUserResponse(order.getUser()));
+        return response;
+    }
+
+
+    public List<OrderResponse> getOrderByUser() {
         User user = userUtils.getCurrentUser();
-        return orderRepository.findAllByUserId((user.getId()));
+        List<Order> orders = orderRepository.findAllByUserId((user.getId()));
+        List<OrderResponse> responses = new ArrayList<>();
+        for(Order order : orders) {
+            OrderResponse orderResponse = mappingOrderResponse(order);
+            System.out.println(orderResponse.getUserResponse().getFullName());
+            responses.add(orderResponse);
+        }
+        return responses;
     }
 
     public String createURLPayment(Order order) throws Exception {
@@ -310,7 +378,7 @@ public class OrderService {
         } else if (status == OrderStatusEnums.REFUND_REQ) {// user gửi yêu cấu refund sp, chờ manager duyệt
             updateOrderRefundRequest(id);
         } else if (status == OrderStatusEnums.REFUNDED) {// đơn được duyệt, trả tiền cho user, manager chỉnh stock lại =
-                                                         // tay
+            // tay
             updateOrderRefunded(id);
         }
         return orderRepository.save(order);

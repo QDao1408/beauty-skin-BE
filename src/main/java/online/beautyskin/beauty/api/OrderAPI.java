@@ -3,6 +3,7 @@ package online.beautyskin.beauty.api;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import online.beautyskin.beauty.entity.Order;
 import online.beautyskin.beauty.entity.request.OrderRequest;
+import online.beautyskin.beauty.entity.respone.OrderResponse;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.service.OrderService;
@@ -41,10 +42,17 @@ public class OrderAPI {
         return ResponseEntity.ok(orders);
     }
 
+    @GetMapping("/getAll2")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity getAll2() {
+        List<OrderResponse> orders = orderService.getAll2();
+        return ResponseEntity.ok(orders);
+    }
+
     @GetMapping("/getByUser")
     @PreAuthorize("hasAnyAuthority('User')")
     public ResponseEntity getOrdersByUser() {
-        List<Order> orders = orderService.getOrderByUser();
+        List<OrderResponse> orders = orderService.getOrderByUser();
         return ResponseEntity.ok(orders);
     }
 

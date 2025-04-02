@@ -71,6 +71,7 @@ public class ProductService {
                 productResponse.setFavoritedByUsers(product.getFavoritedByUsers());
                 productResponse.setAverageRating(productRepository.findAverageRatingByProductId(product.getId()));
                 productResponse.setProductSold(productRepository.findTotalSoldByProductId(product.getId()));
+                productResponse.setPromotion(product.getPromotion());
                 productResponses.add(productResponse);
             }
         }

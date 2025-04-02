@@ -218,6 +218,7 @@ public class ProductService {
         product.setPrice(productRequest.getPrice());
         product.setIngredient(productRequest.getIngredient());
         product.setCategory(categoryRepository.findById(productRequest.getCategoryId()));
+        product.setPromotion(productRequest.getPromotion());
 
         List<SkinType> skinTypes = addSkinType(productRequest.getSkinTypeId());
         product.setSkinTypes(skinTypes);

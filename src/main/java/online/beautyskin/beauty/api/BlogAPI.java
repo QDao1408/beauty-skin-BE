@@ -50,7 +50,7 @@ public class BlogAPI {
         return ResponseEntity.ok(blog);
     }
 
-    @PostMapping("edit/{id}")
+    @PutMapping("edit/{id}")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity edit(@RequestBody Blog blog,@PathVariable long id){
         Blog newBlog = blogService.edit(blog);

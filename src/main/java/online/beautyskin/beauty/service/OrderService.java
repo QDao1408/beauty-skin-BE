@@ -237,7 +237,8 @@ public class OrderService {
         List<Order> orders = orderRepository.findAll();
         List<OrderResponse> responses = new ArrayList<>();
         for(Order order : orders) {
-            responses.add(mappingOrderResponse(order));
+            OrderResponse orderResponse = mappingOrderResponse(order);
+            responses.add(orderResponse);
         }
         return responses;
     }
@@ -253,7 +254,7 @@ public class OrderService {
 
     public OrderProductResponse mappingOrderProductResponse(Product product) {
         OrderProductResponse orderProductResponse = new OrderProductResponse();
-        orderProductResponse.setCategory(product.getCategory());
+        orderProductResponse.setCategory(product.getCategory().getName());
         orderProductResponse.setId(product.getId());
         orderProductResponse.setImage(product.getImages().getFirst());
         orderProductResponse.setName(product.getName());
@@ -281,9 +282,15 @@ public class OrderService {
         response.setId(order.getId());
         response.setOrderDate(order.getOrderDate());
         response.setOrderDetails(mappingOrderDetailResponse(order.getOrderDetails()));
-        response.setOrderStatus(order.getOrderStatus());
-        response.setPaymentMethod(order.getPaymentMethod());
-        response.setPromotion(order.getPromotion());
+        response.setOrderStatus(order.getOrderStatus().toString());
+        response.setPaymentMethod(order.getPaymentMethod().getName());
+        response.setPaymentStatus(order.getPaymentStatus().toString());
+        if(order.getPromotion() != null) {
+            response.setPromotion(order.getPromotion().getName());
+        } else {
+            response.setPromotion("");
+        }
+
         response.setTotalPrice(order.getTotalPrice());
         response.setUserResponse(mappingOrderUserResponse(order.getUser()));
         return response;

@@ -11,12 +11,13 @@ import online.beautyskin.beauty.enums.OrderStatusEnums;
 public class OrderResponse {
     private long id;
     private LocalDateTime orderDate;
-    private OrderStatusEnums orderStatus;
+    private String orderStatus;
     private double totalPrice;
-    private PaymentMethod paymentMethod;
+    private String paymentMethod;
+    private String paymentStatus;
     private List<OrderDetailResponse> orderDetails = new ArrayList<>();
     private OrderUserResponse userResponse;
-    private Promotion promotion;
+    private String promotion;
 
 
     public OrderResponse() {
@@ -33,30 +34,6 @@ public class OrderResponse {
     public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
-    public OrderStatusEnums getOrderStatus() {
-        return orderStatus;
-    }
-    public void setOrderStatus(OrderStatusEnums orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-    public Promotion getPromotion() {
-        return promotion;
-    }
-    public void setPromotion(Promotion promotion) {
-        this.promotion = promotion;
-    }
     public OrderUserResponse getUserResponse() {
         return userResponse;
     }
@@ -70,7 +47,43 @@ public class OrderResponse {
         this.orderDetails = orderDetails;
     }
 
+    public String getPromotion() {
+        return promotion;
+    }
 
+    public void setPromotion(String promotion) {
+        this.promotion = promotion;
+    }
 
+    public String getOrderStatus() {
+        return orderStatus;
+    }
 
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
 }

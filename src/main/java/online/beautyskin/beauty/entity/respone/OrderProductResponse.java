@@ -8,7 +8,7 @@ public class OrderProductResponse {
     private long id;
     private String name;
     private double price;
-    private Category category;
+    private String category;
     private Image image;
     private double promotion;
 
@@ -33,12 +33,7 @@ public class OrderProductResponse {
     public void setPrice(double price) {
         this.price = price;
     }
-    public Category getCategory() {
-        return category;
-    }
-    public void setCategory(Category category) {
-        this.category = category;
-    }
+
     public Image getImage() {
         return image;
     }
@@ -52,5 +47,11 @@ public class OrderProductResponse {
         this.promotion = promotion;
     }
 
+    public String getCategory() {
+        return category;
+    }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
 }

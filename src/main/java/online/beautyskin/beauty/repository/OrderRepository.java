@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -61,4 +63,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                 "GROUP BY month " +
                 "ORDER BY month ASC", nativeQuery = true)
         List<Object[]> getMonthlyRevenueByYear(@Param("year") int year);
+
+        @Query("SELECT o FROM Order o ORDER BY o.orderDate DESC")
+        List<Order> findTop40LatestOrders(Pageable pageable);
 }

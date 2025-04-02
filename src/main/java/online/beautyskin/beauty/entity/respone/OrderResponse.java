@@ -18,7 +18,7 @@ public class OrderResponse {
     private List<OrderDetailResponse> orderDetails = new ArrayList<>();
     private OrderUserResponse userResponse;
     private String promotion;
-
+    private List<OrderTransactionResponse> orderTransactions = new ArrayList<>();
 
     public OrderResponse() {
     }
@@ -85,5 +85,13 @@ public class OrderResponse {
 
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public List<OrderTransactionResponse> getOrderTransactions() {
+        return orderTransactions;
+    }
+
+    public void setOrderTransactions(List<OrderTransactionResponse> orderTransactions) {
+        this.orderTransactions = orderTransactions;
     }
 }

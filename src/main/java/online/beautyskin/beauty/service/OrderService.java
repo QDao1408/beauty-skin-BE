@@ -4,10 +4,7 @@ import online.beautyskin.beauty.api.OrderAPI;
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.OrderDetailsRequest;
 import online.beautyskin.beauty.entity.request.OrderRequest;
-import online.beautyskin.beauty.entity.respone.OrderDetailResponse;
-import online.beautyskin.beauty.entity.respone.OrderProductResponse;
-import online.beautyskin.beauty.entity.respone.OrderResponse;
-import online.beautyskin.beauty.entity.respone.OrderUserResponse;
+import online.beautyskin.beauty.entity.respone.*;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 import online.beautyskin.beauty.enums.StaffTaskEnums;
@@ -285,6 +282,7 @@ public class OrderService {
         response.setOrderStatus(order.getOrderStatus().toString());
         response.setPaymentMethod(order.getPaymentMethod().getName());
         response.setPaymentStatus(order.getPaymentStatus().toString());
+        response.setOrderTransactions(mappingOrderTransactionResponse(order.getTransactions()));
         if(order.getPromotion() != null) {
             response.setPromotion(order.getPromotion().getName());
         } else {
@@ -296,6 +294,17 @@ public class OrderService {
         return response;
     }
 
+    public List<OrderTransactionResponse> mappingOrderTransactionResponse(List<Transaction> transactions) {
+        List<OrderTransactionResponse> responses = new ArrayList<>();
+        OrderTransactionResponse response = new OrderTransactionResponse();
+        for(Transaction transaction : transactions) {
+            response.setTransactionEnum(transaction.getEnums().toString());
+            response.setTransactionDate(transaction.getTransactionDate());
+            response.setTransactionAmount(transaction.getAmount());
+            responses.add(response);
+        }
+        return responses;
+    }
 
 //    public List<OrderResponse> getOrderByUser() {
 //        User user = userUtils.getCurrentUser();

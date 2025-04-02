@@ -71,7 +71,6 @@ public class User implements UserDetails {
     private CustomerCart customerCart;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonIgnore
     private List<Feedback> feedbacks = new ArrayList<>();
 
     @ManyToOne

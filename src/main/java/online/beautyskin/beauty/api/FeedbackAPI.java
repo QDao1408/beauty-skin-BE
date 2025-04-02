@@ -4,6 +4,7 @@ package online.beautyskin.beauty.api;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import online.beautyskin.beauty.entity.Feedback;
 import online.beautyskin.beauty.entity.request.FeedbackRequest;
+import online.beautyskin.beauty.entity.respone.FeedbackResponse;
 import online.beautyskin.beauty.service.FeedBackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,8 +47,8 @@ public class FeedbackAPI {
     //display
     @GetMapping("getAll")
     public ResponseEntity getAll(){
-        feedbackList = feedBackService.getAll();
-        return ResponseEntity.ok(feedbackList);
+        List<FeedbackResponse> feedback = feedBackService.getAll();
+        return ResponseEntity.ok(feedback);
     }
     @GetMapping("getDeleteIsFalse")
     public ResponseEntity getDeleteIsFalse(){
@@ -56,7 +57,7 @@ public class FeedbackAPI {
     }
     @GetMapping("getFeedbackById/{productId}")
     public ResponseEntity getFeedbackByProductId(@PathVariable long productId){
-        List<Feedback> feedback = feedBackService.getFeedbackByProductId(productId);
+        List<FeedbackResponse> feedback = feedBackService.getFeedbackByProductId(productId);
         return ResponseEntity.ok(feedback);
     }
 }

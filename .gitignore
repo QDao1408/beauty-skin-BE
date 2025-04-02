@@ -34,4 +34,4 @@ build/
 
 # KHI NÀO XONG HẾT UNCOMMENT CÁI NÀY!
 .env
-firebase-admin.json
+/src/main/resources/firebase-admin.json

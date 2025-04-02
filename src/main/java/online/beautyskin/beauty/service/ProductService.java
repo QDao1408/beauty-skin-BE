@@ -102,6 +102,7 @@ public class ProductService {
         product.setPrice(productRequest.getPrice());
         product.setIngredient(productRequest.getIngredient());
         product.setCategory(categoryRepository.findById(productRequest.getCategoryId()));
+        product.setPromotion(productRequest.getPromotion());
 
         List<SkinType> skinTypes = addSkinType(productRequest.getSkinTypeId());
         product.setSkinTypes(skinTypes);
@@ -195,18 +196,6 @@ public class ProductService {
             return null;
         }
         return images;
-    }
-
-    public List<Promotion> addPromo(List<Long> promoId) {
-        List<Promotion> promotions = new ArrayList<>();
-        if(!promoId.isEmpty()) {
-            for(long id : promoId) {
-                promotions.add(promotionRepository.findByIdAndIsDeletedFalseAndIsOutDateFalse(id));
-            }
-        } else {
-            return null;
-        }
-        return promotions;
     }
 
     public Product deleteProduct(long id) {

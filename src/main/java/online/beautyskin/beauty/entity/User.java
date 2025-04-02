@@ -76,7 +76,6 @@ public class User implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "rank_id")
-    @JsonIgnore
     private LoyaltyPoint loyaltyPoint;
 
     @OneToMany(mappedBy = "user")

@@ -57,10 +57,5 @@ public class PromotionAPI {
         return ResponseEntity.ok(upd);
     }
 
-    @GetMapping("/get-by-user")
-    @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity getByUserRank() {
-        return ResponseEntity.ok(promotionService.getByUserRank());
-    }
     
 }

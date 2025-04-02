@@ -23,6 +23,7 @@ public class LoyaltyPoint {
 //    private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "loyaltyPoint")
+    @JsonIgnore
     private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "loyaltyPoint", cascade = CascadeType.ALL, orphanRemoval = true)

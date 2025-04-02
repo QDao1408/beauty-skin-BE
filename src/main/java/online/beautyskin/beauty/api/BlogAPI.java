@@ -3,6 +3,7 @@ package online.beautyskin.beauty.api;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import online.beautyskin.beauty.entity.Blog;
+import online.beautyskin.beauty.entity.request.BlogRequest;
 import online.beautyskin.beauty.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -52,8 +53,15 @@ public class BlogAPI {
 
     @PutMapping("edit/{id}")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity edit(@RequestBody Blog blog,@PathVariable long id){
-        Blog newBlog = blogService.edit(blog);
+    public ResponseEntity edit(@RequestBody BlogRequest blogRequest,@PathVariable long id){
+        Blog newBlog = blogService.edit(blogRequest, id);
         return ResponseEntity.ok(newBlog);
+    }
+
+    @GetMapping("get/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity getAllBlog(@PathVariable long id){
+        Blog blog = blogService.getById(id);
+        return ResponseEntity.ok(blog);
     }
 }

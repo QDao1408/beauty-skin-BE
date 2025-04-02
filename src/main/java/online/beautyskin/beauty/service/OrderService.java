@@ -208,82 +208,88 @@ public class OrderService {
         return order;
     }
 
-    //    public List<Order> getAll() {
+//        public List<Order> getAll() {
 //        List<Order> orders = orderRepository.findAll();
 //        return orders;
 //    }
     public List<Order> getAll() {
-        Pageable pageable = PageRequest.of(0, 40);  // Trang đầu (0), giới hạn 40 đơn hàng
-        return orderRepository.findTop40LatestOrders(pageable);
+        Pageable pageable = PageRequest.of(0, 60);  // Trang đầu (0), giới hạn 40 đơn hàng
+        return orderRepository.findTop60LatestOrders(pageable);
     }
 
-    public List<OrderResponse> getAll2() {
-        List<Order> orders = orderRepository.findAll();
-        List<OrderResponse> responses = new ArrayList<>();
-        for(Order order : orders) {
-            responses.add(mappingOrderResponse(order));
-        }
-        return responses;
-    }
+//    public List<OrderResponse> getAll2() {
+//        List<Order> orders = orderRepository.findAll();
+//        List<OrderResponse> responses = new ArrayList<>();
+//        for(Order order : orders) {
+//            responses.add(mappingOrderResponse(order));
+//        }
+//        return responses;
+//    }
+//
+//    public OrderUserResponse mappingOrderUserResponse(User user) {
+//        OrderUserResponse orderUserResponse = new OrderUserResponse();
+//        orderUserResponse.setFullName(user.getFullName());
+//        orderUserResponse.setId(user.getId());
+//        orderUserResponse.setMail(user.getMail());
+//        orderUserResponse.setPhone(user.getPhone());
+//        return orderUserResponse;
+//    }
+//
+//    public OrderProductResponse mappingOrderProductResponse(Product product) {
+//        OrderProductResponse orderProductResponse = new OrderProductResponse();
+//        orderProductResponse.setCategory(product.getCategory());
+//        orderProductResponse.setId(product.getId());
+//        orderProductResponse.setImage(product.getImages().getFirst());
+//        orderProductResponse.setName(product.getName());
+//        orderProductResponse.setPrice(product.getPrice());
+//        orderProductResponse.setPromotion(product.getPromotion());
+//        return orderProductResponse;
+//    }
+//
+//    public List<OrderDetailResponse> mappingOrderDetailResponse(List<OrderDetail> orderDetails) {
+//        List<OrderDetailResponse> responses = new ArrayList<>();
+//        OrderDetailResponse response = new OrderDetailResponse();
+//        for(OrderDetail orderDetail : orderDetails) {
+//            response.setId(orderDetail.getOrderDetailId());
+//            response.setOrderProductResponse(mappingOrderProductResponse(orderDetail.getProduct()));
+//            response.setQuantity(orderDetail.getQuantity());
+//            response.setTotalPrice(orderDetail.getTotalPrice());
+//            response.setUnitPrice(orderDetail.getUnitPrice());
+//            responses.add(response);
+//        }
+//        return responses;
+//    }
+//
+//    public OrderResponse mappingOrderResponse(Order order) {
+//        OrderResponse response = new OrderResponse();
+//        response.setId(order.getId());
+//        response.setOrderDate(order.getOrderDate());
+//        response.setOrderDetails(mappingOrderDetailResponse(order.getOrderDetails()));
+//        response.setOrderStatus(order.getOrderStatus());
+//        response.setPaymentMethod(order.getPaymentMethod());
+//        response.setPromotion(order.getPromotion());
+//        response.setTotalPrice(order.getTotalPrice());
+//        response.setUserResponse(mappingOrderUserResponse(order.getUser()));
+//        return response;
+//    }
 
-    public OrderUserResponse mappingOrderUserResponse(User user) {
-        OrderUserResponse orderUserResponse = new OrderUserResponse();
-        orderUserResponse.setFullName(user.getFullName());
-        orderUserResponse.setId(user.getId());
-        orderUserResponse.setMail(user.getMail());
-        orderUserResponse.setPhone(user.getPhone());
-        return orderUserResponse;
-    }
 
-    public OrderProductResponse mappingOrderProductResponse(Product product) {
-        OrderProductResponse orderProductResponse = new OrderProductResponse();
-        orderProductResponse.setCategory(product.getCategory());
-        orderProductResponse.setId(product.getId());
-        orderProductResponse.setImage(product.getImages().getFirst());
-        orderProductResponse.setName(product.getName());
-        orderProductResponse.setPrice(product.getPrice());
-        orderProductResponse.setPromotion(product.getPromotion());
-        return orderProductResponse;
-    }
+//    public List<OrderResponse> getOrderByUser() {
+//        User user = userUtils.getCurrentUser();
+//        List<Order> orders = orderRepository.findAllByUserId((user.getId()));
+//        List<OrderResponse> responses = new ArrayList<>();
+//        for(Order order : orders) {
+//            OrderResponse orderResponse = mappingOrderResponse(order);
+//            System.out.println(orderResponse.getUserResponse().getFullName());
+//            responses.add(orderResponse);
+//        }
+//        return responses;
+//    }
 
-    public List<OrderDetailResponse> mappingOrderDetailResponse(List<OrderDetail> orderDetails) {
-        List<OrderDetailResponse> responses = new ArrayList<>();
-        OrderDetailResponse response = new OrderDetailResponse();
-        for(OrderDetail orderDetail : orderDetails) {
-            response.setId(orderDetail.getOrderDetailId());
-            response.setOrderProductResponse(mappingOrderProductResponse(orderDetail.getProduct()));
-            response.setQuantity(orderDetail.getQuantity());
-            response.setTotalPrice(orderDetail.getTotalPrice());
-            response.setUnitPrice(orderDetail.getUnitPrice());
-            responses.add(response);
-        }
-        return responses;
-    }
-
-    public OrderResponse mappingOrderResponse(Order order) {
-        OrderResponse response = new OrderResponse();
-        response.setId(order.getId());
-        response.setOrderDate(order.getOrderDate());
-        response.setOrderDetails(mappingOrderDetailResponse(order.getOrderDetails()));
-        response.setOrderStatus(order.getOrderStatus());
-        response.setPaymentMethod(order.getPaymentMethod());
-        response.setPromotion(order.getPromotion());
-        response.setTotalPrice(order.getTotalPrice());
-        response.setUserResponse(mappingOrderUserResponse(order.getUser()));
-        return response;
-    }
-
-
-    public List<OrderResponse> getOrderByUser() {
+    public List<Order> getOrderByUser() {
         User user = userUtils.getCurrentUser();
         List<Order> orders = orderRepository.findAllByUserId((user.getId()));
-        List<OrderResponse> responses = new ArrayList<>();
-        for(Order order : orders) {
-            OrderResponse orderResponse = mappingOrderResponse(order);
-            System.out.println(orderResponse.getUserResponse().getFullName());
-            responses.add(orderResponse);
-        }
-        return responses;
+        return orders;
     }
 
     public String createURLPayment(Order order) throws Exception {

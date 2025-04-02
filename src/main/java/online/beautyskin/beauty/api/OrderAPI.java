@@ -42,17 +42,10 @@ public class OrderAPI {
         return ResponseEntity.ok(orders);
     }
 
-    @GetMapping("/getAll2")
-    @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity getAll2() {
-        List<OrderResponse> orders = orderService.getAll2();
-        return ResponseEntity.ok(orders);
-    }
-
     @GetMapping("/getByUser")
     @PreAuthorize("hasAnyAuthority('User')")
     public ResponseEntity getOrdersByUser() {
-        List<OrderResponse> orders = orderService.getOrderByUser();
+        List<Order> orders = orderService.getOrderByUser();
         return ResponseEntity.ok(orders);
     }
 

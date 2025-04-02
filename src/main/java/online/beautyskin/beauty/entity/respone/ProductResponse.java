@@ -30,6 +30,7 @@ public class ProductResponse {
     private List<Favorites> favoritedByUsers = new ArrayList<>();
     private Double averageRating;
     private Long productSold;
+    private double promotion;
 
     public Long getId() {
         return id;
@@ -208,5 +209,13 @@ public class ProductResponse {
     }
 
     public ProductResponse() {
+    }
+
+    public double getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(double promotion) {
+        this.promotion = promotion;
     }
 }

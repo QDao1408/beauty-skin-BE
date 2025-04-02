@@ -76,4 +76,9 @@ public class UserAPI {
         return ResponseEntity.ok(user);
     }
 
+    @GetMapping("/getRank")
+    public ResponseEntity getRank() {
+        return ResponseEntity.ok(userService.getTotalAmount());
+    }
+
 }

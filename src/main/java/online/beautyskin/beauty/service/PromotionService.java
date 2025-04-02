@@ -2,6 +2,7 @@ package online.beautyskin.beauty.service;
 
 import online.beautyskin.beauty.entity.LoyaltyPoint;
 import online.beautyskin.beauty.entity.Promotion;
+import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.PromoRequest;
 import online.beautyskin.beauty.repository.LoyaltyPointRepository;
 import online.beautyskin.beauty.repository.OrderRepository;
@@ -74,9 +75,5 @@ public class PromotionService {
         return loyaltyPointRepository.getReferenceById(rank);
     }
 
-    public List<Promotion> getByUserRank() {
-        LoyaltyPoint loyaltyPoint = userUtils.getCurrentUser().getLoyaltyPoint();
-        return promotionRepository.findAllByLoyaltyPoint(loyaltyPoint);
-    }
 
 }

@@ -358,10 +358,28 @@ public class OrderService {
     }
 
     public void cancelOrder(long orderId) {
+//        Order order = orderRepository.findOrderById(orderId);
+//        if (order == null) {
+//            throw new RuntimeException("Order không tồn tại");
+//        } else {
+//            order.setOrderStatus(OrderStatusEnums.CANCELLED);
+//            orderRepository.save(order);
+//        }
         Order order = orderRepository.findOrderById(orderId);
-        if (order == null) {
-            throw new RuntimeException("Order không tồn tại");
-        } else {
+        if (order.getOrderStatus() == OrderStatusEnums.PENDING) {
+            for (OrderDetail orderDetail : order.getOrderDetails()) {
+                Product product = orderDetail.getProduct();
+                product.setStock(product.getStock() + orderDetail.getQuantity());
+                productRepository.save(product);
+            }
+            // update promotion
+            Promotion promotion = order.getPromotion();
+            if (promotion != null) {
+                promotion.setNumOfPromo(promotion.getNumOfPromo() + 1);
+                promotionRepository.save(promotion);
+            }
+            // create refund transaction
+            transactionService.createRefundTransaction(order);
             order.setOrderStatus(OrderStatusEnums.CANCELLED);
             List<OrderDetail> orderDetails = order.getOrderDetails();
             for (OrderDetail orderDetail : orderDetails) {
@@ -370,6 +388,8 @@ public class OrderService {
                 productRepository.save(product);
             }
             orderRepository.save(order);
+        } else {
+            throw new NotFoundException("Đơn hàng đang được xử lí, bạn không thể hủy đơn hàng");
         }
     }
 

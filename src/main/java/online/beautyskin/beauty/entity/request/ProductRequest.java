@@ -45,7 +45,7 @@ public class ProductRequest {
 
     private List<Long> images;
 
-    private List<Long> promotions;
+    private double promotion;
 
     public ProductRequest() {
     }
@@ -201,11 +201,13 @@ public class ProductRequest {
         this.ingredient = ingredient;
     }
 
-    public List<Long> getPromotions() {
-        return promotions;
+    public double getPromotion() {
+        return promotion;
     }
 
-    public void setPromotions(List<Long> promotions) {
-        this.promotions = promotions;
+    public void setPromotion(double promotion) {
+        this.promotion = promotion;
     }
+
+    
 }

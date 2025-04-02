@@ -3,6 +3,8 @@ package online.beautyskin.beauty.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import online.beautyskin.beauty.enums.ProductEnums;
 
 import java.time.OffsetDateTime;
@@ -71,6 +73,9 @@ public class Product {
     @JsonIgnore
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
+    @Min(0)
+    @Max(1)
+    private double promotion;
 
 //    @ManyToMany(mappedBy = "products", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 //    private List<SkinType> skinTypes = new ArrayList<>();
@@ -283,5 +288,12 @@ public class Product {
 
     public void setFavoritedByUsers(List<Favorites> favoritedByUsers) {
         this.favoritedByUsers = favoritedByUsers;
+    }
+
+    public double getPromotion() {
+        return promotion;
+    }
+    public void setPromotion(double promotion) {
+        this.promotion = promotion;
     }
 }

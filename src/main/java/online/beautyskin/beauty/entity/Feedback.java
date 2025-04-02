@@ -39,7 +39,6 @@ public class Feedback {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
 
     public User getUser() { return user; }

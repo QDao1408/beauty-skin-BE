@@ -366,7 +366,7 @@ public class OrderService {
 //            orderRepository.save(order);
 //        }
         Order order = orderRepository.findOrderById(orderId);
-        if (order.getOrderStatus() != OrderStatusEnums.PENDING) {
+        if (order.getOrderStatus() == OrderStatusEnums.PENDING) {
             for (OrderDetail orderDetail : order.getOrderDetails()) {
                 Product product = orderDetail.getProduct();
                 product.setStock(product.getStock() + orderDetail.getQuantity());
@@ -380,6 +380,7 @@ public class OrderService {
             }
             // create refund transaction
             transactionService.createRefundTransaction(order);
+            order.setOrderStatus(OrderStatusEnums.CANCELLED);
             orderRepository.save(order);
         } else {
             throw new NotFoundException("Đơn hàng đang được xử lí, bạn không thể hủy đơn hàng");

@@ -4,6 +4,11 @@ import online.beautyskin.beauty.api.OrderAPI;
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.OrderDetailsRequest;
 import online.beautyskin.beauty.entity.request.OrderRequest;
+import online.beautyskin.beauty.entity.respone.OrderDetailResponse;
+import online.beautyskin.beauty.entity.respone.OrderProductResponse;
+import online.beautyskin.beauty.entity.respone.OrderResponse;
+import online.beautyskin.beauty.entity.respone.OrderTransactionResponse;
+import online.beautyskin.beauty.entity.respone.OrderUserResponse;
 import online.beautyskin.beauty.enums.*;
 import online.beautyskin.beauty.exception.NotFoundException;
 import online.beautyskin.beauty.repository.*;
@@ -269,7 +274,7 @@ public class OrderService {
         response.setOrderDate(order.getOrderDate());
         response.setOrderDetails(mappingOrderDetailResponse(order.getOrderDetails()));
         response.setOrderStatus(order.getOrderStatus().toString());
-        response.setPaymentMethod(order.getPaymentMethod().getName());
+        response.setPaymentMethod(order.getPaymentMethod().toString());
         response.setPaymentStatus(order.getPaymentStatus().toString());
         response.setOrderTransactions(mappingOrderTransactionResponse(order.getTransactions()));
         if(order.getPromotion() != null) {

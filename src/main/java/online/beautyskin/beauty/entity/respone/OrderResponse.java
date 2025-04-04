@@ -4,10 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import online.beautyskin.beauty.entity.PaymentMethod;
-import online.beautyskin.beauty.entity.Promotion;
-import online.beautyskin.beauty.enums.OrderStatusEnums;
-
 public class OrderResponse {
     private long id;
     private LocalDateTime orderDate;

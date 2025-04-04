@@ -65,8 +65,6 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Feedback> feedbacks = new ArrayList<>();
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    private CartDetails cartDetails;
 
     @OneToMany(mappedBy = "product")
     @JsonIgnore
@@ -190,14 +188,6 @@ public class Product {
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
-
-    public CartDetails getCartDetails() {
-        return cartDetails;
-    }
-
-    public void setCartDetails(CartDetails cartDetails) {
-        this.cartDetails = cartDetails;
-    }
 
     public List<OrderDetail> getOrderDetails() {
         return orderDetails;

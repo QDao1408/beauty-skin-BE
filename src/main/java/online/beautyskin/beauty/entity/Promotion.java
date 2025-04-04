@@ -37,7 +37,7 @@ public class Promotion {
 
     
     @ManyToOne(fetch = FetchType.LAZY) // Ensure Lazy Fetch
-    @JoinColumn(name = "rank_id")
+    @JoinColumn(name = "rank_id", referencedColumnName = "id")
     @JsonIgnore 
     private LoyaltyPoint loyaltyPoint;
 

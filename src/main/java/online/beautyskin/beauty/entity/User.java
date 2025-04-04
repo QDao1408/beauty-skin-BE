@@ -67,9 +67,6 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<UserAddress> addresses;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private CustomerCart customerCart;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Feedback> feedbacks = new ArrayList<>();
 
@@ -237,14 +234,6 @@ public class User implements UserDetails {
 
     public Boolean getActive() {
         return isActive;
-    }
-
-    public CustomerCart getCustomerCart() {
-        return customerCart;
-    }
-
-    public void setCustomerCart(CustomerCart customerCart) {
-        this.customerCart = customerCart;
     }
 
     public double getTotalAmount() {

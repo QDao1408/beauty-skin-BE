@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 @Entity
+@Table(name = "user_rank")
 public class LoyaltyPoint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

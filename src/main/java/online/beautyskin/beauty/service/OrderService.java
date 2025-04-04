@@ -4,11 +4,7 @@ import online.beautyskin.beauty.api.OrderAPI;
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.OrderDetailsRequest;
 import online.beautyskin.beauty.entity.request.OrderRequest;
-import online.beautyskin.beauty.entity.respone.*;
-import online.beautyskin.beauty.enums.OrderStatusEnums;
-import online.beautyskin.beauty.enums.PaymentStatusEnums;
-import online.beautyskin.beauty.enums.StaffTaskEnums;
-import online.beautyskin.beauty.enums.TransactionEnums;
+import online.beautyskin.beauty.enums.*;
 import online.beautyskin.beauty.exception.NotFoundException;
 import online.beautyskin.beauty.repository.*;
 import online.beautyskin.beauty.utils.UserUtils;
@@ -54,9 +50,6 @@ public class OrderService {
     private PromotionRepository promotionRepository;
 
     @Autowired
-    private PaymentMethodRepository paymentMethodRepository;
-
-    @Autowired
     private TransactionService transactionService;
 
     @Autowired
@@ -86,8 +79,6 @@ public class OrderService {
         User user = userUtils.getCurrentUser();
         order.setUser(user);
 
-        PaymentMethod vnpay = paymentMethodRepository.findById(1);
-
         UserAddress userAddress = addressRepository.findFirstByUserIdAndIsDeletedFalse(user.getId())
                 .orElseThrow(() -> new RuntimeException("No active address found for user"));
 
@@ -132,7 +123,7 @@ public class OrderService {
                 promotionRepository.save(promotion);
             }
         }
-        order.setPaymentMethod(vnpay);
+        order.setPaymentMethod(PaymentMethodEnums.VNPAY);
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
         // updateStatusOrder(order.getOrderStatus(), order.getId());
@@ -150,8 +141,6 @@ public class OrderService {
         User user = userUtils.getCurrentUser();
         order.setUser(user);
 
-        PaymentMethod cod = paymentMethodRepository.findById(2);
-
         UserAddress userAddress = addressRepository.findFirstByUserIdAndIsDeletedFalse(user.getId())
                 .orElseThrow(() -> new RuntimeException("No active address found for user"));
 
@@ -196,7 +185,7 @@ public class OrderService {
                 promotionRepository.save(promotion);
             }
         }
-        order.setPaymentMethod(cod);
+        order.setPaymentMethod(PaymentMethodEnums.COD);
         order.setPaymentStatus(PaymentStatusEnums.PENDING);
         order.setOrderStatus(OrderStatusEnums.PENDING);
         orderRepository.save(order);
@@ -525,7 +514,7 @@ public class OrderService {
         staffTask2.setStaffTaskEnums(StaffTaskEnums.SHIPPING);
         staffTaskRepository.save(staffTask2);
         // create transaction if payment method is COD
-        if (order.getPaymentMethod().getId() == COD) {
+        if (order.getPaymentMethod().equals("COD")) {
             // shipper will pay the order and collect back form customer when delivered
             order.setPaymentStatus(PaymentStatusEnums.PAID);
             // save into transaction

@@ -54,4 +54,7 @@ public class LoyaltyPointService {
         return rankId;
     }
 
+    public LoyaltyPoint createRank(LoyaltyPoint loyaltyPoint) {
+        return loyaltyPointRepository.save(loyaltyPoint);
+    }
 }

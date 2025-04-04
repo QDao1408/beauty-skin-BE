@@ -77,6 +77,13 @@ public class ProductAPI {
         return ResponseEntity.ok(productResponse);
     }
 
+    @GetMapping("/get-by-cate-and-skin-type")
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public ResponseEntity getByCateAndSkinType(@RequestParam long cateId, @RequestParam long skinTypeId) {
+        List<Product> products = productService.getByCateAndSkinType(cateId, skinTypeId);
+        return ResponseEntity.ok(products);
+    }
+
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity createProduct(@Valid @RequestBody ProductRequest product) {

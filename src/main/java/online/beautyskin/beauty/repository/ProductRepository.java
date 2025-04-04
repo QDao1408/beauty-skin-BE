@@ -13,64 +13,76 @@ import java.util.List;
 
 public interface ProductRepository extends CrudRepository<Product, Long> {
 
+        @Query("select p from Product p where p.name like %:name%")
+        public List<Product> findByName(String name);
 
-    @Query("select p from Product p where p.name like %:name%")
-    public List<Product> findByName(String name);
-    public List<Product> findByIsDeletedFalse();
-    public Product findById(long id);
-    List<Product> findByCategory(Category category);
+        public List<Product> findByIsDeletedFalse();
 
-    List<Product> findBySkinTypesIdAndIsDeletedFalse(long id);
+        public Product findById(long id);
 
-    List<Product> findBySkinConcernsIdAndIsDeletedFalse(long concernId);
+        List<Product> findByCategory(Category category);
 
-    List<Product> findByTagsIdAndIsDeletedFalse(long tagId);
+        List<Product> findBySkinTypesIdAndIsDeletedFalse(long id);
 
-    List<Product> findByRoutineStepsIdAndIsDeletedFalse(long stepId);
+        List<Product> findBySkinConcernsIdAndIsDeletedFalse(long concernId);
 
-    List<Product> findByFormsIdAndIsDeletedFalse(long id);
-    List<Image> findByImagesIdAndIsDeletedFalse(long id);
+        List<Product> findByTagsIdAndIsDeletedFalse(long tagId);
 
-    Product findByIdAndIsDeletedFalse(long id);
+        List<Product> findByRoutineStepsIdAndIsDeletedFalse(long stepId);
 
-    List<Product> getByCategory(Category category);
+        List<Product> findByFormsIdAndIsDeletedFalse(long id);
 
-    @Query("SELECT p.name, SUM(od.quantity) AS totalSold " +
-            "FROM OrderDetail od " +
-            "JOIN od.product p " +
-            "JOIN od.order o " +
-            "WHERE o.orderStatus = :orderStatus " +
-            "AND o.paymentStatus = :paymentStatus " +
-            "AND MONTH(o.orderDate) = MONTH(CURRENT_DATE) " +
-            "AND YEAR(o.orderDate) = YEAR(CURRENT_DATE) " +
-            "GROUP BY p.id, p.name " +
-            "ORDER BY totalSold DESC")
-    List<Object[]> findTop5BestSellingProduct();
+        List<Image> findByImagesIdAndIsDeletedFalse(long id);
 
-    @Query("SELECT COALESCE(AVG(r.rating), 0) " +
-            "FROM Feedback r " +
-            "WHERE r.product.id = :productId")
-    Double findAverageRatingByProductId(@Param("productId") Long productId);
+        Product findByIdAndIsDeletedFalse(long id);
 
-    @Query("SELECT COALESCE(SUM(od.quantity), 0) " +
-            "FROM OrderDetail od " +
-            "JOIN od.order o " +
-            "WHERE od.product.id = :productId " +
-            "AND o.orderStatus = 'CONFIRMED' " +
-            "AND o.paymentStatus = 'PAID'")
-    Long findTotalSoldByProductId(@Param("productId") Long productId);
+        List<Product> getByCategory(Category category);
 
-    @Query("SELECT p.name, SUM(od.quantity) AS totalSold " +
-            "FROM OrderDetail od " +
-            "JOIN od.product p " +
-            "JOIN od.order o " +
-            "WHERE o.orderStatus = :orderStatus " +
-            "AND o.paymentStatus = :paymentStatus " +
-            "AND MONTH(o.orderDate) = MONTH(CURRENT_DATE) " +
-            "AND YEAR(o.orderDate) = YEAR(CURRENT_DATE) " +
-            "GROUP BY p.id, p.name " +
-            "ORDER BY totalSold DESC " +
-            "LIMIT 5")
-    List<Object[]> findTop5BestSellingProductsThisMonth(@Param("orderStatus") OrderStatusEnums orderStatus,
-                                                        @Param("paymentStatus") PaymentStatusEnums paymentStatus);
+        @Query("SELECT p.name, SUM(od.quantity) AS totalSold " +
+                        "FROM OrderDetail od " +
+                        "JOIN od.product p " +
+                        "JOIN od.order o " +
+                        "WHERE o.orderStatus = :orderStatus " +
+                        "AND o.paymentStatus = :paymentStatus " +
+                        "AND MONTH(o.orderDate) = MONTH(CURRENT_DATE) " +
+                        "AND YEAR(o.orderDate) = YEAR(CURRENT_DATE) " +
+                        "GROUP BY p.id, p.name " +
+                        "ORDER BY totalSold DESC")
+        List<Object[]> findTop5BestSellingProduct();
+
+        @Query("SELECT COALESCE(AVG(r.rating), 0) " +
+                        "FROM Feedback r " +
+                        "WHERE r.product.id = :productId")
+        Double findAverageRatingByProductId(@Param("productId") Long productId);
+
+        @Query("SELECT COALESCE(SUM(od.quantity), 0) " +
+                        "FROM OrderDetail od " +
+                        "JOIN od.order o " +
+                        "WHERE od.product.id = :productId " +
+                        "AND o.orderStatus = 'CONFIRMED' " +
+                        "AND o.paymentStatus = 'PAID'")
+        Long findTotalSoldByProductId(@Param("productId") Long productId);
+
+        @Query("SELECT p.name, SUM(od.quantity) AS totalSold " +
+                        "FROM OrderDetail od " +
+                        "JOIN od.product p " +
+                        "JOIN od.order o " +
+                        "WHERE o.orderStatus = :orderStatus " +
+                        "AND o.paymentStatus = :paymentStatus " +
+                        "AND MONTH(o.orderDate) = MONTH(CURRENT_DATE) " +
+                        "AND YEAR(o.orderDate) = YEAR(CURRENT_DATE) " +
+                        "GROUP BY p.id, p.name " +
+                        "ORDER BY totalSold DESC " +
+                        "LIMIT 5")
+        List<Object[]> findTop5BestSellingProductsThisMonth(@Param("orderStatus") OrderStatusEnums orderStatus,
+                        @Param("paymentStatus") PaymentStatusEnums paymentStatus);
+        
+        @Query("select p " +
+                "from Product p " +
+                "join SkinType st " +
+                "where p.category.id = :cateId " +
+                "and st.id = :skinTypeId " +
+                "and p.isDeleted = false")
+        List<Product> findByCateAndSkinType(@Param("cateId")long cateId, @Param("skinTypeId") long skinTypeId);
+
 }

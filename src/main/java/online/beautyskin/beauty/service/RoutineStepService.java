@@ -2,6 +2,7 @@ package online.beautyskin.beauty.service;
 
 import online.beautyskin.beauty.entity.RoutineStep;
 import online.beautyskin.beauty.entity.request.RoutineStepRequest;
+import online.beautyskin.beauty.repository.CategoryRepository;
 import online.beautyskin.beauty.repository.RoutineRepository;
 import online.beautyskin.beauty.repository.RoutineStepRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,17 @@ import java.util.List;
 public class RoutineStepService {
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private RoutineStepRepository repository;
 
     @Autowired
     private RoutineRepository routineRepository;
+
+    RoutineStepService(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     public RoutineStep create(RoutineStepRequest request) {
         RoutineStep step = new RoutineStep();
@@ -24,6 +32,7 @@ public class RoutineStepService {
         step.setDescription(request.getDescription());
         step.setStepName(request.getStepName());
         step.setStepOrder(request.getStepOrder());
+        step.setCategory(categoryRepository.findById(request.getCategoryId()));
         return repository.save(step);
     }
 
@@ -33,6 +42,7 @@ public class RoutineStepService {
         step.setDescription(request.getDescription());
         step.setStepName(request.getStepName());
         step.setStepOrder(request.getStepOrder());
+        step.setCategory(categoryRepository.findById(request.getCategoryId()));
         return repository.save(step);
     }
 

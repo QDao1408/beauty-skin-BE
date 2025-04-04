@@ -38,6 +38,10 @@ public class RoutineStep {
     @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "cate_id")
+    private Category category;
+
     public RoutineStep() {}
     public RoutineStep(String description, String stepName, int stepOrder) {
         this.description = description;
@@ -61,4 +65,12 @@ public class RoutineStep {
     public void setRoutine(Routine routine) {
         this.routine = routine;
     }
+    public Category getCategory() {
+        return category;
+    }
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    
 }

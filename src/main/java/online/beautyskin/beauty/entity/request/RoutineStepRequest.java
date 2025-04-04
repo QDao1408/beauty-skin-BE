@@ -10,6 +10,8 @@ public class RoutineStepRequest {
 
     private Long routine;
 
+    private long categoryId;
+
     public RoutineStepRequest() {
     }
 
@@ -44,4 +46,14 @@ public class RoutineStepRequest {
     public void setRoutine(Long routine) {
         this.routine = routine;
     }
+
+    public long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    
 }

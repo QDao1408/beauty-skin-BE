@@ -65,5 +65,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         List<Object[]> getMonthlyRevenueByYear(@Param("year") int year);
 
         @Query("SELECT o FROM Order o ORDER BY o.orderDate DESC")
-        List<Order> findTop40LatestOrders(Pageable pageable);
+        List<Order> findTop60LatestOrders(Pageable pageable);
 }

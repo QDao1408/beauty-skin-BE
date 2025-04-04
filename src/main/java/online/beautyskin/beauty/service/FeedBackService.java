@@ -2,6 +2,7 @@ package online.beautyskin.beauty.service;
 
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.FeedbackRequest;
+import online.beautyskin.beauty.entity.respone.FeedbackResponse;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
 import online.beautyskin.beauty.repository.FeedbackRepository;
 import online.beautyskin.beauty.repository.ImageRepository;
@@ -130,13 +131,28 @@ public class FeedBackService {
     }
 
     //display
-    public List<Feedback> getAll(){
-        return feedBackRepository.findAll();
+    public List<FeedbackResponse> getAll(){
+        return converts(feedBackRepository.findAll());
     }
     public List<Feedback> getFeedbackByDeleteIsFalse(){
         return feedBackRepository.findByIsDeleteFalse();
     }
-    public List<Feedback> getFeedbackByProductId(long productId){
-        return feedBackRepository.findByProductId(productId);
+    public List<FeedbackResponse> getFeedbackByProductId(long productId){
+        return converts(feedBackRepository.findByProductId(productId));
     }
+    public List<FeedbackResponse> converts(List<Feedback> feedbacks){
+        List<FeedbackResponse> feedbackResponses = new ArrayList<>();
+        for (Feedback feedback : feedbacks) {
+            FeedbackResponse feedbackResponse = new FeedbackResponse();
+            feedbackResponse.setId(feedback.getId());
+            feedbackResponse.setFeedbackDate(feedback.getFeedBackDate());
+            feedbackResponse.setComment(feedback.getComment());
+            feedbackResponse.setImages(feedback.getImages());
+            feedbackResponse.setRating(feedback.getRating());
+            feedbackResponse.setUserName(feedback.getUser().getFullName());
+            feedbackResponses.add(feedbackResponse);
+        }
+        return feedbackResponses;
+    }
+
 }

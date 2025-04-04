@@ -71,6 +71,7 @@ public class ProductService {
                 productResponse.setFavoritedByUsers(product.getFavoritedByUsers());
                 productResponse.setAverageRating(productRepository.findAverageRatingByProductId(product.getId()));
                 productResponse.setProductSold(productRepository.findTotalSoldByProductId(product.getId()));
+                productResponse.setPromotion(product.getPromotion());
                 productResponses.add(productResponse);
             }
         }
@@ -334,5 +335,10 @@ public class ProductService {
         productResponse.setProductSold(productRepository.findTotalSoldByProductId(product.getId()));
         productResponse.setPromotion(product.getPromotion());
         return productResponse;
+    }
+
+
+    public List<Product> getByCateAndSkinType(long cateId, long skinTypeId) {
+        return  productRepository.findByCateAndSkinType(cateId, skinTypeId);
     }
 }

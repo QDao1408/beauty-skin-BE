@@ -194,19 +194,120 @@ public class OrderService {
         return order;
     }
 
-//    public List<Order> getAll() {
+//        public List<Order> getAll() {
 //        List<Order> orders = orderRepository.findAll();
 //        return orders;
 //    }
     public List<Order> getAll() {
-        Pageable pageable = PageRequest.of(0, 40);  // Trang đầu (0), giới hạn 40 đơn hàng
-        return orderRepository.findTop40LatestOrders(pageable);
+        Pageable pageable = PageRequest.of(0, 60);  // Trang đầu (0), giới hạn 40 đơn hàng
+        return orderRepository.findTop60LatestOrders(pageable);
     }
 
     public List<Order> getOrderByUser() {
         User user = userUtils.getCurrentUser();
-        return orderRepository.findAllByUserId((user.getId()));
+        List<Order> orders = orderRepository.findAllByUserId((user.getId()));
+        return orders;
     }
+
+    public Order getLastedOrder() {
+        User user = userUtils.getCurrentUser();
+        List<Order> order = orderRepository.findOrderByUserId(user.getId());
+        if(order.size() == 0) {
+            throw new RuntimeException("Người dùng chưa có đơn hàng nào");
+        } else {
+            return order.get(order.size() - 1);
+        }
+    }
+
+    public List<OrderResponse> getAll2() {
+        List<Order> orders = orderRepository.findAll();
+        List<OrderResponse> responses = new ArrayList<>();
+        for(Order order : orders) {
+            OrderResponse orderResponse = mappingOrderResponse(order);
+            responses.add(orderResponse);
+        }
+        return responses;
+    }
+
+    public OrderUserResponse mappingOrderUserResponse(User user) {
+        OrderUserResponse orderUserResponse = new OrderUserResponse();
+        orderUserResponse.setFullName(user.getFullName());
+        orderUserResponse.setId(user.getId());
+        orderUserResponse.setMail(user.getMail());
+        orderUserResponse.setPhone(user.getPhone());
+        return orderUserResponse;
+    }
+
+    public OrderProductResponse mappingOrderProductResponse(Product product) {
+        OrderProductResponse orderProductResponse = new OrderProductResponse();
+        orderProductResponse.setCategory(product.getCategory().getName());
+        orderProductResponse.setId(product.getId());
+        orderProductResponse.setImage(product.getImages().getFirst());
+        orderProductResponse.setName(product.getName());
+        orderProductResponse.setPrice(product.getPrice());
+        orderProductResponse.setPromotion(product.getPromotion());
+        return orderProductResponse;
+    }
+
+    public List<OrderDetailResponse> mappingOrderDetailResponse(List<OrderDetail> orderDetails) {
+        List<OrderDetailResponse> responses = new ArrayList<>();
+        OrderDetailResponse response = new OrderDetailResponse();
+        for(OrderDetail orderDetail : orderDetails) {
+            response.setId(orderDetail.getOrderDetailId());
+            response.setOrderProductResponse(mappingOrderProductResponse(orderDetail.getProduct()));
+            response.setQuantity(orderDetail.getQuantity());
+            response.setTotalPrice(orderDetail.getTotalPrice());
+            response.setUnitPrice(orderDetail.getUnitPrice());
+            responses.add(response);
+        }
+        return responses;
+    }
+
+    public OrderResponse mappingOrderResponse(Order order) {
+        OrderResponse response = new OrderResponse();
+        response.setId(order.getId());
+        response.setOrderDate(order.getOrderDate());
+        response.setOrderDetails(mappingOrderDetailResponse(order.getOrderDetails()));
+        response.setOrderStatus(order.getOrderStatus().toString());
+        response.setPaymentMethod(order.getPaymentMethod().getName());
+        response.setPaymentStatus(order.getPaymentStatus().toString());
+        response.setOrderTransactions(mappingOrderTransactionResponse(order.getTransactions()));
+        if(order.getPromotion() != null) {
+            response.setPromotion(order.getPromotion().getName());
+        } else {
+            response.setPromotion("");
+        }
+
+        response.setTotalPrice(order.getTotalPrice());
+        response.setUserResponse(mappingOrderUserResponse(order.getUser()));
+        return response;
+    }
+
+    public List<OrderTransactionResponse> mappingOrderTransactionResponse(List<Transaction> transactions) {
+        List<OrderTransactionResponse> responses = new ArrayList<>();
+        OrderTransactionResponse response = new OrderTransactionResponse();
+        for(Transaction transaction : transactions) {
+            response.setTransactionEnum(transaction.getEnums().toString());
+            response.setTransactionDate(transaction.getTransactionDate());
+            response.setTransactionAmount(transaction.getAmount());
+            responses.add(response);
+        }
+        return responses;
+    }
+
+//    public List<OrderResponse> getOrderByUser() {
+//        User user = userUtils.getCurrentUser();
+//        List<Order> orders = orderRepository.findAllByUserId((user.getId()));
+//        List<OrderResponse> responses = new ArrayList<>();
+//        for(Order order : orders) {
+//            OrderResponse orderResponse = mappingOrderResponse(order);
+//            System.out.println(orderResponse.getUserResponse().getFullName());
+//            responses.add(orderResponse);
+//        }
+//        return responses;
+//    }
+
+
 
     public String createURLPayment(Order order) throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -300,7 +401,7 @@ public class OrderService {
         } else if (status == OrderStatusEnums.REFUND_REQ) {// user gửi yêu cấu refund sp, chờ manager duyệt
             updateOrderRefundRequest(id);
         } else if (status == OrderStatusEnums.REFUNDED) {// đơn được duyệt, trả tiền cho user, manager chỉnh stock lại =
-                                                         // tay
+            // tay
             updateOrderRefunded(id);
         }
         return orderRepository.save(order);
@@ -343,16 +444,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public Order getLastedOrder() {
-        User user = userUtils.getCurrentUser();
-        List<Order> order = orderRepository.findOrderByUserId(user.getId());
-        Order lastOrder = order.get(order.size() - 1);
-        if (order == null) {
-            throw new RuntimeException("Người dùng chưa có đơn hàng nào");
-        } else {
-            return lastOrder;
-        }
-    }
+
 
     public void cancelOrder(long orderId) {
 //        Order order = orderRepository.findOrderById(orderId);

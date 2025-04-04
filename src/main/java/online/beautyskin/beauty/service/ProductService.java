@@ -336,4 +336,9 @@ public class ProductService {
         productResponse.setPromotion(product.getPromotion());
         return productResponse;
     }
+
+
+    public List<Product> getByCateAndSkinType(long cateId, long skinTypeId) {
+        return  productRepository.findByCateAndSkinType(cateId, skinTypeId);
+    }
 }

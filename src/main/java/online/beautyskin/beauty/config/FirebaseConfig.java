@@ -6,21 +6,24 @@ import com.google.firebase.FirebaseOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 @Configuration
 public class FirebaseConfig {
 
-    @Value("${fcm.credentials.file.path}")
-    private String credentialsFilePath;
+    @Value("${FIREBASE_CREDENTIALS}") // Đọc từ biến môi trường
+    private String firebaseCredentialsPath;
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(credentialsFilePath).getInputStream()))
+        FileInputStream serviceAccount = new FileInputStream(firebaseCredentialsPath);
+
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();
+
         return FirebaseApp.initializeApp(options);
     }
 

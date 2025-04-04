@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import online.beautyskin.beauty.enums.OrderStatusEnums;
+import online.beautyskin.beauty.enums.PaymentMethodEnums;
 import online.beautyskin.beauty.enums.PaymentStatusEnums;
 
 import java.time.LocalDateTime;
@@ -35,15 +36,13 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
+    @Enumerated(value = EnumType.STRING)
+    private PaymentMethodEnums paymentMethod;
+
     @ManyToOne
     @JoinColumn(name = "address_id", nullable = false)
     @JsonIgnore
     private UserAddress userAddress;
-
-    @ManyToOne
-    @JoinColumn(name = "payment_id", nullable = false)
-    @JsonIgnore
-    private PaymentMethod paymentMethod;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -96,11 +95,11 @@ public class Order {
         this.userAddress = userAddress;
     }
 
-    public PaymentMethod getPaymentMethod() {
+    public PaymentMethodEnums getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
+    public void setPaymentMethod(PaymentMethodEnums paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
@@ -124,8 +123,8 @@ public class Order {
         this.promotion = promotion;
     }
 
-    
-    
 
-    
+
+
+
 }

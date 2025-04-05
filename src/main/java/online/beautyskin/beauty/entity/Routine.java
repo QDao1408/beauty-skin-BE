@@ -15,9 +15,6 @@ public class Routine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RountineID")
     private long id;
-
-
-
     @Column(name = "RoutineName")
     private String name;
     @Column(name = "Description")
@@ -31,8 +28,7 @@ public class Routine {
     @JoinColumn(name = "skinType")
     private SkinType skinType;
 
-    @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL)
     private List<RoutineStep> routineSteps = new ArrayList<>();
 
 
@@ -46,25 +42,58 @@ public class Routine {
         step.setRoutine(null);
     }
 
-    public List<RoutineStep> getRoutineSteps() {
-        return routineSteps;
+    public Routine() {
     }
 
-    public void setRoutineSteps(List<RoutineStep> routineSteps) {
+    public Routine(long id, String name, String description, LocalDateTime lastUpdate, boolean isDeleted, SkinType skinType, List<RoutineStep> routineSteps) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.lastUpdate = lastUpdate;
+        this.isDeleted = isDeleted;
+        this.skinType = skinType;
         this.routineSteps = routineSteps;
     }
 
-    public Routine() {}
-    public Routine(String name, String description, LocalDateTime lastUpdate) { this.name = name; this.description = description; this.lastUpdate = lastUpdate; }
-    public long getId() { return id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public LocalDateTime getLastUpdate() { return lastUpdate; }
-    public void setLastUpdate(LocalDateTime lastUpdate) { this.lastUpdate = lastUpdate; }
-    public boolean isDeleted() { return isDeleted; }
-    public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
 
     public SkinType getSkinType() {
         return skinType;
@@ -73,4 +102,14 @@ public class Routine {
     public void setSkinType(SkinType skinType) {
         this.skinType = skinType;
     }
+
+    public List<RoutineStep> getRoutineSteps() {
+        return routineSteps;
+    }
+
+    public void setRoutineSteps(List<RoutineStep> routineSteps) {
+        this.routineSteps = routineSteps;
+    }
+
+
 }

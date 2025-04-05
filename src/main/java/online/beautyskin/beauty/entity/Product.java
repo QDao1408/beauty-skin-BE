@@ -114,12 +114,6 @@ public class Product {
     private List<Form> forms = new ArrayList<>();
 
     @ManyToMany
-//    @JoinTable(
-//            name = "mapping_product_routine_step",
-//            joinColumns = @JoinColumn(name = "product_id"),
-//            inverseJoinColumns = @JoinColumn(name = "step_id")
-//    )
-//    @ManyToMany(mappedBy = "products")
     @JsonIgnore
     private List<RoutineStep> routineSteps = new ArrayList<>();
 

@@ -29,11 +29,6 @@ public class RoutineStep {
     private Routine routine;
 
     @ManyToMany
-    @JoinTable(
-            name = "routine_step_product",
-            joinColumns = @JoinColumn(name = "routine_step_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
     private List<Product> products = new ArrayList<>();
 
 
@@ -48,8 +43,15 @@ public class RoutineStep {
     public void setDescription(String description) { this.description = description; }
     public String getStepName() { return stepName; }
     public void setStepName(String stepName) { this.stepName = stepName; }
-    public int getStepOrder() { return stepOrder; }
-    public void setStepOrder(int stepOrder) { this.stepOrder = stepOrder; }
+
+    public int getStepOrder() {
+        return stepOrder;
+    }
+
+    public void setStepOrder(int stepOrder) {
+        this.stepOrder = stepOrder;
+    }
+
     public boolean isDeleted() { return isDeleted; }
     public void setDeleted(boolean isDeleted) { this.isDeleted = isDeleted; }
 
@@ -75,4 +77,5 @@ public class RoutineStep {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+
 }

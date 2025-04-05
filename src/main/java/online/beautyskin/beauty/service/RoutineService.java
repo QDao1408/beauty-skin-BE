@@ -1,8 +1,12 @@
 package online.beautyskin.beauty.service;
 
+import online.beautyskin.beauty.entity.Product;
 import online.beautyskin.beauty.entity.Routine;
 import online.beautyskin.beauty.entity.RoutineStep;
+import online.beautyskin.beauty.entity.request.ProductRequestRoutine;
 import online.beautyskin.beauty.entity.request.RoutineRequest;
+import online.beautyskin.beauty.entity.request.RoutineStepRequest;
+import online.beautyskin.beauty.repository.ProductRepository;
 import online.beautyskin.beauty.repository.RoutineRepository;
 import online.beautyskin.beauty.repository.RoutineStepRepository;
 import online.beautyskin.beauty.repository.SkinTypeRepository;
@@ -16,52 +20,73 @@ import java.util.List;
 @Service
 public class RoutineService {
     @Autowired
-    private RoutineRepository repository;
+    private RoutineRepository routineRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private SkinTypeRepository skinTypeRepository;
 
-    @Autowired
-    private RoutineStepRepository stepRepository;
-
-    public Routine save(RoutineRequest request) {
+    public Routine createRoutine(RoutineRequest routineRequest) {
+        // Tạo mới routine
         Routine routine = new Routine();
-        routine.setDescription(request.getDescription());
-        routine.setName(request.getName());
-        routine.setSkinType(skinTypeRepository.findById(request.getSkinTypeId()).orElseThrow());
+        routine.setName(routineRequest.getName());
+        routine.setDescription(routineRequest.getDescription());
+        routine.setSkinType(skinTypeRepository.findById(routineRequest.getSkinTypeId()).orElse(null));
         routine.setLastUpdate(LocalDateTime.now());
-        return repository.save(routine);
-    }
 
-    public Routine delete(long id) {
-        Routine routine = repository.findById(id);
-        routine.setDeleted(true);
-        routine.setLastUpdate(LocalDateTime.now());
-        return repository.save(routine);
-    }
+        // Lưu routine vào cơ sở dữ liệu
+        routine = routineRepository.save(routine);
 
-    public Routine update(long id, RoutineRequest request) {
-        Routine routine = repository.findById(id);
-        routine.setName(request.getName());
-        routine.setDescription(request.getDescription());
-        routine.setSkinType(skinTypeRepository.findById(request.getSkinTypeId()).orElseThrow());
-        routine.setLastUpdate(LocalDateTime.now());
-        return repository.save(routine);
-    }
+        // Lấy danh sách các bước trong routine
+        List<RoutineStepRequest> routineStepRequests = routineRequest.getRoutineStepRequests();
+        List<RoutineStep> routineSteps = new ArrayList<>();
 
-    public List<Routine> getAll() {
-        return repository.findAllWithSteps();
-    }
+        for (RoutineStepRequest routineStepRequest : routineStepRequests) {
+            RoutineStep routineStep = new RoutineStep();
+            routineStep.setDescription(routineStepRequest.getDescription());
+            routineStep.setStepName(routineStepRequest.getStepName());
+            routineStep.setStepOrder(routineStepRequest.getStepOrder());
+            routineStep.setRoutine(routine);
 
+            // Danh sách sản phẩm cho mỗi bước
+            List<ProductRequestRoutine> productRequestRoutines = routineStepRequest.getProducts();
+            List<Product> products = new ArrayList<>();
 
-
-    public List<RoutineStep> addStep(List<Long> stepId) {
-        List<RoutineStep> steps = new ArrayList<>();
-        if(!stepId.isEmpty()) {
-            for(long id : stepId) {
-                steps.add(stepRepository.findByIdAndIsDeletedFalse(id));
+            for (ProductRequestRoutine productRequestRoutine : productRequestRoutines) {
+                Product product = productRepository.findById(productRequestRoutine.getId());
+                if (product == null) {
+                    throw new RuntimeException("Product not found");
+                }else {
+                    product.setRoutineSteps(routineSteps);  // Thiết lập mối quan hệ với RoutineSteps
+                    products.add(product);
+                }
             }
+            routineStep.setProducts(products);  // Thiết lập sản phẩm cho RoutineStep
+            routineSteps.add(routineStep);
         }
-        return steps;
+        // Cập nhật danh sách steps vào routine
+        routine.setRoutineSteps(routineSteps);
+        routineRepository.save(routine);  // Lưu lại routine với các steps
+        return routineRepository.save(routine);
+    }
+
+    public Object updateRoutine(Long id, Routine routine) {
+        return routineRepository.save(routine);
+    }
+
+    public void deleteRoutine(Long id) {
+    }
+
+    public Object createRoutineStep(Long routineId, RoutineStep routineStep) {
+    return null;
+    }
+
+    public Object updateRoutineStep(Long id, RoutineStep routineStep) {
+    return null;
+    }
+
+    public void deleteRoutineStep(Long id) {
     }
 }

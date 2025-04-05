@@ -1,5 +1,9 @@
 package online.beautyskin.beauty.entity.request;
 
+import online.beautyskin.beauty.entity.Product;
+
+import java.util.List;
+
 public class RoutineStepRequest {
 
     private String description;
@@ -8,9 +12,7 @@ public class RoutineStepRequest {
 
     private int stepOrder;
 
-    private Long routine;
-
-    private long categoryId;
+    private List<ProductRequestRoutine> products;
 
     public RoutineStepRequest() {
     }
@@ -39,21 +41,11 @@ public class RoutineStepRequest {
         this.stepOrder = stepOrder;
     }
 
-    public Long getRoutine() {
-        return routine;
+    public List<ProductRequestRoutine> getProducts() {
+        return products;
     }
 
-    public void setRoutine(Long routine) {
-        this.routine = routine;
+    public void setProducts(List<ProductRequestRoutine> products) {
+        this.products = products;
     }
-
-    public long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    
 }

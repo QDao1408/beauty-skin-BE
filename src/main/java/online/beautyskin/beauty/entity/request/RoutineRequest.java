@@ -1,11 +1,15 @@
 package online.beautyskin.beauty.entity.request;
 
 
+import online.beautyskin.beauty.entity.SkinType;
+
+import java.util.List;
+
 public class RoutineRequest {
     private String name;
     private String description;
-    private long skinTypeId;
-    //private List<Long> stepId;
+    private Long skinTypeId;
+    private List<RoutineStepRequest> routineStepRequests;
 
     public RoutineRequest() {
     }
@@ -34,11 +38,15 @@ public class RoutineRequest {
         this.skinTypeId = skinTypeId;
     }
 
-    public void setSkinTypeId(long skinTypeId) {
-        this.skinTypeId = skinTypeId;
+    public List<RoutineStepRequest> getRoutineStepRequests() {
+        return routineStepRequests;
     }
 
-//    public List<Long> getStepId() {
+    public void setRoutineStepRequests(List<RoutineStepRequest> routineStepRequests) {
+        this.routineStepRequests = routineStepRequests;
+    }
+
+    //    public List<Long> getStepId() {
 //        return stepId;
 //    }
 //

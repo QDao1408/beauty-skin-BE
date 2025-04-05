@@ -22,45 +22,4 @@ public class RoutineStepService {
     @Autowired
     private RoutineRepository routineRepository;
 
-    RoutineStepService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
-
-    public RoutineStep create(RoutineStepRequest request) {
-        RoutineStep step = new RoutineStep();
-        step.setRoutine(routineRepository.findByIdAndIsDeletedFalse(request.getRoutine()));
-        step.setDescription(request.getDescription());
-        step.setStepName(request.getStepName());
-        step.setStepOrder(request.getStepOrder());
-        step.setCategory(categoryRepository.findById(request.getCategoryId()));
-        return repository.save(step);
-    }
-
-    public RoutineStep update(long id, RoutineStepRequest request) {
-        RoutineStep step = repository.findById(id);
-        step.setRoutine(routineRepository.findByIdAndIsDeletedFalse(request.getRoutine()));
-        step.setDescription(request.getDescription());
-        step.setStepName(request.getStepName());
-        step.setStepOrder(request.getStepOrder());
-        step.setCategory(categoryRepository.findById(request.getCategoryId()));
-        return repository.save(step);
-    }
-
-//    public RoutineStep delete(long id) {
-//        RoutineStep step = repository.findById(id);
-//        step.setDeleted(true);
-//
-//    }
-
-    public List<RoutineStep> getAll() {
-        return repository.findByIsDeletedFalse();
-    }
-
-    public RoutineStep delete(long id) {
-        RoutineStep step = repository.findById(id);
-        step.setDeleted(false);
-        return repository.save(step);
-    }
-
-
 }

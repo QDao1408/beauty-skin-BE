@@ -20,9 +20,9 @@ public class Category {
     @JsonIgnore
     private List<Product> products = new ArrayList<Product>();
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<RoutineStep> routineSteps = new ArrayList<>();
+//    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonIgnore
+//    private List<RoutineStep> routineSteps = new ArrayList<>();
 
     public List<Product> getProducts() {
         return products;

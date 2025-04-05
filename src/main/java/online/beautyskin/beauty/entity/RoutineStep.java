@@ -24,23 +24,18 @@ public class RoutineStep {
     private boolean isDeleted = false;
 
     @ManyToOne
-    @JoinColumn(name = "routine_id", nullable = false)
-    @JsonBackReference
+    @JoinColumn(name = "routine_id")
+    @JsonIgnore
     private Routine routine;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "mapping_product_routine_step",
-//            joinColumns = @JoinColumn(name = "step_id"),
-//            inverseJoinColumns = @JoinColumn(name = "product_id")
-//    )
-    @ManyToMany(mappedBy = "routineSteps", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "routine_step_product",
+            joinColumns = @JoinColumn(name = "routine_step_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
     private List<Product> products = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "cate_id")
-    private Category category;
 
     public RoutineStep() {}
     public RoutineStep(String description, String stepName, int stepOrder) {
@@ -65,12 +60,19 @@ public class RoutineStep {
     public void setRoutine(Routine routine) {
         this.routine = routine;
     }
-    public Category getCategory() {
-        return category;
-    }
-    public void setCategory(Category category) {
-        this.category = category;
+//    public Category getCategory() {
+//        return category;
+//    }
+//    public void setCategory(Category category) {
+//        this.category = category;
+//    }
+
+
+    public List<Product> getProducts() {
+        return products;
     }
 
-    
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 }

@@ -2,6 +2,8 @@ package online.beautyskin.beauty.api;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import online.beautyskin.beauty.entity.Routine;
+import online.beautyskin.beauty.entity.RoutineStep;
 import online.beautyskin.beauty.entity.request.RoutineRequest;
 import online.beautyskin.beauty.service.RoutineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,27 +19,40 @@ public class RoutineAPI {
     @Autowired
     private RoutineService service;
 
-    @GetMapping("/get")
-    public ResponseEntity getAll() {
-        return ResponseEntity.ok(service.getAll());
+    @Autowired
+    private RoutineService routineService;
+
+    @PostMapping("/createRoutine")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
+    public ResponseEntity createRoutine(@RequestBody RoutineRequest routine) {
+        Routine newRoutine = routineService.createRoutine(routine);
+        return ResponseEntity.ok(newRoutine);
     }
 
-
-    @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity create(@Valid @RequestBody RoutineRequest request) {
-        return ResponseEntity.ok(service.save(request));
+    @PutMapping("/{id}")
+    public ResponseEntity updateRoutine(@PathVariable Long id, @RequestBody Routine routine) {
+        return ResponseEntity.ok(routineService.updateRoutine(id, routine));
     }
 
-    @PutMapping("/update/{id}")
-    @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity update(@PathVariable long id, @Valid @RequestBody RoutineRequest request) {
-        return ResponseEntity.ok(service.update(id,request));
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteRoutine(@PathVariable Long id) {
+        routineService.deleteRoutine(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity delete(@PathVariable long id) {
-        return ResponseEntity.ok(service.delete(id));
+    @PostMapping("/{routineId}/steps")
+    public ResponseEntity createRoutineStep(@PathVariable Long routineId, @RequestBody RoutineStep routineStep) {
+        return ResponseEntity.ok(routineService.createRoutineStep(routineId, routineStep));
+    }
+
+    @PutMapping("/steps/{id}")
+    public ResponseEntity updateRoutineStep(@PathVariable Long id, @RequestBody RoutineStep routineStep) {
+        return ResponseEntity.ok(routineService.updateRoutineStep(id, routineStep));
+    }
+
+    @DeleteMapping("/steps/{id}")
+    public ResponseEntity deleteRoutineStep(@PathVariable Long id) {
+        routineService.deleteRoutineStep(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,8 +1,6 @@
 package online.beautyskin.beauty.service;
 
-import online.beautyskin.beauty.entity.Product;
-import online.beautyskin.beauty.entity.Routine;
-import online.beautyskin.beauty.entity.RoutineStep;
+import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.ProductRequestRoutine;
 import online.beautyskin.beauty.entity.request.RoutineRequest;
 import online.beautyskin.beauty.entity.request.RoutineStepRequest;
@@ -10,6 +8,7 @@ import online.beautyskin.beauty.repository.ProductRepository;
 import online.beautyskin.beauty.repository.RoutineRepository;
 import online.beautyskin.beauty.repository.RoutineStepRepository;
 import online.beautyskin.beauty.repository.SkinTypeRepository;
+import online.beautyskin.beauty.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +26,12 @@ public class RoutineService {
 
     @Autowired
     private SkinTypeRepository skinTypeRepository;
+
+    @Autowired
+    private RoutineStepRepository routineStepRepository;
+
+    @Autowired
+    private UserUtils userUtils;
 
     public Routine createRoutine(RoutineRequest routineRequest) {
         // Tạo mới routine
@@ -72,21 +77,91 @@ public class RoutineService {
         return routineRepository.save(routine);
     }
 
-    public Object updateRoutine(Long id, Routine routine) {
+    public Routine updateRoutine(Long id, Long skinTypeId, String name, String description) {
+        Routine routine = routineRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Routine not found"));
+        SkinType skinType = skinTypeRepository.findById(skinTypeId)
+                .orElseThrow(() -> new RuntimeException("SkinType not found"));
+        routine.setName(name);
+        routine.setDescription(description);
+        routine.setLastUpdate(LocalDateTime.now());
+        routine.setSkinType(skinType);
+        routine = routineRepository.save(routine);
         return routineRepository.save(routine);
     }
 
     public void deleteRoutine(Long id) {
+        Routine routine = routineRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Routine not found"));
+        routine.setDeleted(true);
+        routine = routineRepository.save(routine);
     }
 
-    public Object createRoutineStep(Long routineId, RoutineStep routineStep) {
-    return null;
+    public RoutineStep createRoutineStep(Long routineId, RoutineStepRequest routineStepRequest) {
+        Routine routine = routineRepository.findById(routineId)
+                .orElseThrow(() -> new RuntimeException("Routine step not found"));
+        RoutineStep routineStep = new RoutineStep();
+        routineStep.setDescription(routineStepRequest.getDescription());
+        routineStep.setStepName(routineStepRequest.getStepName());
+        routineStep.setStepOrder(routineStepRequest.getStepOrder());
+        routineStep.setRoutine(routine);
+        routineStep = routineStepRepository.save(routineStep);
+        routineStep.setStepOrder(routineStepRequest.getStepOrder());
+        List<ProductRequestRoutine> productRequestRoutines = routineStepRequest.getProducts();
+        List<Product> products = new ArrayList<>();
+        for (ProductRequestRoutine productRequestRoutine : productRequestRoutines) {
+            Product product = productRepository.findById(productRequestRoutine.getId());
+            products.add(product);
+        }
+        routineStep.setProducts(products);
+        routine = routineRepository.save(routine);
+        return routineStep;
     }
 
-    public Object updateRoutineStep(Long id, RoutineStep routineStep) {
-    return null;
+    public RoutineStep updateRoutineStep(Long id, RoutineStepRequest routineStepRequest) {
+        RoutineStep routineStep = routineStepRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Routine step not found"));
+        routineStep.setDescription(routineStepRequest.getDescription());
+        routineStep.setStepName(routineStepRequest.getStepName());
+        routineStep.setStepOrder(routineStepRequest.getStepOrder());
+        routineStep = routineStepRepository.save(routineStep);
+        routineStep.setStepOrder(routineStepRequest.getStepOrder());
+        List<ProductRequestRoutine> productRequestRoutines = routineStepRequest.getProducts();
+        if (productRequestRoutines != null) {
+            List<Product> products = new ArrayList<>();
+            for (ProductRequestRoutine productRequestRoutine : productRequestRoutines) {
+                Product product = productRepository.findById(productRequestRoutine.getId());
+                products.add(product);
+            }
+            routineStep.setProducts(products);
+        }
+        routineStep = routineStepRepository.save(routineStep);
+    return routineStep;
     }
 
     public void deleteRoutineStep(Long id) {
+        RoutineStep routineStep = routineStepRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Routine step not found"));
+        routineStep.setDeleted(true);
+        routineStep = routineStepRepository.save(routineStep);
+    }
+
+    public List<Routine> getAll() {
+        List<Routine> routines = routineRepository.findByIsDeletedFalse();
+        return routines;
+    }
+
+    public Routine getRoutine(Long skinTypeId) {
+        return routineRepository.findBySkinTypeIdAndIsDeletedFalse(skinTypeId);
+    }
+
+    public Routine getRoutineByCurrentUser() {
+        User user = userUtils.getCurrentUser();
+        Routine routine = routineRepository.findBySkinTypeIdAndIsDeletedFalse(user.getSkinProfile().getId());
+        if (routine == null) {
+            throw new RuntimeException("Routine not found");
+        }else {
+            return routine;
+        }
     }
 }

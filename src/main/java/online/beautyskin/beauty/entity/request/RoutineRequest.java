@@ -46,11 +46,4 @@ public class RoutineRequest {
         this.routineStepRequests = routineStepRequests;
     }
 
-    //    public List<Long> getStepId() {
-//        return stepId;
-//    }
-//
-//    public void setStepId(List<Long> stepId) {
-//        this.stepId = stepId;
-//    }
 }

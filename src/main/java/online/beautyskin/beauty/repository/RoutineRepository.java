@@ -12,10 +12,9 @@ public interface RoutineRepository extends JpaRepository<Routine, Long> {
     List<Routine> findByIsDeletedFalse();
 
     Routine findByIdAndIsDeletedFalse(long id);
-
     @Query("SELECT DISTINCT r FROM Routine r LEFT JOIN FETCH r.routineSteps")
     List<Routine> findAllWithSteps();
 
-
+    Routine findBySkinTypeIdAndIsDeletedFalse(Long skinTypeId);
 
 }

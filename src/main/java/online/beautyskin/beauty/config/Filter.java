@@ -84,6 +84,9 @@ List<String> PUBLIC_API = List.of(
         if(method.equals("GET") && matcher.match("/api/feedback/**", uri)) {
             return true;
         }
+        if(method.equals("GET") && matcher.match("/api/routine/**", uri)) {
+            return true;
+        }
         return PUBLIC_API.stream().anyMatch(m -> matcher.match(m, uri));
     }
 

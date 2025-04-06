@@ -6,11 +6,14 @@ import online.beautyskin.beauty.entity.Routine;
 import online.beautyskin.beauty.entity.RoutineStep;
 import online.beautyskin.beauty.entity.request.RoutineRequest;
 import online.beautyskin.beauty.entity.request.RoutineStepRequest;
+import online.beautyskin.beauty.entity.respone.RoutineResponse;
 import online.beautyskin.beauty.service.RoutineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/routine")
@@ -67,7 +70,8 @@ public class RoutineAPI {
 
     @GetMapping("/getAll")
     public ResponseEntity getAll() {
-        return ResponseEntity.ok(routineService.getAll());
+        List<RoutineResponse> routineResponses = routineService.getAll();
+        return ResponseEntity.ok(routineResponses);
     }
 
     @GetMapping("/getRoutineBySkinType/{skinTypeId}")
@@ -78,5 +82,10 @@ public class RoutineAPI {
     @GetMapping("/getRoutineByCurrentUser")
     public ResponseEntity getRoutineByCurrentUser() {
         return ResponseEntity.ok(routineService.getRoutineByCurrentUser());
+    }
+
+    @GetMapping("/getRoutineById/{id}")
+    public ResponseEntity getRoutineById(@PathVariable Long id) {
+        return ResponseEntity.ok(routineService.getRoutineById(id));
     }
 }

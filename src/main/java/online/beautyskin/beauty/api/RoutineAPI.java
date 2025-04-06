@@ -63,6 +63,7 @@ public class RoutineAPI {
     }
 
     @DeleteMapping("/deleteRoutineStep/{routineStepId}")
+    @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity deleteRoutineStep(@PathVariable Long routineStepId) {
         routineService.deleteRoutineStep(routineStepId);
         return ResponseEntity.ok("Routine step deleted");

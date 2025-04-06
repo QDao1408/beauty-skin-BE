@@ -4,6 +4,10 @@ import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.ProductRequestRoutine;
 import online.beautyskin.beauty.entity.request.RoutineRequest;
 import online.beautyskin.beauty.entity.request.RoutineStepRequest;
+import online.beautyskin.beauty.entity.respone.ProductResponse;
+import online.beautyskin.beauty.entity.respone.ProductResponseForRoutine;
+import online.beautyskin.beauty.entity.respone.RoutineResponse;
+import online.beautyskin.beauty.entity.respone.RoutineStepResponse;
 import online.beautyskin.beauty.repository.ProductRepository;
 import online.beautyskin.beauty.repository.RoutineRepository;
 import online.beautyskin.beauty.repository.RoutineStepRepository;
@@ -146,22 +150,149 @@ public class RoutineService {
         routineStep = routineStepRepository.save(routineStep);
     }
 
-    public List<Routine> getAll() {
+    public List<RoutineResponse> getAll() {
+        List<RoutineResponse> routinesResponse = new ArrayList<>();
         List<Routine> routines = routineRepository.findByIsDeletedFalse();
-        return routines;
-    }
-
-    public Routine getRoutine(Long skinTypeId) {
-        return routineRepository.findBySkinTypeIdAndIsDeletedFalse(skinTypeId);
-    }
-
-    public Routine getRoutineByCurrentUser() {
-        User user = userUtils.getCurrentUser();
-        Routine routine = routineRepository.findBySkinTypeIdAndIsDeletedFalse(user.getSkinProfile().getId());
-        if (routine == null) {
-            throw new RuntimeException("Routine not found");
-        }else {
-            return routine;
+        for (Routine routine : routines) {
+            RoutineResponse routineResponse = new RoutineResponse();
+            routineResponse.setName(routine.getName());
+            routineResponse.setDescription(routine.getDescription());
+            routineResponse.setSkinTypeId(routine.getSkinType().getId());
+            List<RoutineStep> routineSteps = routine.getRoutineSteps();
+            List<RoutineStepResponse> routineStepResponses = new ArrayList<>();
+            for (RoutineStep routineStep : routineSteps) {
+                if (!routineStep.isDeleted()) {
+                    RoutineStepResponse routineStepResponse = new RoutineStepResponse();
+                    routineStepResponse.setDescription(routineStep.getDescription());
+                    routineStepResponse.setStepName(routineStep.getStepName());
+                    routineStepResponse.setStepOrder(routineStep.getStepOrder());
+                    List<Product> products = routineStep.getProducts();
+                    List<ProductResponseForRoutine> productResponsesForRoutines = new ArrayList<>();
+                    for (Product product : products) {
+                        ProductResponseForRoutine productResponseForRoutine = new ProductResponseForRoutine();
+                        productResponseForRoutine.setId(product.getId());
+                        productResponseForRoutine.setName(product.getName());
+                        productResponsesForRoutines.add(productResponseForRoutine);
+                    }
+                    routineStepResponse.setProductResponse(productResponsesForRoutines);
+                    routineStepResponses.add(routineStepResponse);
+                }
+            }
+            routineResponse.setRoutineStepResponse(routineStepResponses);
+            routinesResponse.add(routineResponse);
         }
+        return routinesResponse;
+    }
+
+    public RoutineResponse getRoutine(Long skinTypeId) {
+        RoutineResponse routinesResponse = new RoutineResponse();
+        Routine routines = routineRepository.findBySkinTypeIdAndIsDeletedFalse(skinTypeId);
+        if (routines != null) {
+            routinesResponse.setName(routines.getName());
+            routinesResponse.setDescription(routines.getDescription());
+            routinesResponse.setSkinTypeId(routines.getSkinType().getId());
+
+            List<RoutineStep> routineSteps = routines.getRoutineSteps();
+            List<RoutineStepResponse> routineStepResponses = new ArrayList<>();
+            for (RoutineStep routineStep : routineSteps) {
+                if (!routineStep.isDeleted()) {
+                    RoutineStepResponse routineStepResponse = new RoutineStepResponse();
+                    routineStepResponse.setDescription(routineStep.getDescription());
+                    routineStepResponse.setStepName(routineStep.getStepName());
+                    routineStepResponse.setStepOrder(routineStep.getStepOrder());
+
+                    List<Product> products = routineStep.getProducts();
+                    List<ProductResponseForRoutine> productResponsesForRoutines = new ArrayList<>();
+                    for (Product product : products) {
+                        ProductResponseForRoutine productResponseForRoutine = new ProductResponseForRoutine();
+                        productResponseForRoutine.setId(product.getId());
+                        productResponseForRoutine.setName(product.getName());
+                        productResponsesForRoutines.add(productResponseForRoutine);
+                    }
+
+                    routineStepResponse.setProductResponse(productResponsesForRoutines);
+                    routineStepResponses.add(routineStepResponse);
+                }
+            }
+            routinesResponse.setRoutineStepResponse(routineStepResponses);
+        }else{
+            throw new RuntimeException("Routine not found");
+        }
+        return routinesResponse;
+    }
+
+    public RoutineResponse getRoutineByCurrentUser() {
+        User user = userUtils.getCurrentUser();
+        Routine routines = routineRepository.findBySkinTypeIdAndIsDeletedFalse(user.getSkinProfile().getId());
+        RoutineResponse routinesResponse = new RoutineResponse();
+        if (routines != null) {
+            routinesResponse.setName(routines.getName());
+            routinesResponse.setDescription(routines.getDescription());
+            routinesResponse.setSkinTypeId(routines.getSkinType().getId());
+
+            List<RoutineStep> routineSteps = routines.getRoutineSteps();
+            List<RoutineStepResponse> routineStepResponses = new ArrayList<>();
+            for (RoutineStep routineStep : routineSteps) {
+                if (!routineStep.isDeleted()) {
+                    RoutineStepResponse routineStepResponse = new RoutineStepResponse();
+                    routineStepResponse.setDescription(routineStep.getDescription());
+                    routineStepResponse.setStepName(routineStep.getStepName());
+                    routineStepResponse.setStepOrder(routineStep.getStepOrder());
+
+                    List<Product> products = routineStep.getProducts();
+                    List<ProductResponseForRoutine> productResponsesForRoutines = new ArrayList<>();
+                    for (Product product : products) {
+                        ProductResponseForRoutine productResponseForRoutine = new ProductResponseForRoutine();
+                        productResponseForRoutine.setId(product.getId());
+                        productResponseForRoutine.setName(product.getName());
+                        productResponsesForRoutines.add(productResponseForRoutine);
+                    }
+
+                    routineStepResponse.setProductResponse(productResponsesForRoutines);
+                    routineStepResponses.add(routineStepResponse);
+                }
+            }
+            routinesResponse.setRoutineStepResponse(routineStepResponses);
+        }else{
+            throw new RuntimeException("Routine not found");
+        }
+        return routinesResponse;
+    }
+
+    public RoutineResponse getRoutineById(Long id) {
+        Routine routines = routineRepository.findByIdAndIsDeletedFalse(id);
+        RoutineResponse routinesResponse = new RoutineResponse();
+        if (routines != null) {
+            routinesResponse.setName(routines.getName());
+            routinesResponse.setDescription(routines.getDescription());
+            routinesResponse.setSkinTypeId(routines.getSkinType().getId());
+
+            List<RoutineStep> routineSteps = routines.getRoutineSteps();
+            List<RoutineStepResponse> routineStepResponses = new ArrayList<>();
+            for (RoutineStep routineStep : routineSteps) {
+                if (!routineStep.isDeleted()) {
+                    RoutineStepResponse routineStepResponse = new RoutineStepResponse();
+                    routineStepResponse.setDescription(routineStep.getDescription());
+                    routineStepResponse.setStepName(routineStep.getStepName());
+                    routineStepResponse.setStepOrder(routineStep.getStepOrder());
+
+                    List<Product> products = routineStep.getProducts();
+                    List<ProductResponseForRoutine> productResponsesForRoutines = new ArrayList<>();
+                    for (Product product : products) {
+                        ProductResponseForRoutine productResponseForRoutine = new ProductResponseForRoutine();
+                        productResponseForRoutine.setId(product.getId());
+                        productResponseForRoutine.setName(product.getName());
+                        productResponsesForRoutines.add(productResponseForRoutine);
+                    }
+
+                    routineStepResponse.setProductResponse(productResponsesForRoutines);
+                    routineStepResponses.add(routineStepResponse);
+                }
+            }
+            routinesResponse.setRoutineStepResponse(routineStepResponses);
+        }else{
+            throw new RuntimeException("Routine not found");
+        }
+        return routinesResponse;
     }
 }

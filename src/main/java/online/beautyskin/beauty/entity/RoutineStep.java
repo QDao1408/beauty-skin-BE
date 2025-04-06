@@ -14,7 +14,7 @@ public class RoutineStep {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private long id;
-    @Column(name = "Description")
+    @Column(name = "Description",columnDefinition = "TEXT")
     private String description;
     @Column(name = "StepName")
     private String stepName;

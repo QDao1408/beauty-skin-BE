@@ -17,7 +17,7 @@ public class Routine {
     private long id;
     @Column(name = "RoutineName")
     private String name;
-    @Column(name = "Description")
+    @Column(name = "Description",columnDefinition = "TEXT")
     private String description;
     @Column(name = "LastUpdate")
     @NotNull

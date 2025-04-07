@@ -152,6 +152,7 @@ public class RoutineService {
         List<Routine> routines = routineRepository.findByIsDeletedFalse();
         for (Routine routine : routines) {
             RoutineResponse routineResponse = new RoutineResponse();
+            routineResponse.setId(routine.getId());
             routineResponse.setName(routine.getName());
             routineResponse.setDescription(routine.getDescription());
 
@@ -165,6 +166,7 @@ public class RoutineService {
             for (RoutineStep routineStep : routineSteps) {
                 if (!routineStep.isDeleted()) {
                     RoutineStepResponse routineStepResponse = new RoutineStepResponse();
+                    routineStepResponse.setId(routineStep.getId());
                     routineStepResponse.setDescription(routineStep.getDescription());
                     routineStepResponse.setStepName(routineStep.getStepName());
                     routineStepResponse.setStepOrder(routineStep.getStepOrder());
@@ -190,6 +192,7 @@ public class RoutineService {
         RoutineResponse routinesResponse = new RoutineResponse();
         Routine routines = routineRepository.findBySkinTypeIdAndIsDeletedFalse(skinTypeId);
         if (routines != null) {
+            routinesResponse.setId(routines.getId());
             routinesResponse.setName(routines.getName());
             routinesResponse.setDescription(routines.getDescription());
 
@@ -203,6 +206,7 @@ public class RoutineService {
             for (RoutineStep routineStep : routineSteps) {
                 if (!routineStep.isDeleted()) {
                     RoutineStepResponse routineStepResponse = new RoutineStepResponse();
+                    routineStepResponse.setId(routineStep.getId());
                     routineStepResponse.setDescription(routineStep.getDescription());
                     routineStepResponse.setStepName(routineStep.getStepName());
                     routineStepResponse.setStepOrder(routineStep.getStepOrder());
@@ -232,6 +236,7 @@ public class RoutineService {
         Routine routines = routineRepository.findBySkinTypeIdAndIsDeletedFalse(user.getSkinProfile().getId());
         RoutineResponse routinesResponse = new RoutineResponse();
         if (routines != null) {
+            routinesResponse.setId(routines.getId());
             routinesResponse.setName(routines.getName());
             routinesResponse.setDescription(routines.getDescription());
 
@@ -245,6 +250,7 @@ public class RoutineService {
             for (RoutineStep routineStep : routineSteps) {
                 if (!routineStep.isDeleted()) {
                     RoutineStepResponse routineStepResponse = new RoutineStepResponse();
+                    routineStepResponse.setId(routineStep.getId());
                     routineStepResponse.setDescription(routineStep.getDescription());
                     routineStepResponse.setStepName(routineStep.getStepName());
                     routineStepResponse.setStepOrder(routineStep.getStepOrder());
@@ -273,6 +279,7 @@ public class RoutineService {
         Routine routines = routineRepository.findByIdAndIsDeletedFalse(id);
         RoutineResponse routinesResponse = new RoutineResponse();
         if (routines != null) {
+            routinesResponse.setId(routines.getId());
             routinesResponse.setName(routines.getName());
             routinesResponse.setDescription(routines.getDescription());
 
@@ -286,6 +293,7 @@ public class RoutineService {
             for (RoutineStep routineStep : routineSteps) {
                 if (!routineStep.isDeleted()) {
                     RoutineStepResponse routineStepResponse = new RoutineStepResponse();
+                    routineStepResponse.setId(routineStep.getId());
                     routineStepResponse.setDescription(routineStep.getDescription());
                     routineStepResponse.setStepName(routineStep.getStepName());
                     routineStepResponse.setStepOrder(routineStep.getStepOrder());

@@ -5,10 +5,19 @@ import online.beautyskin.beauty.entity.SkinType;
 import java.util.List;
 
 public class RoutineResponse {
+    private Long id;
     private String name;
     private String description;
     private SkinTypeResponse skinTypeResponse;
     private List<RoutineStepResponse> routineStepResponse;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -45,7 +54,8 @@ public class RoutineResponse {
     public RoutineResponse() {
     }
 
-    public RoutineResponse(String name, String description, SkinTypeResponse skinTypeResponse, List<RoutineStepResponse> routineStepResponse) {
+    public RoutineResponse(Long id, String name, String description, SkinTypeResponse skinTypeResponse, List<RoutineStepResponse> routineStepResponse) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.skinTypeResponse = skinTypeResponse;

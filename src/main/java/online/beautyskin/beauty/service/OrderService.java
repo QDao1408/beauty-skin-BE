@@ -320,8 +320,8 @@ public class OrderService {
         String formattedCreateDate = createDate.format(formatter);
         String orderId = UUID.randomUUID().toString().substring(0, 6);
 
-        String tmnCode = "8FDRRU1S";
-        String secretKey = "2LS6HWZV3VANKGVZW4IFO7L0J8A3406K";
+        String tmnCode = "WERG9TU5";
+        String secretKey = "V5CBL4IW8SZ8SFHES5FDPEGM6SRIEWTJ";
         String vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         // String returnURL =
         // "http://beautyskinshop.online/checkout/payment-result/?orderId="+order.getId();

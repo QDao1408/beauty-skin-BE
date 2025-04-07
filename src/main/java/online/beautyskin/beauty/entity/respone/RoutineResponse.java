@@ -7,7 +7,7 @@ import java.util.List;
 public class RoutineResponse {
     private String name;
     private String description;
-    private Long skinTypeId;
+    private SkinTypeResponse skinTypeResponse;
     private List<RoutineStepResponse> routineStepResponse;
 
     public String getName() {
@@ -26,12 +26,12 @@ public class RoutineResponse {
         this.description = description;
     }
 
-    public Long getSkinTypeId() {
-        return skinTypeId;
+    public SkinTypeResponse getSkinTypeResponse() {
+        return skinTypeResponse;
     }
 
-    public void setSkinTypeId(Long skinTypeId) {
-        this.skinTypeId = skinTypeId;
+    public void setSkinTypeResponse(SkinTypeResponse skinTypeResponse) {
+        this.skinTypeResponse = skinTypeResponse;
     }
 
     public List<RoutineStepResponse> getRoutineStepResponse() {
@@ -45,10 +45,10 @@ public class RoutineResponse {
     public RoutineResponse() {
     }
 
-    public RoutineResponse(String name, String description, Long skinTypeId, List<RoutineStepResponse> routineStepResponse) {
+    public RoutineResponse(String name, String description, SkinTypeResponse skinTypeResponse, List<RoutineStepResponse> routineStepResponse) {
         this.name = name;
         this.description = description;
-        this.skinTypeId = skinTypeId;
+        this.skinTypeResponse = skinTypeResponse;
         this.routineStepResponse = routineStepResponse;
     }
 }

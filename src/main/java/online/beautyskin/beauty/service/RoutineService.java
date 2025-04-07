@@ -4,10 +4,7 @@ import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.ProductRequestRoutine;
 import online.beautyskin.beauty.entity.request.RoutineRequest;
 import online.beautyskin.beauty.entity.request.RoutineStepRequest;
-import online.beautyskin.beauty.entity.respone.ProductResponse;
-import online.beautyskin.beauty.entity.respone.ProductResponseForRoutine;
-import online.beautyskin.beauty.entity.respone.RoutineResponse;
-import online.beautyskin.beauty.entity.respone.RoutineStepResponse;
+import online.beautyskin.beauty.entity.respone.*;
 import online.beautyskin.beauty.repository.ProductRepository;
 import online.beautyskin.beauty.repository.RoutineRepository;
 import online.beautyskin.beauty.repository.RoutineStepRepository;
@@ -157,7 +154,12 @@ public class RoutineService {
             RoutineResponse routineResponse = new RoutineResponse();
             routineResponse.setName(routine.getName());
             routineResponse.setDescription(routine.getDescription());
-            routineResponse.setSkinTypeId(routine.getSkinType().getId());
+
+            SkinTypeResponse skinTypeResponse = new SkinTypeResponse();
+            skinTypeResponse.setTypeId(routine.getSkinType().getId());
+            skinTypeResponse.setType(routine.getSkinType().getName());
+            routineResponse.setSkinTypeResponse(skinTypeResponse);
+
             List<RoutineStep> routineSteps = routine.getRoutineSteps();
             List<RoutineStepResponse> routineStepResponses = new ArrayList<>();
             for (RoutineStep routineStep : routineSteps) {
@@ -190,7 +192,11 @@ public class RoutineService {
         if (routines != null) {
             routinesResponse.setName(routines.getName());
             routinesResponse.setDescription(routines.getDescription());
-            routinesResponse.setSkinTypeId(routines.getSkinType().getId());
+
+            SkinTypeResponse skinTypeResponse = new SkinTypeResponse();
+            skinTypeResponse.setTypeId(routines.getSkinType().getId());
+            skinTypeResponse.setType(routines.getSkinType().getName());
+            routinesResponse.setSkinTypeResponse(skinTypeResponse);
 
             List<RoutineStep> routineSteps = routines.getRoutineSteps();
             List<RoutineStepResponse> routineStepResponses = new ArrayList<>();
@@ -228,7 +234,11 @@ public class RoutineService {
         if (routines != null) {
             routinesResponse.setName(routines.getName());
             routinesResponse.setDescription(routines.getDescription());
-            routinesResponse.setSkinTypeId(routines.getSkinType().getId());
+
+            SkinTypeResponse skinTypeResponse = new SkinTypeResponse();
+            skinTypeResponse.setTypeId(routines.getSkinType().getId());
+            skinTypeResponse.setType(routines.getSkinType().getName());
+            routinesResponse.setSkinTypeResponse(skinTypeResponse);
 
             List<RoutineStep> routineSteps = routines.getRoutineSteps();
             List<RoutineStepResponse> routineStepResponses = new ArrayList<>();
@@ -265,7 +275,11 @@ public class RoutineService {
         if (routines != null) {
             routinesResponse.setName(routines.getName());
             routinesResponse.setDescription(routines.getDescription());
-            routinesResponse.setSkinTypeId(routines.getSkinType().getId());
+
+            SkinTypeResponse skinTypeResponse = new SkinTypeResponse();
+            skinTypeResponse.setTypeId(routines.getSkinType().getId());
+            skinTypeResponse.setType(routines.getSkinType().getName());
+            routinesResponse.setSkinTypeResponse(skinTypeResponse);
 
             List<RoutineStep> routineSteps = routines.getRoutineSteps();
             List<RoutineStepResponse> routineStepResponses = new ArrayList<>();

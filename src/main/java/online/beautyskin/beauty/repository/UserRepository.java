@@ -1,6 +1,6 @@
 package online.beautyskin.beauty.repository;
 
-import online.beautyskin.beauty.entity.LoyaltyPoint;
+import online.beautyskin.beauty.entity.UserRank;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.enums.RoleEnums;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,13 +19,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByMail(String mail);
 
 
-    List<User> findByLoyaltyPointAndIsDeletedFalse(LoyaltyPoint loyaltyPoint);
-
-
     @Query("select count(a) from User  a where a.roleEnums=:roleEnums")
     long countByRole(RoleEnums roleEnums);
 
     @Query("SELECT u FROM User u WHERE u.roleEnums = :roleEnums")
     List<User> findAllStaff(@Param("roleEnums") RoleEnums roleEnums);
 
+    List<User> findByUserRankAndIsDeletedFalse(UserRank userRank);
 }

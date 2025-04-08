@@ -67,7 +67,7 @@ public class OrderService {
     private UserUtils userUtils;
 
     @Autowired
-    private LoyaltyPointService loyaltyPointService;
+    private UserRank userRank;
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
@@ -107,6 +107,9 @@ public class OrderService {
                 totalPrice += orderDetail.getTotalPrice();
                 // update the stock after order is create
                 product.setStock(product.getStock() - orderDetail.getQuantity());
+                if(product.getStock() == 0) {
+                    product.setStatus(ProductEnums.OUT_OF_STOCK);
+                }
                 productRepository.save(product);
             } else {
                 throw new RuntimeException("quantity is not enough");
@@ -169,6 +172,9 @@ public class OrderService {
                 totalPrice += orderDetail.getTotalPrice();
                 // update the stock after order is create
                 product.setStock(product.getStock() - orderDetail.getQuantity());
+                if(product.getStock() == 0) {
+                    product.setStatus(ProductEnums.OUT_OF_STOCK);
+                }
                 productRepository.save(product);
             } else {
                 throw new RuntimeException("quantity is not enough");
@@ -524,7 +530,7 @@ public class OrderService {
             order.setPaymentStatus(PaymentStatusEnums.PAID);
             // save into transaction
             transactionService.createTransactionForCreateOrder(order, TransactionEnums.COD);
-            loyaltyPointService.updateRankForUser(order.getUser());
+            userRank.updateRankForUser(order.getUser());
         }
         return orderRepository.save(order);
     }
@@ -583,7 +589,7 @@ public class OrderService {
 
         User user = order.getUser();
         user.setTotalAmount(user.getTotalAmount() + order.getTotalPrice());
-        loyaltyPointService.updateRankForUser(user);
+        userRank.updateRankForUser(user);
 
         return orderRepository.save(order);
     }

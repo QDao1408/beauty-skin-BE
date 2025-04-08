@@ -100,7 +100,7 @@ public class ProductService {
         product.setCreateDateTime(productRequest.getCreateDateTime());
         product.setLastUpdateDateTime(productRequest.getLastUpdateDateTime());
         product.setExpiredDateTime(productRequest.getExpiredDateTime());
-        product.setStatus(productRequest.getStatus());
+        product.setStatus(ProductEnums.AVAILABLE);
         product.setInstruction(productRequest.getInstruction());
         product.setPrice(productRequest.getPrice());
         product.setIngredient(productRequest.getIngredient());
@@ -203,6 +203,7 @@ public class ProductService {
 
     public Product deleteProduct(long id) {
         Product p1 = productRepository.findById(id);
+        p1.setStatus(ProductEnums.DELETED);
         p1.setDeleted(true);
         return productRepository.save(p1);
     }
@@ -216,7 +217,6 @@ public class ProductService {
         product.setCreateDateTime(productRequest.getCreateDateTime());
         product.setLastUpdateDateTime(productRequest.getLastUpdateDateTime());
         product.setExpiredDateTime(productRequest.getExpiredDateTime());
-        product.setStatus(productRequest.getStatus());
         product.setInstruction(productRequest.getInstruction());
         product.setPrice(productRequest.getPrice());
         product.setIngredient(productRequest.getIngredient());
@@ -344,19 +344,5 @@ public class ProductService {
         return  productRepository.findByCateAndSkinType(cateId, skinTypeId);
     }
 
-    @Scheduled(fixedRate = 1000 * 60 * 60)
-    public void updateProductStatus() {
-        List<Product> products = productRepository.getAllProducts();
-        for(Product product : products) {
-            if(product.getStock() > 0) {
-                product.setStatus(ProductEnums.AVAILABLE);
-            } else if (product.getStock() == 0) {
-                product.setStatus(ProductEnums.OUT_OF_STOCK);
-            }
-            if(product.isDeleted() == true) {
-                product.setStatus(ProductEnums.DELETED);
-            }
-            productRepository.save(product);
-        }
-    }
+
 }

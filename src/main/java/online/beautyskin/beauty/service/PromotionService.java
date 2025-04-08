@@ -1,11 +1,9 @@
 package online.beautyskin.beauty.service;
 
-import online.beautyskin.beauty.entity.LoyaltyPoint;
+import online.beautyskin.beauty.entity.UserRank;
 import online.beautyskin.beauty.entity.Promotion;
-import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.entity.request.PromoRequest;
-import online.beautyskin.beauty.repository.LoyaltyPointRepository;
-import online.beautyskin.beauty.repository.OrderRepository;
+import online.beautyskin.beauty.repository.UserRankRepository;
 import online.beautyskin.beauty.repository.PromotionRepository;
 import online.beautyskin.beauty.utils.UserUtils;
 
@@ -22,7 +20,7 @@ public class PromotionService {
     private PromotionRepository promotionRepository;
 
     @Autowired
-    private LoyaltyPointRepository loyaltyPointRepository;
+    private UserRankRepository userRankRepository;
 
     @Autowired
     private UserUtils userUtils;
@@ -43,7 +41,7 @@ public class PromotionService {
         promotion.setDeleted(false);
         promotion.setDescription(request.getDescription());
         promotion.setEndDate(request.getEndDate());
-        promotion.setLoyaltyPoint(getLoyaltyPoint(request.getRank()));
+        promotion.setUserRank(getLoyaltyPoint(request.getRank()));
         promotion.setStartDate(request.getStartDate());
         promotion.setName(request.getName());
         promotion.setNumOfPromo(request.getNumOfPromo());
@@ -71,8 +69,8 @@ public class PromotionService {
         return promotionRepository.save(promotion);
     }
 
-    public LoyaltyPoint getLoyaltyPoint(long rank) {
-        return loyaltyPointRepository.getReferenceById(rank);
+    public UserRank getLoyaltyPoint(long rank) {
+        return userRankRepository.getReferenceById(rank);
     }
 
 

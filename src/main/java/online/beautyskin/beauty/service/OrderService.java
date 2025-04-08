@@ -411,8 +411,7 @@ public class OrderService {
             updateOrderConfirmed(id);
         } else if (status == OrderStatusEnums.REFUND_REQ) {// user gửi yêu cấu refund sp, chờ manager duyệt
             updateOrderRefundRequest(id);
-        } else if (status == OrderStatusEnums.REFUNDED) {// đơn được duyệt, trả tiền cho user, manager chỉnh stock lại =
-            // tay
+        } else if (status == OrderStatusEnums.REFUNDED) {// đơn được duyệt, trả tiền cho user, manager chỉnh stock lại = tay
             updateOrderRefunded(id);
         }
         return orderRepository.save(order);
@@ -426,7 +425,13 @@ public class OrderService {
             String des = "User " + order.getUser().getId()
                     + " pay for order " + order.getId();
             transaction.setTransactionDate(LocalDateTime.now());
-            transaction.setEnums(TransactionEnums.VNPAY);
+            // kiểm tra payment method của order để gắn vào enum của transaction
+            if(order.getPaymentMethod().toString().equals("VNPAY")) { // vnpay
+                transaction.setEnums(TransactionEnums.VNPAY);
+            } else { // cod
+                transaction.setEnums(TransactionEnums.COD);
+            }
+            
             transaction.setOrders(order);
             transaction.setAmount(order.getTotalPrice());
             transaction.setDescription(des);
@@ -546,7 +551,6 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    // bug cancel chưa cộng
     public Order updateOrderCancelled(long orderId) {
         Order order = orderRepository.findOrderById(orderId);
         if (order.getOrderStatus() != OrderStatusEnums.PENDING) {
@@ -589,6 +593,7 @@ public class OrderService {
 
         User user = order.getUser();
         user.setTotalAmount(user.getTotalAmount() + order.getTotalPrice());
+        userRepository.save(user);
         userRankService.updateRankForUser(user);
 
         return orderRepository.save(order);

@@ -27,13 +27,13 @@ public class UserRankService {
     }
 
     public List<User> getUserByRank(long id) {
-        online.beautyskin.beauty.entity.UserRank userRank = userRankRepository.getReferenceById(id);
+        UserRank userRank = userRankRepository.getReferenceById(id);
         return userRepository.findByUserRankAndIsDeletedFalse(userRank);
     }
 
     public void updateRankForUser(User user) {
         long rankId = calculateRank(user.getTotalAmount());
-        online.beautyskin.beauty.entity.UserRank rank = userRankRepository.getReferenceById(rankId);
+        UserRank rank = userRankRepository.getReferenceById(rankId);
         user.setUserRank(rank);
         userRepository.save(user);
     }

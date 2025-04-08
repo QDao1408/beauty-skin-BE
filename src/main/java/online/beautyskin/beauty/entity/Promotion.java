@@ -34,8 +34,8 @@ public class Promotion {
     private int numOfPromo;
 
     
-    @ManyToOne(fetch = FetchType.LAZY) // Ensure Lazy Fetch
-    @JoinColumn(name = "rank_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "rank_id")
     private UserRank userRank;
 
     @OneToMany(mappedBy = "promotion", orphanRemoval = true)

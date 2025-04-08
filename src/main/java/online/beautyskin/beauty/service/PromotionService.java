@@ -64,7 +64,7 @@ public class PromotionService {
         promotion.setDeleted(false);
         promotion.setDescription(request.getDescription());
         promotion.setEndDate(request.getEndDate());
-        promotion.setUserRank(getLoyaltyPoint(request.getRank()));
+        promotion.setUserRank(userRankRepository.findById(request.getRank()));
         promotion.setStartDate(request.getStartDate());
         promotion.setName(request.getName());
         promotion.setNumOfPromo(request.getNumOfPromo());
@@ -83,18 +83,26 @@ public class PromotionService {
         }
     }
 
-    public Promotion updatePromotion(Promotion promotion) {
+    public Promotion updatePromotion(PromoRequest request, long id) {
+        Promotion promotion = promotionRepository.findById(id);
+        promotion.setDescription(request.getDescription());
+        promotion.setEndDate(request.getEndDate());
+        promotion.setUserRank(userRankRepository.findById(request.getRank()));
+        promotion.setStartDate(request.getStartDate());
+        promotion.setName(request.getName());
+        promotion.setNumOfPromo(request.getNumOfPromo());
+        promotion.setPromoAmount(request.getPromoAmount());
+        promotion.setOrderPrice(request.getOrderPrice());
+        promotion.setOutDate();
         return promotionRepository.save(promotion);
     }
 
-    public Promotion deletePromotion(Promotion promotion) {
+    public Promotion deletePromotion(long id) {
+        Promotion promotion = promotionRepository.findById(id);
         promotion.setDeleted(true);
         return promotionRepository.save(promotion);
     }
 
-    public UserRank getLoyaltyPoint(long rank) {
-        return userRankRepository.getReferenceById(rank);
-    }
 
 
 }

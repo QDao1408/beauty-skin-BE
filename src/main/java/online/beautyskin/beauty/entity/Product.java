@@ -43,6 +43,7 @@ public class Product {
     private OffsetDateTime expiredDateTime;
 
     @Column(name = "Status")
+    @Enumerated(EnumType.STRING)
     private ProductEnums status;
 
     @Lob  // Marks this as a large object (TEXT/BLOB)

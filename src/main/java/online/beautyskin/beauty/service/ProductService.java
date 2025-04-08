@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.ProductRequest;
 import online.beautyskin.beauty.entity.respone.ProductResponse;
+import online.beautyskin.beauty.enums.ProductEnums;
 import online.beautyskin.beauty.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -340,5 +342,21 @@ public class ProductService {
 
     public List<Product> getByCateAndSkinType(long cateId, long skinTypeId) {
         return  productRepository.findByCateAndSkinType(cateId, skinTypeId);
+    }
+
+    @Scheduled(fixedRate = 1000 * 60 * 60)
+    public void updateProductStatus() {
+        List<Product> products = productRepository.getAllProducts();
+        for(Product product : products) {
+            if(product.getStock() > 0) {
+                product.setStatus(ProductEnums.AVAILABLE);
+            } else if (product.getStock() == 0) {
+                product.setStatus(ProductEnums.OUT_OF_STOCK);
+            }
+            if(product.isDeleted() == true) {
+                product.setStatus(ProductEnums.DELETED);
+            }
+            productRepository.save(product);
+        }
     }
 }

@@ -32,6 +32,12 @@ public class PromotionAPI {
         return ResponseEntity.ok(responses);
     }
 
+    @GetMapping("/get-promotion-by-rank/{rankId}")
+    public ResponseEntity getPromotionByRank(@PathVariable long rankId) {
+        List<Promotion> promotions = promotionService.getPromotionByRank(rankId);
+        return ResponseEntity.ok(promotions);
+    }
+
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity create(@RequestBody PromoRequest promotion) {

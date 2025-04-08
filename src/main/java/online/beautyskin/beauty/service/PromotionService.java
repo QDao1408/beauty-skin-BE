@@ -104,5 +104,8 @@ public class PromotionService {
     }
 
 
-
+    public List<Promotion> getPromotionByRank(long rankId) {
+        List<Promotion> promotions = promotionRepository.findByUserRank(userRankRepository.findById(rankId));
+        return promotions;
+    }
 }

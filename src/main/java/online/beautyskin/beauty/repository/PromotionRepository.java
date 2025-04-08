@@ -18,4 +18,5 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
     Promotion findById(long id);
 
+    List<Promotion> findByUserRank(UserRank userRank);
 }

@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface UserRankRepository extends JpaRepository<UserRank, Long>{
     @Override
     Optional<UserRank> findById(Long aLong);
+
+    Double findAmountLevelByRankName(String rankName);
 }

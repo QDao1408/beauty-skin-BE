@@ -67,7 +67,7 @@ public class OrderService {
     private UserUtils userUtils;
 
     @Autowired
-    private UserRank userRank;
+    private UserRankService userRankService;
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
@@ -530,7 +530,7 @@ public class OrderService {
             order.setPaymentStatus(PaymentStatusEnums.PAID);
             // save into transaction
             transactionService.createTransactionForCreateOrder(order, TransactionEnums.COD);
-            userRank.updateRankForUser(order.getUser());
+            userRankService.updateRankForUser(order.getUser());
         }
         return orderRepository.save(order);
     }
@@ -589,7 +589,7 @@ public class OrderService {
 
         User user = order.getUser();
         user.setTotalAmount(user.getTotalAmount() + order.getTotalPrice());
-        userRank.updateRankForUser(user);
+        userRankService.updateRankForUser(user);
 
         return orderRepository.save(order);
     }

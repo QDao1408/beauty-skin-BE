@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import online.beautyskin.beauty.entity.User;
+import online.beautyskin.beauty.entity.UserRank;
 import online.beautyskin.beauty.repository.UserRankRepository;
 import online.beautyskin.beauty.repository.UserRepository;
 
 @Service
-public class UserRank {
+public class UserRankService {
 
     
 
@@ -20,11 +21,8 @@ public class UserRank {
     @Autowired
     private UserRepository userRepository;
 
-    double SILVER_POINT = 5000000;
-    double GOLD_POINT = 10000000;
-    double DIAMOND_POINT = 20000000;
 
-    public List<online.beautyskin.beauty.entity.UserRank> getAll() {
+    public List<UserRank> getAll() {
         return userRankRepository.findAll();
     }
 
@@ -41,6 +39,9 @@ public class UserRank {
     }
 
     public Long calculateRank(double point) {
+        double SILVER_POINT = userRankRepository.findAmountLevelByRankName("SILVER");
+        double GOLD_POINT = userRankRepository.findAmountLevelByRankName("GOLD");
+        double DIAMOND_POINT = userRankRepository.findAmountLevelByRankName("DIAMOND");
         long rankId = 1;
         if(point > SILVER_POINT && point <= GOLD_POINT) {
             rankId = 2;

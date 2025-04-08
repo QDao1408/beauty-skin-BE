@@ -223,6 +223,12 @@ public class ProductService {
         product.setCategory(categoryRepository.findById(productRequest.getCategoryId()));
         product.setPromotion(productRequest.getPromotion());
 
+        if(product.getStock() > 0) {
+            product.setStatus(ProductEnums.AVAILABLE);
+        } else {
+            product.setStatus(ProductEnums.OUT_OF_STOCK);
+        }
+
         List<SkinType> skinTypes = addSkinType(productRequest.getSkinTypeId());
         product.setSkinTypes(skinTypes);
 

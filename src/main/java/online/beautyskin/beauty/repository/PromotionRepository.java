@@ -1,6 +1,6 @@
 package online.beautyskin.beauty.repository;
 
-import online.beautyskin.beauty.entity.LoyaltyPoint;
+import online.beautyskin.beauty.entity.UserRank;
 import online.beautyskin.beauty.entity.Promotion;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,16 +12,11 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
     List<Promotion> findAllByIsDeletedFalse();
 
-    Promotion findByIdAndIsDeletedFalseAndIsOutDateFalse(long id);
-
-    List<Promotion> findAllByIsOutDateFalseAndIsDeletedFalse();
-
     List<Promotion> findAllByNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(int numOfPromo);
 
     Optional<Promotion> findAllByIdAndNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(long id, int numOfPromo);
 
-    List<Promotion> findAllByLoyaltyPointAndIsDeletedFalse(LoyaltyPoint loyaltyPoint);
+    Promotion findById(long id);
 
-    List<Promotion> findByLoyaltyPoint(LoyaltyPoint loyaltyPoint);
-
+    List<Promotion> findByUserRank(UserRank userRank);
 }

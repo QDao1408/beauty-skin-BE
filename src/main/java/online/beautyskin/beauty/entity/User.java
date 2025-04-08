@@ -72,7 +72,7 @@ public class User implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "rank_id")
-    private LoyaltyPoint loyaltyPoint;
+    private UserRank userRank;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
@@ -270,11 +270,11 @@ public class User implements UserDetails {
         this.isActive = isActive;
     }
 
-    public LoyaltyPoint getLoyaltyPoint() {
-        return loyaltyPoint;
+    public UserRank getUserRank() {
+        return userRank;
     }
 
-    public void setLoyaltyPoint(LoyaltyPoint loyaltyPoint) {
-        this.loyaltyPoint = loyaltyPoint;
+    public void setUserRank(UserRank userRank) {
+        this.userRank = userRank;
     }
 }

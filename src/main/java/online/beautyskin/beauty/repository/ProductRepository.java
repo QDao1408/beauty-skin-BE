@@ -20,6 +20,9 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
 
         public Product findById(long id);
 
+        @Query("select p from Product p")
+        List<Product> getAllProducts();
+
         List<Product> findByCategory(Category category);
 
         List<Product> findBySkinTypesIdAndIsDeletedFalse(long id);

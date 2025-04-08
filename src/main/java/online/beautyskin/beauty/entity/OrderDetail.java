@@ -20,6 +20,8 @@ public class OrderDetail {
     @Column(name = "TotalPrice")
     @Min(0)
     private double totalPrice;
+    
+    @Column(name = "is_feedback")
     private boolean feedback = false;
 
     @ManyToOne

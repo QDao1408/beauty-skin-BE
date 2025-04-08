@@ -1,48 +1,47 @@
 package online.beautyskin.beauty.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import online.beautyskin.beauty.entity.LoyaltyPoint;
 import online.beautyskin.beauty.entity.User;
-import online.beautyskin.beauty.repository.LoyaltyPointRepository;
+import online.beautyskin.beauty.entity.UserRank;
+import online.beautyskin.beauty.repository.UserRankRepository;
 import online.beautyskin.beauty.repository.UserRepository;
 
 @Service
-public class LoyaltyPointService {
+public class UserRankService {
 
     
 
     @Autowired
-    private LoyaltyPointRepository loyaltyPointRepository;
+    private UserRankRepository userRankRepository;
 
     @Autowired
     private UserRepository userRepository;
 
-    double SILVER_POINT = 5000000;
-    double GOLD_POINT = 10000000;
-    double DIAMOND_POINT = 20000000;
 
-    public List<LoyaltyPoint> getAll() {
-        return loyaltyPointRepository.findAll();
+    public List<UserRank> getAll() {
+        return userRankRepository.findAll();
     }
 
     public List<User> getUserByRank(long id) {
-        LoyaltyPoint loyaltyPoint = loyaltyPointRepository.getReferenceById(id);
-        return userRepository.findByLoyaltyPointAndIsDeletedFalse(loyaltyPoint);
+        UserRank userRank = userRankRepository.getReferenceById(id);
+        return userRepository.findByUserRankAndIsDeletedFalse(userRank);
     }
 
     public void updateRankForUser(User user) {
         long rankId = calculateRank(user.getTotalAmount());
-        LoyaltyPoint rank = loyaltyPointRepository.getReferenceById(rankId);
-        user.setLoyaltyPoint(rank);
+        UserRank rank = userRankRepository.getReferenceById(rankId);
+        user.setUserRank(rank);
         userRepository.save(user);
     }
 
     public Long calculateRank(double point) {
+        double SILVER_POINT = userRankRepository.findAmountLevelByRankName("SILVER");
+        double GOLD_POINT = userRankRepository.findAmountLevelByRankName("GOLD");
+        double DIAMOND_POINT = userRankRepository.findAmountLevelByRankName("DIAMOND");
         long rankId = 1;
         if(point > SILVER_POINT && point <= GOLD_POINT) {
             rankId = 2;
@@ -54,7 +53,7 @@ public class LoyaltyPointService {
         return rankId;
     }
 
-    public LoyaltyPoint createRank(LoyaltyPoint loyaltyPoint) {
-        return loyaltyPointRepository.save(loyaltyPoint);
+    public online.beautyskin.beauty.entity.UserRank createRank(online.beautyskin.beauty.entity.UserRank userRank) {
+        return userRankRepository.save(userRank);
     }
 }

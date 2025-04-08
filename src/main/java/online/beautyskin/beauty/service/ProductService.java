@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import online.beautyskin.beauty.entity.*;
 import online.beautyskin.beauty.entity.request.ProductRequest;
 import online.beautyskin.beauty.entity.respone.ProductResponse;
+import online.beautyskin.beauty.enums.ProductEnums;
 import online.beautyskin.beauty.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -98,7 +100,7 @@ public class ProductService {
         product.setCreateDateTime(productRequest.getCreateDateTime());
         product.setLastUpdateDateTime(productRequest.getLastUpdateDateTime());
         product.setExpiredDateTime(productRequest.getExpiredDateTime());
-        product.setStatus(productRequest.getStatus());
+        product.setStatus(ProductEnums.AVAILABLE);
         product.setInstruction(productRequest.getInstruction());
         product.setPrice(productRequest.getPrice());
         product.setIngredient(productRequest.getIngredient());
@@ -201,6 +203,7 @@ public class ProductService {
 
     public Product deleteProduct(long id) {
         Product p1 = productRepository.findById(id);
+        p1.setStatus(ProductEnums.DELETED);
         p1.setDeleted(true);
         return productRepository.save(p1);
     }
@@ -214,12 +217,17 @@ public class ProductService {
         product.setCreateDateTime(productRequest.getCreateDateTime());
         product.setLastUpdateDateTime(productRequest.getLastUpdateDateTime());
         product.setExpiredDateTime(productRequest.getExpiredDateTime());
-        product.setStatus(productRequest.getStatus());
         product.setInstruction(productRequest.getInstruction());
         product.setPrice(productRequest.getPrice());
         product.setIngredient(productRequest.getIngredient());
         product.setCategory(categoryRepository.findById(productRequest.getCategoryId()));
         product.setPromotion(productRequest.getPromotion());
+
+        if(product.getStock() > 0) {
+            product.setStatus(ProductEnums.AVAILABLE);
+        } else {
+            product.setStatus(ProductEnums.OUT_OF_STOCK);
+        }
 
         List<SkinType> skinTypes = addSkinType(productRequest.getSkinTypeId());
         product.setSkinTypes(skinTypes);
@@ -341,4 +349,6 @@ public class ProductService {
     public List<Product> getByCateAndSkinType(long cateId, long skinTypeId) {
         return  productRepository.findByCateAndSkinType(cateId, skinTypeId);
     }
+
+
 }

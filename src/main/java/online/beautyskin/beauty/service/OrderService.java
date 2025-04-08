@@ -67,7 +67,7 @@ public class OrderService {
     private UserUtils userUtils;
 
     @Autowired
-    private LoyaltyPointService loyaltyPointService;
+    private UserRankService userRankService;
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
@@ -107,6 +107,9 @@ public class OrderService {
                 totalPrice += orderDetail.getTotalPrice();
                 // update the stock after order is create
                 product.setStock(product.getStock() - orderDetail.getQuantity());
+                if(product.getStock() == 0) {
+                    product.setStatus(ProductEnums.OUT_OF_STOCK);
+                }
                 productRepository.save(product);
             } else {
                 throw new RuntimeException("quantity is not enough");
@@ -169,6 +172,9 @@ public class OrderService {
                 totalPrice += orderDetail.getTotalPrice();
                 // update the stock after order is create
                 product.setStock(product.getStock() - orderDetail.getQuantity());
+                if(product.getStock() == 0) {
+                    product.setStatus(ProductEnums.OUT_OF_STOCK);
+                }
                 productRepository.save(product);
             } else {
                 throw new RuntimeException("quantity is not enough");
@@ -405,8 +411,7 @@ public class OrderService {
             updateOrderConfirmed(id);
         } else if (status == OrderStatusEnums.REFUND_REQ) {// user gửi yêu cấu refund sp, chờ manager duyệt
             updateOrderRefundRequest(id);
-        } else if (status == OrderStatusEnums.REFUNDED) {// đơn được duyệt, trả tiền cho user, manager chỉnh stock lại =
-            // tay
+        } else if (status == OrderStatusEnums.REFUNDED) {// đơn được duyệt, trả tiền cho user, manager chỉnh stock lại = tay
             updateOrderRefunded(id);
         }
         return orderRepository.save(order);
@@ -420,7 +425,13 @@ public class OrderService {
             String des = "User " + order.getUser().getId()
                     + " pay for order " + order.getId();
             transaction.setTransactionDate(LocalDateTime.now());
-            transaction.setEnums(TransactionEnums.VNPAY);
+            // kiểm tra payment method của order để gắn vào enum của transaction
+            if(order.getPaymentMethod().toString().equals("VNPAY")) { // vnpay
+                transaction.setEnums(TransactionEnums.VNPAY);
+            } else { // cod
+                transaction.setEnums(TransactionEnums.COD);
+            }
+            
             transaction.setOrders(order);
             transaction.setAmount(order.getTotalPrice());
             transaction.setDescription(des);
@@ -524,7 +535,7 @@ public class OrderService {
             order.setPaymentStatus(PaymentStatusEnums.PAID);
             // save into transaction
             transactionService.createTransactionForCreateOrder(order, TransactionEnums.COD);
-            loyaltyPointService.updateRankForUser(order.getUser());
+            userRankService.updateRankForUser(order.getUser());
         }
         return orderRepository.save(order);
     }
@@ -540,7 +551,6 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    // bug cancel chưa cộng
     public Order updateOrderCancelled(long orderId) {
         Order order = orderRepository.findOrderById(orderId);
         if (order.getOrderStatus() != OrderStatusEnums.PENDING) {
@@ -583,7 +593,8 @@ public class OrderService {
 
         User user = order.getUser();
         user.setTotalAmount(user.getTotalAmount() + order.getTotalPrice());
-        loyaltyPointService.updateRankForUser(user);
+        userRepository.save(user);
+        userRankService.updateRankForUser(user);
 
         return orderRepository.save(order);
     }

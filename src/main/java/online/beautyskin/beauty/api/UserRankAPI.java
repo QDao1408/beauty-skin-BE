@@ -7,34 +7,33 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import online.beautyskin.beauty.entity.LoyaltyPoint;
-import online.beautyskin.beauty.service.LoyaltyPointService;
+import online.beautyskin.beauty.service.UserRankService;
 
 
 @RestController
-@RequestMapping("/api/loyalty-point")
+@RequestMapping("/api/user-rank")
 @SecurityRequirement(name = "api")
-public class LoyaltyPointAPI {
+public class UserRankAPI {
     
     @Autowired
-    private LoyaltyPointService loyaltyPointService;
+    private UserRankService userRankService;
 
     @GetMapping("/gets")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity getAll() {
-        return ResponseEntity.ok(loyaltyPointService.getAll());
+        return ResponseEntity.ok(userRankService.getAll());
     }
 
     @GetMapping("/get-user-by-rank/{id}")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
     public ResponseEntity getUserByRank(@PathVariable long id) {
-        return ResponseEntity.ok(loyaltyPointService.getUserByRank(id));
+        return ResponseEntity.ok(userRankService.getUserByRank(id));
     }
 
     @PostMapping("/create-rank")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity createRank(@RequestBody LoyaltyPoint loyaltyPoint) {
-        return ResponseEntity.ok(loyaltyPointService.createRank(loyaltyPoint));
+    public ResponseEntity createRank(@RequestBody online.beautyskin.beauty.entity.UserRank userRank) {
+        return ResponseEntity.ok(this.userRankService.createRank(userRank));
     }
     
     

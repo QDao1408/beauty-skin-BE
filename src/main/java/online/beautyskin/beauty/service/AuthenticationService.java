@@ -62,8 +62,8 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    @SneakyThrows
-    public User register(UserRequest userRequest) {
+
+    public User register(UserRequest userRequest) throws SQLIntegrityConstraintViolationException {
         User user = new User();
 
         if (userRequest.getConfirmPassword().equals(userRequest.getPassword())) {
@@ -193,8 +193,8 @@ public class AuthenticationService implements UserDetailsService {
 
     }
 
-    @SneakyThrows
-    public void resetPassword(ResetPasswordRequest resetPasswordRequest) {
+
+    public void resetPassword(ResetPasswordRequest resetPasswordRequest) throws SQLIntegrityConstraintViolationException {
         User user = userUtils.getCurrentUser();
         String pass = resetPasswordRequest.getPassword();
         String confirmPass = resetPasswordRequest.getConfirmPassword();

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,7 @@ public class AuthenticationAPI {
     private AuthenticationService authenticationService;
 
     @PostMapping("register")
-    public ResponseEntity register(@Valid @RequestBody UserRequest userRequest) {
+    public ResponseEntity register(@Valid @RequestBody UserRequest userRequest) throws SQLIntegrityConstraintViolationException {
         User user = authenticationService.register(userRequest);
         return ResponseEntity.ok(user);
     }
@@ -56,7 +57,7 @@ public class AuthenticationAPI {
     }
 
     @PostMapping("reset-password")
-    public ResponseEntity resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
+    public ResponseEntity resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) throws SQLIntegrityConstraintViolationException {
         authenticationService.resetPassword(resetPasswordRequest);
         return ResponseEntity.ok("Reset password successfully");
     }

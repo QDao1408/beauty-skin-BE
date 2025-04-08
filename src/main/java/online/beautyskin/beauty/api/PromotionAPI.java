@@ -3,6 +3,7 @@ package online.beautyskin.beauty.api;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import online.beautyskin.beauty.entity.Promotion;
 import online.beautyskin.beauty.entity.request.PromoRequest;
+import online.beautyskin.beauty.entity.respone.PromoResponse;
 import online.beautyskin.beauty.service.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -26,13 +26,15 @@ public class PromotionAPI {
     private PromotionService promotionService;
 
 
-
-    List<Promotion> promotions;
-
-
     @GetMapping("/getValid")
     public ResponseEntity getValid() {
-        promotions = promotionService.getValidPromotions();
+        List<PromoResponse> responses = promotionService.getValidPromotions();
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/get-promotion-by-rank/{rankId}")
+    public ResponseEntity getPromotionByRank(@PathVariable long rankId) {
+        List<Promotion> promotions = promotionService.getPromotionByRank(rankId);
         return ResponseEntity.ok(promotions);
     }
 
@@ -45,15 +47,15 @@ public class PromotionAPI {
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity delete(@RequestBody Promotion promotion, @PathVariable long id) {
-        Promotion del = promotionService.deletePromotion(promotion);
+    public ResponseEntity delete(@PathVariable long id) {
+        Promotion del = promotionService.deletePromotion(id);
         return ResponseEntity.ok(del);
     }
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAnyAuthority('MANAGER')")
-    public ResponseEntity update(@RequestBody Promotion promotion, @PathVariable long id) {
-        Promotion upd = promotionService.updatePromotion(promotion);
+    public ResponseEntity update(@RequestBody PromoRequest promotion, @PathVariable long id) {
+        Promotion upd = promotionService.updatePromotion(promotion, id);
         return ResponseEntity.ok(upd);
     }
 

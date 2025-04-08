@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 @Entity
 @Table(name = "user_rank")
-public class LoyaltyPoint {
+public class UserRank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -23,14 +23,15 @@ public class LoyaltyPoint {
 //    )
 //    private List<User> users = new ArrayList<>();
 
-    @OneToMany(mappedBy = "loyaltyPoint")
+    @OneToMany(mappedBy = "userRank")
     @JsonIgnore
     private List<User> users = new ArrayList<>();
 
-    @OneToMany(mappedBy = "loyaltyPoint", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "userRank", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Promotion> promotions = new ArrayList<>();
 
-    public LoyaltyPoint() {}
+    public UserRank() {}
 
     public long getId() {
         return id;
@@ -62,12 +63,12 @@ public class LoyaltyPoint {
     
     public void addPromotion(Promotion promotion) {
         this.promotions.add(promotion);
-        promotion.setLoyaltyPoint(this);
+        promotion.setUserRank(this);
     }
 
     public void removePromotion(Promotion promotion) {
         this.promotions.remove(promotion);
-        promotion.setLoyaltyPoint(null);
+        promotion.setUserRank(null);
     }
 
     public List<User> getUsers() {

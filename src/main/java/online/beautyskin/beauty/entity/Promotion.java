@@ -3,12 +3,9 @@ package online.beautyskin.beauty.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.scheduling.annotation.Scheduled;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,6 +22,7 @@ public class Promotion {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private OffsetDateTime startDate;
     @Column(name = "EndDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private OffsetDateTime endDate;
     @Column(name = "Description")
     private String description;
@@ -36,10 +34,9 @@ public class Promotion {
     private int numOfPromo;
 
     
-    @ManyToOne(fetch = FetchType.LAZY) // Ensure Lazy Fetch
-    @JoinColumn(name = "rank_id", referencedColumnName = "id")
-    @JsonIgnore 
-    private LoyaltyPoint loyaltyPoint;
+    @ManyToOne
+    @JoinColumn(name = "rank_id")
+    private UserRank userRank;
 
     @OneToMany(mappedBy = "promotion", orphanRemoval = true)
     @JsonIgnore
@@ -92,12 +89,12 @@ public class Promotion {
         isDeleted = deleted;
     }
 
-    public LoyaltyPoint getLoyaltyPoint() {
-        return loyaltyPoint;
+    public UserRank getUserRank() {
+        return userRank;
     }
 
-    public void setLoyaltyPoint(LoyaltyPoint loyaltyPoint) {
-        this.loyaltyPoint = loyaltyPoint;
+    public void setUserRank(UserRank userRank) {
+        this.userRank = userRank;
     }
 
     public int getNumOfPromo() {

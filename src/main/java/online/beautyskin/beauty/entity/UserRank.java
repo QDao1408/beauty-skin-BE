@@ -28,6 +28,7 @@ public class UserRank {
     private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "userRank", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Promotion> promotions = new ArrayList<>();
 
     public UserRank() {}

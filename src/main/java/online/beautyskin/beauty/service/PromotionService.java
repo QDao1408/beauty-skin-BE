@@ -3,6 +3,8 @@ package online.beautyskin.beauty.service;
 import online.beautyskin.beauty.entity.UserRank;
 import online.beautyskin.beauty.entity.Promotion;
 import online.beautyskin.beauty.entity.request.PromoRequest;
+import online.beautyskin.beauty.entity.respone.PromoResponse;
+import online.beautyskin.beauty.entity.respone.UserRankResponse;
 import online.beautyskin.beauty.repository.UserRankRepository;
 import online.beautyskin.beauty.repository.PromotionRepository;
 import online.beautyskin.beauty.utils.UserUtils;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,15 +28,35 @@ public class PromotionService {
     @Autowired
     private UserUtils userUtils;
 
-    public List<Promotion> getValidPromotions() {
-        List<Promotion> promotions = promotionRepository
-                .findAllByNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(0);
-        return promotions;
+    public List<PromoResponse> getValidPromotions() {
+        List<Promotion> promotions = promotionRepository.findAllByNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(0);
+        List<PromoResponse> responses = new ArrayList<>();
+        for(Promotion promo : promotions) {
+            responses.add(mappingPromoResponse(promo));
+        }
+        return responses;
     }
 
-    public List<Promotion> getAllPromotions() {
-        List<Promotion> promotions = promotionRepository.findAllByIsDeletedFalse();
-        return promotions;
+    public PromoResponse mappingPromoResponse(Promotion promotion) {
+        PromoResponse response = new PromoResponse();
+        response.setDescription(promotion.getDescription());
+        response.setEndDate(promotion.getEndDate());
+        response.setId(promotion.getId());
+        response.setName(promotion.getName());
+        response.setNumOfPromo(promotion.getNumOfPromo());
+        response.setPromoAmount(promotion.getPromoAmount());
+        response.setStartDate(promotion.getStartDate());
+        response.setUserRank(mappingUserRankResponse(promotion.getUserRank()));
+        response.setOrderPrice(promotion.getOrderPrice());
+        return response;
+    }
+
+    public UserRankResponse mappingUserRankResponse(UserRank userRank) {
+        UserRankResponse response = new UserRankResponse();
+        response.setAmountLevel(userRank.getAmountLevel());
+        response.setId(userRank.getId());
+        response.setRankName(userRank.getRankName());
+        return response;
     }
 
     public Promotion createPromotion(PromoRequest request) {

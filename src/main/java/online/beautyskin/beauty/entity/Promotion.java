@@ -22,6 +22,7 @@ public class Promotion {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private OffsetDateTime startDate;
     @Column(name = "EndDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private OffsetDateTime endDate;
     @Column(name = "Description")
     private String description;
@@ -35,7 +36,6 @@ public class Promotion {
     
     @ManyToOne(fetch = FetchType.LAZY) // Ensure Lazy Fetch
     @JoinColumn(name = "rank_id", referencedColumnName = "id")
-    @JsonIgnore 
     private UserRank userRank;
 
     @OneToMany(mappedBy = "promotion", orphanRemoval = true)

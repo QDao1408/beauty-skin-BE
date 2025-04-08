@@ -3,6 +3,7 @@ package online.beautyskin.beauty.api;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import online.beautyskin.beauty.entity.Promotion;
 import online.beautyskin.beauty.entity.request.PromoRequest;
+import online.beautyskin.beauty.entity.respone.PromoResponse;
 import online.beautyskin.beauty.service.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,8 @@ public class PromotionAPI {
 
     @GetMapping("/getValid")
     public ResponseEntity getValid() {
-        promotions = promotionService.getValidPromotions();
-        return ResponseEntity.ok(promotions);
+        List<PromoResponse> responses = promotionService.getValidPromotions();
+        return ResponseEntity.ok(responses);
     }
 
     @PostMapping("/create")

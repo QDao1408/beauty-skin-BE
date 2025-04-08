@@ -46,7 +46,7 @@ public class EmailService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
 
             // setting mail details
-            mimeMessageHelper.setFrom("daonqse182848@fpt.edu.vn");
+            mimeMessageHelper.setFrom("daoleo2048@gmail.com");
             mimeMessageHelper.setTo(emailDetails.getReceiver());
             mimeMessageHelper.setText(text, true); // là 1 template html
             mimeMessageHelper.setSubject(emailDetails.getSubject());

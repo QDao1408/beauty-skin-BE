@@ -558,8 +558,10 @@ public class OrderService {
                 promotion.setNumOfPromo(promotion.getNumOfPromo() + 1);
                 promotionRepository.save(promotion);
             }
-            // tạo transaction hoàn tiền
-            transactionService.createRefundTransaction(order);
+            // tạo transaction hoàn tiền khi thanh toán qua VNPAY
+            if(order.getPaymentMethod().equals("VNPAY")) {
+                transactionService.createRefundTransaction(order);
+            }
             return orderRepository.save(order);
         } else {
             throw new NotFoundException("Đơn hàng đang được xử lí, bạn không thể hủy đơn hàng");

@@ -114,7 +114,7 @@ public class Product {
     )
     private List<Form> forms = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "products")
     @JsonIgnore
     private List<RoutineStep> routineSteps = new ArrayList<>();
 

@@ -29,6 +29,11 @@ public class RoutineStep {
     private Routine routine;
 
     @ManyToMany
+    @JoinTable(
+            name = "mapping_step_product",
+            joinColumns = @JoinColumn(name = "step_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
     private List<Product> products = new ArrayList<>();
 
 

@@ -68,7 +68,7 @@ public class AuthenticationService implements UserDetailsService {
 
         if (userRequest.getConfirmPassword().equals(userRequest.getPassword())) {
 
-            passwordEncoder.encode(userRequest.getPassword());
+            //passwordEncoder.encode(userRequest.getPassword());
 
             user.roleEnums = RoleEnums.USER;
             user.setPassword(passwordEncoder.encode(userRequest.getPassword()));

@@ -7,6 +7,7 @@ public class UserRequest {
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$#*!%&]).{8,}$",  message =  "password cần có chữ hoa, chữ thường, số, ký tự db")
     private String password;
     private String confirmPassword;
+    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "email chưa đúng định dạng")
     private String email;
     private String fullName;
 

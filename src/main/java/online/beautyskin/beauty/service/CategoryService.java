@@ -21,9 +21,6 @@ public class CategoryService {
         return categoryRepository.findById(id);
     }
 
-    public Category update(Category category) {
-        return categoryRepository.save(category);
-    }
 
     public Category create(CategoryRequest categoryRequest) {
         Category category = new Category();

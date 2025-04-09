@@ -34,8 +34,6 @@ import java.util.*;
 @Service
 public class OrderService {
 
-    private final OrderAPI orderAPI;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -71,10 +69,6 @@ public class OrderService {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
-    OrderService(UserRepository userRepository, OrderAPI orderAPI) {
-        this.userRepository = userRepository;
-        this.orderAPI = orderAPI;
-    }
 
     public String create(OrderRequest orderRequest, String promoId) throws Exception {
         List<OrderDetail> details = new ArrayList<>();
@@ -121,7 +115,7 @@ public class OrderService {
 
             Promotion promotion = promotionRepository
                     .findAllByIdAndNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(id, 0)
-                    .orElseThrow(() -> new NotFoundException("this promotion is unavailable"));
+                    .orElseThrow(() -> new NotFoundException("Can not found promotion"));
             if (order.getTotalPrice() >= promotion.getOrderPrice()) {
                 double discount = getDiscountByPromotion(order, promotion);
                 totalPrice = order.getTotalPrice() - discount;
@@ -523,17 +517,16 @@ public class OrderService {
     public Order updateOrderShipped(long orderId) {
         Order order = orderRepository.findOrderById(orderId);
         order.setOrderStatus(OrderStatusEnums.SHIPPING);
-        long COD = 2l; // COD id is 2
         // update staff task
         StaffTask staffTask2 = staffTaskRepository.findByOrder(order);
         staffTask2.setLastUpdate(LocalDateTime.now());
         staffTask2.setStaffTaskEnums(StaffTaskEnums.SHIPPING);
         staffTaskRepository.save(staffTask2);
-        // create transaction if payment method is COD
+        // kiểm tra nếu payment method là COD
         if (order.getPaymentMethod().equals("COD")) {
-            // shipper will pay the order and collect back form customer when delivered
+            // vì shipper ứng tiền trước cho đơn hàng và thu lại tiền của customer
             order.setPaymentStatus(PaymentStatusEnums.PAID);
-            // save into transaction
+            // tạo và lưu transaction
             transactionService.createTransactionForCreateOrder(order, TransactionEnums.COD);
             userRankService.updateRankForUser(order.getUser());
         }
@@ -565,7 +558,7 @@ public class OrderService {
                 promotion.setNumOfPromo(promotion.getNumOfPromo() + 1);
                 promotionRepository.save(promotion);
             }
-            // create refund transaction
+            // tạo transaction hoàn tiền
             transactionService.createRefundTransaction(order);
             return orderRepository.save(order);
         } else {
@@ -599,7 +592,8 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    @Scheduled(fixedRate = 60000 * 60) // repeat every hour
+    // millisecond * minute * hour
+    @Scheduled(fixedRate = 1000 * 60 * 60) // repeat every hour
     public void updateUnconfirmedOrder() {
         List<Order> orders = orderRepository.findByOrderStatus(OrderStatusEnums.DELIVERED);
         LocalDateTime now = LocalDateTime.now();

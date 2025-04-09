@@ -74,7 +74,7 @@ public class PromotionService {
         return promotionRepository.save(promotion);
     }
 
-    @Scheduled(fixedRate = 60000 * 60) // run every hour
+    @Scheduled(fixedRate = 1000 * 60 * 60) // run every hour
     public void updateOutDate() {
         List<Promotion> promotions = promotionRepository
                 .findAllByNumOfPromoIsGreaterThanAndIsOutDateFalseAndIsDeletedFalse(0);

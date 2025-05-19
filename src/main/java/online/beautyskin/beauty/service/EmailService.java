@@ -52,6 +52,7 @@ public class EmailService {
             mimeMessageHelper.setSubject(emailDetails.getSubject());
             mailSender.send(mimeMessage);
 
+            context.clearVariables();
         } catch (MessagingException e) {
             e.printStackTrace();
         }

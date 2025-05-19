@@ -6,6 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import online.beautyskin.beauty.entity.User;
 import online.beautyskin.beauty.repository.AuthenticationRepository;
+import online.beautyskin.beauty.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,8 @@ public class TokenService {
     private AuthenticationRepository authenticationRepository;
 
     private final String SECRET_KEY = "HT4bb6d1dfbafb64a681139d1586b6f1160d18159afd57c8c79136d7490630407c";
+    @Autowired
+    private UserUtils userUtils;
 
     private SecretKey getSignInKey(){
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -46,5 +49,9 @@ public class TokenService {
 
         User user = authenticationRepository.findById(id);
         return user;
+    }
+
+    public void main(){
+        generateToken(userUtils.getCurrentUser());
     }
 }
